@@ -45,17 +45,8 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { fontSize: 30, color: "#333" }]}>
-        Welcome to
-      </Text>
-      <Text
-        style={[
-          styles.title,
-          { fontSize: 36, color: "#1e90ff", marginBottom: 32 },
-        ]}
-      >
-        Receipt
-      </Text>
+      <Text style={styles.subtitle}>Hi, Welcome to</Text>
+      <Text style={[styles.title]}>Receipt</Text>
 
       <FormInput
         placeholder="Email"
