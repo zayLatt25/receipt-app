@@ -5,11 +5,16 @@ import HomeScreen from "../screens/Home";
 import LoginScreen from "../screens/Login";
 import SignupScreen from "../screens/Signup";
 import { useAuth } from "../context/AuthContext";
+import SplashScreen from "../components/SplashScreen";
 
 const Stack = createStackNavigator();
 
-const AppNavigator = () => {
-  const { user } = useAuth();
+export default function RootNavigator() {
+  const { user, authLoading } = useAuth();
+
+  if (authLoading) {
+    return <SplashScreen />;
+  }
 
   return (
     <NavigationContainer>
@@ -25,6 +30,4 @@ const AppNavigator = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default AppNavigator;
+}
