@@ -22,11 +22,7 @@ const SignupScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       let errorMessage = "Signup failed. Please try again.";
 
