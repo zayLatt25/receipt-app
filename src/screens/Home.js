@@ -14,7 +14,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome!</Text>
       <Text style={{ fontSize: 18, marginBottom: 20 }}>
-        Logged in as: {user?.displayName}
+        Logged in as: {user?.email}
       </Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>

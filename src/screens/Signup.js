@@ -1,7 +1,7 @@
 // screens/SignupScreen.js
 import React, { useState } from "react";
 import { View, Text, Alert } from "react-native";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { styles } from "../styles/styles";
 import FormInput from "../components/FormInput";
@@ -27,12 +27,6 @@ const SignupScreen = ({ navigation }) => {
         email,
         password
       );
-
-      const user = userCredential.user;
-
-      await updateProfile(user, {
-        displayName: name,
-      });
     } catch (error) {
       let errorMessage = "Signup failed. Please try again.";
 
