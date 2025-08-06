@@ -1,7 +1,7 @@
 // screens/SignupScreen.js
 import React, { useState } from "react";
 import { View, Text, Alert } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { styles } from "../styles/styles";
 import FormInput from "../components/FormInput";
@@ -13,15 +13,26 @@ const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       return Alert.alert("Password Mismatch", "Passwords do not match.");
     }
 
+    setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      // TODO: Save `name` to Firestore or local state
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: name,
+      });
     } catch (error) {
       let errorMessage = "Signup failed. Please try again.";
 
@@ -43,6 +54,8 @@ const SignupScreen = ({ navigation }) => {
       }
 
       Alert.alert("Signup Error", errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,13 +65,16 @@ const SignupScreen = ({ navigation }) => {
         Sign Up
       </Text>
 
+      {/* Name input */}
       <FormInput placeholder="Full Name" value={name} onChangeText={setName} />
+      {/* Email input */}
       <FormInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
+      {/* Password inputs */}
       <FormInput
         placeholder="Password"
         value={password}
@@ -72,7 +88,7 @@ const SignupScreen = ({ navigation }) => {
         secureTextEntry
       />
 
-      <FormButton title="Sign Up" onPress={handleSignup} />
+      <FormButton title="Sign Up" onPress={handleSignup} loading={loading} />
 
       <LinkText
         text="Already have an account?"

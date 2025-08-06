@@ -11,8 +11,10 @@ import LinkText from "../components/LinkText";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -36,6 +38,8 @@ const LoginScreen = ({ navigation }) => {
       }
 
       Alert.alert("Login Error", errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
       />
 
-      <FormButton title="Login" onPress={handleLogin} />
+      <FormButton title="Login" onPress={handleLogin} loading={loading} />
 
       <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
         <LinkText
