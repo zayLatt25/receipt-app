@@ -1,12 +1,13 @@
 // components/LinkText.js
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
+import { styles } from "../styles/styles";
 
 const LinkText = ({ text, link, onPress }) => (
   <TouchableOpacity onPress={onPress}>
-    <Text style={{ fontSize: 14, color: "#555", textAlign: "center" }}>
+    <Text style={styles.linkText}>
       {text}
-      <Text style={{ color: "#1e90ff", fontWeight: "600" }}> {link}</Text>
+      <Text style={styles.linkTextHighlight}> {link}</Text>
     </Text>
   </TouchableOpacity>
 );
