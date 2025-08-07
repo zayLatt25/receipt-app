@@ -1,11 +1,12 @@
+// src/navigation/RootNavigator.js
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../screens/Home";
 import LoginScreen from "../screens/Login";
 import SignupScreen from "../screens/Signup";
 import { useAuth } from "../context/AuthContext";
 import SplashScreen from "../components/SplashScreen";
+import BottomTabNavigator from "./BottomTabNavigator";
 
 const Stack = createStackNavigator();
 
@@ -19,9 +20,8 @@ export default function RootNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* Check if user is logged in */}
         {user ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Main" component={BottomTabNavigator} />
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
