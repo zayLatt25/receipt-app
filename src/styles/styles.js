@@ -1,18 +1,18 @@
 // styles/styles.js
 import { StyleSheet } from "react-native";
 
-// Define color constants
 export const navyBlue = "#0c2d5d";
 export const lightCream = "#f2efe7";
 export const darkPink = "#781d4e";
+export const mainFont = "Montserrat";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    padding: 24,
+    padding: 8,
     backgroundColor: navyBlue,
   },
+
   input: {
     height: 50,
     borderWidth: 1,
@@ -76,5 +76,19 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  calendarWrapper: {
+    backgroundColor: navyBlue,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  calendar: {
+    borderRadius: 10,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginBottom: 20,
   },
 });
