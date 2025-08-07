@@ -35,6 +35,12 @@ export const styles = StyleSheet.create({
     fontFamily: "Montserrat",
     marginBottom: 16,
   },
+  bodyText: {
+    fontSize: 16,
+    color: lightCream,
+    fontFamily: "Montserrat",
+    marginBottom: 16,
+  },
   button: {
     backgroundColor: lightCream,
     borderWidth: 1,

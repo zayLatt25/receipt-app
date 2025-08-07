@@ -1,22 +1,53 @@
-import React from "react";
-import { View, Text, Button } from "react-native";
-import { auth } from "../firebase";
+import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { styles } from "../styles/styles";
+import FormButton from "../components/FormButton";
 
 const HomeScreen = () => {
-  const user = auth.currentUser;
+  const [userData, setUserData] = useState(null);
+  const [userDataLoading, setUserDataLoading] = useState(true);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());
+        }
+      }
+      setUserDataLoading(false);
+    };
+    fetchUserData();
+  }, []);
 
   const handleLogout = () => {
+    setLogoutLoading(true);
     auth.signOut();
+    setLogoutLoading(false);
   };
+
+  if (userDataLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome!</Text>
-      <Text style={{ fontSize: 18, marginBottom: 20 }}>
-        Logged in as: {user?.email}
-      </Text>
-      <Button title="Logout" onPress={handleLogout} />
+      <Text style={styles.bodyText}>Logged in as: {userData?.email}</Text>
+      <Text style={styles.bodyText}>Name: {userData?.name}</Text>
+      <FormButton
+        title="Logout"
+        onPress={handleLogout}
+        loading={logoutLoading}
+      />
     </View>
   );
 };

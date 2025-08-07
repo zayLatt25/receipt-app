@@ -19,6 +19,7 @@ export default function RootNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {/* Check if user is logged in */}
         {user ? (
           <Stack.Screen name="Home" component={HomeScreen} />
         ) : (
