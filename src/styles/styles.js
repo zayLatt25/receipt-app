@@ -91,4 +91,17 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     marginBottom: 20,
   },
+  expenseItem: {
+    backgroundColor: lightCream,
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  expenseText: {
+    color: navyBlue,
+    fontSize: 16,
+    fontFamily: "Montserrat",
+  },
 });
