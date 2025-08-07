@@ -107,6 +107,6 @@ export const styles = StyleSheet.create({
   expenseText: {
     color: navyBlue,
     fontSize: 16,
-    fontFamily: "Montserrat",
+    fontFamily: mainFont,
   },
 });
