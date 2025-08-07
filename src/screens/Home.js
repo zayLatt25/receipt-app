@@ -22,7 +22,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: 50 }]}>
+    <View style={[styles.container]}>
       <CustomCalendar
         selectedDate={selectedDate}
         onDaySelect={(date) => setSelectedDate(date)}

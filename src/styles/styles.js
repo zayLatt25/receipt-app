@@ -9,10 +9,15 @@ export const mainFont = "Montserrat";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+    padding: 20,
     backgroundColor: navyBlue,
   },
-
+  centerContainer: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+    backgroundColor: navyBlue,
+  },
   input: {
     height: 50,
     borderWidth: 1,
