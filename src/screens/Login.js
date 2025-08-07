@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.centerContainer}>
       <Text style={styles.subtitle}>Hi, Welcome to</Text>
       <Text style={[styles.title]}>Receipt</Text>
 

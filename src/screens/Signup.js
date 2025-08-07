@@ -75,10 +75,8 @@ const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, { fontSize: 32, marginBottom: 20 }]}>
-        Sign Up
-      </Text>
+    <View style={styles.centerContainer}>
+      <Text style={styles.title}>Sign Up</Text>
 
       {/* Name input */}
       <FormInput placeholder="Full Name" value={name} onChangeText={setName} />

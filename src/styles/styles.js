@@ -1,16 +1,22 @@
 // styles/styles.js
 import { StyleSheet } from "react-native";
 
-// Define color constants
 export const navyBlue = "#0c2d5d";
 export const lightCream = "#f2efe7";
 export const darkPink = "#781d4e";
+export const mainFont = "Montserrat";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
+    paddingTop: 30,
+    backgroundColor: navyBlue,
+  },
+  centerContainer: {
+    flex: 1,
+    padding: 20,
     justifyContent: "center",
-    padding: 24,
     backgroundColor: navyBlue,
   },
   input: {
@@ -76,5 +82,46 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  calendarWrapper: {
+    backgroundColor: navyBlue,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  calendarStyle: {
+    borderRadius: 10,
+  },
+  calendarTheme: {
+    backgroundColor: navyBlue,
+    calendarBackground: navyBlue,
+    dayTextColor: lightCream,
+    monthTextColor: lightCream,
+    textSectionTitleColor: lightCream,
+    selectedDayTextColor: "#fff",
+    todayTextColor: lightCream,
+    arrowColor: lightCream,
+
+    textDayFontSize: 17,
+    textMonthFontSize: 17,
+    textDayHeaderFontSize: 14,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginBottom: 20,
+  },
+  expenseItem: {
+    backgroundColor: lightCream,
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  expenseText: {
+    color: navyBlue,
+    fontSize: 16,
+    fontFamily: mainFont,
   },
 });

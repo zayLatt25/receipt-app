@@ -1,28 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import { View, Text, FlatList } from "react-native";
 import { styles } from "../styles/styles";
+import { auth } from "../firebase";
 import FormButton from "../components/FormButton";
+import dayjs from "dayjs";
+import CustomCalendar from "../components/Calendar";
 
 const HomeScreen = () => {
-  const [userData, setUserData] = useState(null);
-  const [userDataLoading, setUserDataLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs().format("YYYY-MM-DD")
+  );
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          setUserData(userDoc.data());
-        }
-      }
-      setUserDataLoading(false);
-    };
-    fetchUserData();
-  }, []);
+  // TODO: Fetch expenses from Firestore or database for the selectedDate
+  const expenses = [];
 
   const handleLogout = () => {
     setLogoutLoading(true);
@@ -30,19 +21,31 @@ const HomeScreen = () => {
     setLogoutLoading(false);
   };
 
-  if (userDataLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome!</Text>
-      <Text style={styles.bodyText}>Logged in as: {userData?.email}</Text>
-      <Text style={styles.bodyText}>Name: {userData?.name}</Text>
+    <View style={[styles.container]}>
+      <CustomCalendar
+        selectedDate={selectedDate}
+        onDaySelect={(date) => setSelectedDate(date)}
+      />
+
+      {/* Thin line between calendar and expenses */}
+      <View style={styles.divider} />
+
+      {expenses.length === 0 ? (
+        <Text style={styles.bodyText}>No expenses for this day.</Text>
+      ) : (
+        <FlatList
+          data={expenses}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.expenseItem}>
+              <Text style={styles.expenseText}>{item.description}</Text>
+              <Text style={styles.expenseText}>${item.amount.toFixed(2)}</Text>
+            </View>
+          )}
+        />
+      )}
+
       <FormButton
         title="Logout"
         onPress={handleLogout}
