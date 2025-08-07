@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { View, Text, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { styles } from "../styles/styles";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
@@ -16,15 +17,39 @@ const SignupScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      return Alert.alert("Missing Fields", "Please fill in all the fields.");
+    }
+
     if (password !== confirmPassword) {
       return Alert.alert("Password Mismatch", "Passwords do not match.");
     }
 
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const { user } = userCredential;
+
+      // Create user document in Firestore
+      try {
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          name: name,
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        });
+      } catch (firestoreError) {
+        // Rollback: delete the user from Auth if Firestore write fails
+        await deleteUser(user);
+        throw firestoreError;
+      }
     } catch (error) {
-      let errorMessage = "Signup failed. Please try again.";
+      let errorMessage = "";
 
       switch (error.code) {
         case "auth/email-already-in-use":
