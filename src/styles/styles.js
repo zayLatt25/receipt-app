@@ -1,9 +1,10 @@
 // styles/styles.js
 import { StyleSheet } from "react-native";
 
-const navyBlue = "#0c2d5d";
-const lightCream = "#f2efe7";
-const darkPink = "#781d4e";
+// Define color constants
+export const navyBlue = "#0c2d5d";
+export const lightCream = "#f2efe7";
+export const darkPink = "#781d4e";
 
 export const styles = StyleSheet.create({
   container: {
@@ -63,5 +64,17 @@ export const styles = StyleSheet.create({
   linkTextHighlight: {
     color: darkPink,
     fontWeight: "600",
+  },
+  navBar: {
+    backgroundColor: lightCream,
+    borderTopWidth: 0,
+    height: 73,
+    paddingBottom: 10,
+    paddingTop: 10,
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
 });
