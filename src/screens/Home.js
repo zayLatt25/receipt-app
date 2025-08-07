@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { styles } from "../styles/styles";
+import FormButton from "../components/FormButton";
 
 const HomeScreen = () => {
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [userDataLoading, setUserDataLoading] = useState(true);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -17,16 +19,18 @@ const HomeScreen = () => {
           setUserData(userDoc.data());
         }
       }
-      setLoading(false);
+      setUserDataLoading(false);
     };
     fetchUserData();
   }, []);
 
   const handleLogout = () => {
+    setLogoutLoading(true);
     auth.signOut();
+    setLogoutLoading(false);
   };
 
-  if (loading) {
+  if (userDataLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" />
@@ -39,7 +43,11 @@ const HomeScreen = () => {
       <Text style={styles.title}>Welcome!</Text>
       <Text style={styles.bodyText}>Logged in as: {userData?.email}</Text>
       <Text style={styles.bodyText}>Name: {userData?.name}</Text>
-      <Button title="Logout" onPress={handleLogout} />
+      <FormButton
+        title="Logout"
+        onPress={handleLogout}
+        loading={logoutLoading}
+      />
     </View>
   );
 };
