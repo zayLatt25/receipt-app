@@ -3,23 +3,28 @@ import { View, Text, FlatList } from "react-native";
 import { styles } from "../styles/styles";
 import dayjs from "dayjs";
 import CustomCalendar from "../components/Calendar";
+import FloatingActionButton from "../components/FloatingActionButton";
+import AddExpenseModal from "../components/AddExpenseModal";
 
 const HomeScreen = () => {
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
   );
+  const [expenses, setExpenses] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // TODO: Fetch expenses from Firestore or database for the selectedDate
-  const expenses = [];
+  const handleAddExpense = (expense) => {
+    setExpenses([...expenses, expense]);
+    setModalVisible(false);
+  };
 
   return (
     <View style={[styles.container]}>
       <CustomCalendar
         selectedDate={selectedDate}
-        onDaySelect={(date) => setSelectedDate(date)}
+        onDaySelect={setSelectedDate}
       />
 
-      {/* Thin line between calendar and expenses */}
       <View style={styles.divider} />
 
       {expenses.length === 0 ? (
@@ -36,6 +41,15 @@ const HomeScreen = () => {
           )}
         />
       )}
+
+      <FloatingActionButton onPress={() => setModalVisible(true)} />
+
+      <AddExpenseModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleAddExpense}
+        initialDate={selectedDate}
+      />
     </View>
   );
 };
