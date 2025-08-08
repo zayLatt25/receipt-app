@@ -1,25 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import { styles } from "../styles/styles";
-import { auth } from "../firebase";
-import FormButton from "../components/FormButton";
 import dayjs from "dayjs";
 import CustomCalendar from "../components/Calendar";
 
 const HomeScreen = () => {
-  const [logoutLoading, setLogoutLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
   );
 
   // TODO: Fetch expenses from Firestore or database for the selectedDate
   const expenses = [];
-
-  const handleLogout = () => {
-    setLogoutLoading(true);
-    auth.signOut();
-    setLogoutLoading(false);
-  };
 
   return (
     <View style={[styles.container]}>
@@ -32,7 +23,7 @@ const HomeScreen = () => {
       <View style={styles.divider} />
 
       {expenses.length === 0 ? (
-        <Text style={styles.bodyText}>No expenses for this day.</Text>
+        <Text style={styles.bodyText}>No expenses for this day!</Text>
       ) : (
         <FlatList
           data={expenses}
@@ -45,12 +36,6 @@ const HomeScreen = () => {
           )}
         />
       )}
-
-      <FormButton
-        title="Logout"
-        onPress={handleLogout}
-        loading={logoutLoading}
-      />
     </View>
   );
 };
