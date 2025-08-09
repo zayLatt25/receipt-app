@@ -244,26 +244,33 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 12,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    // Add shadow/elevation for depth
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
   },
-
   sectionHeaderText: {
     color: lightCream,
     fontWeight: "bold",
     fontSize: 18,
   },
-
+  collapseArrow: {
+    color: lightCream,
+    fontWeight: "bold",
+    fontSize: 18,
+    marginRight: 8,
+  },
   expenseItemBorder: {
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
-
   expenseDescription: {
     flex: 1,
     fontWeight: "600",
   },
-
   expenseAmount: {
     fontWeight: "bold",
     fontSize: 16,
