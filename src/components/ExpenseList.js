@@ -52,7 +52,7 @@ const ExpenseList = ({ expenses }) => {
       >
         <Text style={styles.collapseArrow}>{isCollapsed ? "›" : "⌄"}</Text>
         <Text style={styles.sectionHeaderText}>
-          {title} (${total.toFixed(2)})
+          {title} (Total: ${total.toFixed(2)})
         </Text>
       </TouchableOpacity>
     );
