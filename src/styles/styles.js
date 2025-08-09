@@ -111,19 +111,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     marginBottom: 20,
   },
-  expenseItem: {
-    backgroundColor: lightCream,
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  expenseText: {
-    color: navyBlue,
-    fontSize: 16,
-    fontFamily: mainFont,
-  },
   fabContainer: {
     position: "absolute",
     bottom: 30,
@@ -263,6 +250,18 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 8,
   },
+  expenseItem: {
+    backgroundColor: lightCream,
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 10,
+    flexDirection: "row",
+  },
+  expenseText: {
+    color: navyBlue,
+    fontSize: 16,
+    fontFamily: mainFont,
+  },
   expenseItemBorder: {
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
@@ -274,5 +273,18 @@ export const styles = StyleSheet.create({
   expenseAmount: {
     fontWeight: "bold",
     fontSize: 16,
+  },
+  dayTotalContainer: {
+    backgroundColor: lightCream,
+    marginBottom: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  dayTotalText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: navyBlue,
   },
 });

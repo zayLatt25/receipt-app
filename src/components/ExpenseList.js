@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { View, Text, SectionList, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../styles/styles";
 
-// Store the collapsed state in AsyncStorage
 const STORAGE_KEY = "collapsedCategories";
 
 const ExpenseList = ({ expenses }) => {
@@ -20,28 +19,38 @@ const ExpenseList = ({ expenses }) => {
     })();
   }, []);
 
-  const toggleCollapse = async (category) => {
-    const newCollapsed = { ...collapsed, [category]: !collapsed[category] };
-    setCollapsed(newCollapsed);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCollapsed));
-    } catch (e) {
-      console.error("Failed to save collapsed state", e);
-    }
-  };
+  const toggleCollapse = useCallback(
+    async (category) => {
+      const newCollapsed = { ...collapsed, [category]: !collapsed[category] };
+      setCollapsed(newCollapsed);
+      try {
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCollapsed));
+      } catch (e) {
+        console.error("Failed to save collapsed state", e);
+      }
+    },
+    [collapsed]
+  );
 
-  // Group expenses by category & calculate totals
-  const grouped = expenses.reduce((acc, expense) => {
-    const category = expense.category || "Uncategorized";
-    let section = acc.find((s) => s.title === category);
-    if (section) {
-      section.data.push(expense);
-      section.total += expense.amount;
-    } else {
-      acc.push({ title: category, data: [expense], total: expense.amount });
-    }
-    return acc;
-  }, []);
+  // Memoize grouping for performance
+  const grouped = useMemo(() => {
+    return expenses.reduce((acc, expense) => {
+      const category = expense.category || "Uncategorized";
+      let section = acc.find((s) => s.title === category);
+      if (section) {
+        section.data.push(expense);
+        section.total += expense.amount;
+      } else {
+        acc.push({ title: category, data: [expense], total: expense.amount });
+      }
+      return acc;
+    }, []);
+  }, [expenses]);
+
+  // Calculate total for the day
+  const dayTotal = useMemo(() => {
+    return expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  }, [expenses]);
 
   const renderSectionHeader = ({ section: { title, total } }) => {
     const isCollapsed = collapsed[title];
@@ -79,16 +88,23 @@ const ExpenseList = ({ expenses }) => {
   };
 
   return (
-    <SectionList
-      sections={grouped}
-      keyExtractor={(item) => item.id}
-      renderSectionHeader={renderSectionHeader}
-      renderItem={renderItem}
-      contentContainerStyle={{ paddingBottom: 100 }}
-      stickySectionHeadersEnabled={false}
-      showsVerticalScrollIndicator={false}
-      extraData={collapsed}
-    />
+    <>
+      <View style={styles.dayTotalContainer}>
+        <Text style={styles.dayTotalText}>
+          Total for the day: ${dayTotal.toFixed(2)}
+        </Text>
+      </View>
+      <SectionList
+        sections={grouped}
+        keyExtractor={(item) => item.id}
+        renderSectionHeader={renderSectionHeader}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        stickySectionHeadersEnabled={false}
+        showsVerticalScrollIndicator={false}
+        extraData={collapsed}
+      />
+    </>
   );
 };
 
