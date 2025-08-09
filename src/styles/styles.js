@@ -26,12 +26,12 @@ export const styles = StyleSheet.create({
     backgroundColor: navyBlue,
   },
   input: {
-    height: verticalScale(50),
+    height: verticalScale(40),
     borderWidth: 1,
     borderRadius: moderateScale(10),
     paddingHorizontal: scale(15),
     backgroundColor: "#fff",
-    marginBottom: verticalScale(16),
+    marginBottom: verticalScale(10),
     width: "100%",
   },
   title: {
