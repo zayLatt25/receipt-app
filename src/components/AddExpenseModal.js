@@ -7,7 +7,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import { styles, lightCream, navyBlue } from "../styles/styles";
+import { styles } from "../styles/styles";
 import FormInput from "./FormInput";
 import dayjs from "dayjs";
 
@@ -97,7 +97,6 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
       amount: parseFloat(amount),
       date: dayjs(expenseDate).format("YYYY-MM-DD"),
       category,
-      id: Date.now().toString(),
     });
   };
 
