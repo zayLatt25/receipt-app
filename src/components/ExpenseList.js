@@ -42,7 +42,11 @@ const ExpenseList = ({ expenses }) => {
         section.data.push(expense);
         section.total += expense.amount;
       } else {
-        sectionMap.set(category, { title: category, data: [expense], total: expense.amount });
+        sectionMap.set(category, {
+          title: category,
+          data: [expense],
+          total: expense.amount,
+        });
       }
     }
     return Array.from(sectionMap.values());
