@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, SectionList, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { styles, lightCream } from "../styles/styles";
+import { styles } from "../styles/styles";
 
 // Store the collapsed state in AsyncStorage
 const STORAGE_KEY = "collapsedCategories";
