@@ -50,8 +50,11 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
     if (!description.trim()) newErrors.description = "Description is required.";
     if (!amount) {
       newErrors.amount = "Amount is required.";
-    } else if (isNaN(amount) || Number(amount) <= 0) {
-      newErrors.amount = "Amount must be a positive number.";
+    } else {
+      const parsedAmount = parseFloat(amount);
+      if (isNaN(parsedAmount) || parsedAmount <= 0) {
+        newErrors.amount = "Amount must be a positive number.";
+      }
     }
     if (!category) {
       newErrors.categories = "Please select or add a category.";
