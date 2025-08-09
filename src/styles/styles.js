@@ -166,9 +166,75 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     color: navyBlue,
   },
+  modalSubtitle: {
+    color: navyBlue,
+    marginBottom: 8,
+    fontWeight: "600",
+  },
   modalButtons: {
     flexDirection: "row",
     justifyContent: "flex-end",
     marginTop: 10,
+  },
+  categoryScroll: {
+    marginBottom: 12,
+  },
+  categoryButton: {
+    backgroundColor: lightCream,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: navyBlue,
+  },
+  categoryButtonSelected: {
+    backgroundColor: navyBlue,
+  },
+  categoryButtonText: {
+    color: navyBlue,
+    fontWeight: "normal",
+  },
+  categoryButtonTextSelected: {
+    color: lightCream,
+    fontWeight: "bold",
+  },
+  customCategoryRow: {
+    flexDirection: "row",
+    marginBottom: 12,
+    alignItems: "center",
+  },
+  customCategoryInput: {
+    flex: 1,
+    height: 40,
+    borderColor: navyBlue,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    color: navyBlue,
+  },
+  addCategoryButton: {
+    marginLeft: 10,
+    backgroundColor: navyBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+  },
+  addCategoryButtonDisabled: {
+    backgroundColor: "#999",
+  },
+  addCategoryButtonText: {
+    color: lightCream,
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    marginRight: 20,
+  },
+  cancelButtonText: {
+    color: navyBlue,
+  },
+  saveButtonText: {
+    color: navyBlue,
+    fontWeight: "bold",
   },
 });

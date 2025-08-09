@@ -114,15 +114,13 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
             Add Expense - {dayjs(expenseDate).format("DD MMM YYYY")}
           </Text>
 
-          {/* --- CATEGORY SELECTOR ABOVE DESCRIPTION & AMOUNT --- */}
-          <Text style={{ color: navyBlue, marginBottom: 8, fontWeight: "600" }}>
-            Select Category
-          </Text>
+          {/* --- CATEGORY SELECTOR --- */}
+          <Text style={styles.modalSubtitle}>Select Category</Text>
 
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            style={{ marginBottom: 12 }}
+            style={styles.categoryScroll}
           >
             {categories.map((cat) => {
               const selected = category === cat;
@@ -130,21 +128,16 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
                 <TouchableOpacity
                   key={cat}
                   onPress={() => toggleCategory(cat)}
-                  style={{
-                    backgroundColor: selected ? navyBlue : lightCream,
-                    paddingVertical: 8,
-                    paddingHorizontal: 14,
-                    borderRadius: 20,
-                    marginRight: 10,
-                    borderWidth: 1,
-                    borderColor: navyBlue,
-                  }}
+                  style={[
+                    styles.categoryButton,
+                    selected && styles.categoryButtonSelected,
+                  ]}
                 >
                   <Text
-                    style={{
-                      color: selected ? lightCream : navyBlue,
-                      fontWeight: selected ? "bold" : "normal",
-                    }}
+                    style={[
+                      styles.categoryButtonText,
+                      selected && styles.categoryButtonTextSelected,
+                    ]}
                   >
                     {cat}
                   </Text>
@@ -153,41 +146,24 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
             })}
           </ScrollView>
 
-          <View
-            style={{
-              flexDirection: "row",
-              marginBottom: 12,
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.customCategoryRow}>
             <TextInput
               placeholder="Add Custom Category"
               value={customCategory}
               onChangeText={setCustomCategory}
-              style={{
-                flex: 1,
-                height: 40,
-                borderColor: navyBlue,
-                borderWidth: 1,
-                borderRadius: 8,
-                paddingHorizontal: 10,
-                color: navyBlue,
-              }}
+              style={styles.customCategoryInput}
               onSubmitEditing={addCustomCategory}
               returnKeyType="done"
             />
             <TouchableOpacity
               onPress={addCustomCategory}
               disabled={!customCategory.trim()}
-              style={{
-                marginLeft: 10,
-                backgroundColor: !customCategory.trim() ? "#999" : navyBlue,
-                paddingVertical: 10,
-                paddingHorizontal: 15,
-                borderRadius: 8,
-              }}
+              style={[
+                styles.addCategoryButton,
+                !customCategory.trim() && styles.addCategoryButtonDisabled,
+              ]}
             >
-              <Text style={{ color: lightCream, fontWeight: "bold" }}>Add</Text>
+              <Text style={styles.addCategoryButtonText}>Add</Text>
             </TouchableOpacity>
           </View>
           {errors.categories && (
@@ -224,12 +200,12 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
 
           {/* --- MODAL BUTTONS --- */}
           <View style={styles.modalButtons}>
-            <TouchableOpacity onPress={onClose} style={{ marginRight: 20 }}>
-              <Text style={{ color: navyBlue }}>Cancel</Text>
+            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleSave}>
-              <Text style={{ color: navyBlue, fontWeight: "bold" }}>Save</Text>
+              <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
           </View>
         </View>
