@@ -34,17 +34,18 @@ const ExpenseList = ({ expenses }) => {
 
   // Memoize grouping for performance
   const grouped = useMemo(() => {
-    return expenses.reduce((acc, expense) => {
+    const sectionMap = new Map();
+    for (const expense of expenses) {
       const category = expense.category || "Uncategorized";
-      let section = acc.find((s) => s.title === category);
-      if (section) {
+      if (sectionMap.has(category)) {
+        const section = sectionMap.get(category);
         section.data.push(expense);
         section.total += expense.amount;
       } else {
-        acc.push({ title: category, data: [expense], total: expense.amount });
+        sectionMap.set(category, { title: category, data: [expense], total: expense.amount });
       }
-      return acc;
-    }, []);
+    }
+    return Array.from(sectionMap.values());
   }, [expenses]);
 
   // Calculate total for the day
