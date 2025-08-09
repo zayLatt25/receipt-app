@@ -93,12 +93,8 @@ export const styles = StyleSheet.create({
   },
   calendarWrapper: {
     backgroundColor: navyBlue,
-    borderRadius: moderateScale(10),
-    padding: scale(10),
-    marginBottom: verticalScale(10),
-  },
-  calendarStyle: {
-    borderRadius: moderateScale(10),
+    padding: scale(5),
+    marginBottom: verticalScale(5),
   },
   calendarTheme: {
     backgroundColor: navyBlue,
