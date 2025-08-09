@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
   navBar: {
     backgroundColor: lightCream,
     borderTopWidth: 0,
-    height: verticalScale(60),
+    height: verticalScale(55),
     paddingBottom: verticalScale(5),
     paddingTop: verticalScale(5),
     elevation: 10,
