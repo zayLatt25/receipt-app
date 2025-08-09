@@ -237,4 +237,35 @@ export const styles = StyleSheet.create({
     color: navyBlue,
     fontWeight: "bold",
   },
+  sectionHeader: {
+    backgroundColor: navyBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginBottom: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  sectionHeaderText: {
+    color: lightCream,
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+
+  expenseItemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+
+  expenseDescription: {
+    flex: 1,
+    fontWeight: "600",
+  },
+
+  expenseAmount: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
 });
