@@ -188,7 +188,13 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
             keyboardType="numeric"
             value={amount}
             onChangeText={(text) => {
-              const filtered = text.replace(/[^0-9.]/g, "");
+              // Remove all non-digit and non-decimal characters
+              let filtered = text.replace(/[^0-9.]/g, "");
+              // Allow only the first decimal point
+              const parts = filtered.split(".");
+              if (parts.length > 1) {
+                filtered = parts[0] + "." + parts.slice(1).join("");
+              }
               setAmount(filtered);
               if (errors.amount) setErrors({ ...errors, amount: null });
             }}
