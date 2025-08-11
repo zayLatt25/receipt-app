@@ -8,7 +8,7 @@ import {
 } from "../utils/sizes";
 
 export const navyBlue = "#0c2d5d";
-export const lightCream = "#f2efe7";
+export const lightCream = "#e8e5d9";
 export const darkPink = "#781d4e";
 export const mainFont = "Montserrat";
 
@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({
     dayTextColor: lightCream,
     monthTextColor: lightCream,
     textSectionTitleColor: lightCream,
-    selectedDayTextColor: "#fff",
+    selectedDayTextColor: lightCream,
     todayTextColor: lightCream,
     arrowColor: lightCream,
 
@@ -289,5 +289,54 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFont(16),
     fontWeight: "bold",
     color: navyBlue,
+  },
+  reminderItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: verticalScale(14),
+    paddingHorizontal: scale(12),
+    backgroundColor: lightCream,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  itemRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  deleteBtn: {
+    backgroundColor: darkPink,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  deleteBtnNoBg: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  footerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderColor: lightCream,
+  },
+  totalText: {
+    fontSize: normalizeFont(20),
+    fontWeight: "bold",
+    color: lightCream,
+    fontFamily: mainFont,
+  },
+  groceryListInput: {
+    flex: 1,
+    height: verticalScale(40),
+    borderColor: navyBlue,
+    borderWidth: 1,
+    borderRadius: moderateScale(8),
+    paddingHorizontal: scale(10),
+    color: lightCream,
   },
 });
