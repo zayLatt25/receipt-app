@@ -1,12 +1,126 @@
-// src/screens/GroceryList.js
-import React from "react";
-import { View, Text } from "react-native";
-import { styles } from "../styles/styles";
+import React, { useState, useRef, useMemo } from "react";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { styles, lightCream, darkPink } from "../styles/styles";
+import { MaterialIcons } from "@expo/vector-icons";
 
-export default function GroceryListScreen() {
+export default function App() {
+  const [items, setItems] = useState([{ name: "", pcs: "", price: "" }]);
+  const inputRefs = useRef([]);
+
+  const formatCurrency = (num) => "$" + num.toFixed(2);
+
+  const handleChange = (index, field, value) => {
+    const updatedItems = [...items];
+    updatedItems[index][field] = value;
+    setItems(updatedItems);
+  };
+
+  const handleAddItem = () => {
+    const lastIndex = items.length - 1;
+    if (items[lastIndex].name.trim() === "") {
+      if (inputRefs.current[lastIndex]) {
+        inputRefs.current[lastIndex].focus();
+      }
+      return;
+    }
+    const newItems = [...items, { name: "", pcs: "", price: "" }];
+    setItems(newItems);
+    setTimeout(() => {
+      if (inputRefs.current[newItems.length - 1]) {
+        inputRefs.current[newItems.length - 1].focus();
+      }
+    }, 100);
+  };
+
+  const handleDeleteItem = (index) => {
+    if (items.length === 1) {
+      // Clear the only row's data instead of deleting it
+      setItems([{ name: "", pcs: "", price: "" }]);
+    } else {
+      const updatedItems = items.filter((_, i) => i !== index);
+      setItems(updatedItems);
+    }
+  };
+
+  const totalPrice = useMemo(() => {
+    return items.reduce((sum, item) => {
+      const pcs = parseFloat(item.pcs) || 0;
+      const price = parseFloat(item.price) || 0;
+      return sum + pcs * price;
+    }, 0);
+  }, [items]);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.subtitle}>Grocery List Screen</Text>
-    </View>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <Text style={styles.title}>Item List</Text>
+
+      {items.map((item, index) => (
+        <View key={index} style={styles.itemRow}>
+          <TextInput
+            ref={(ref) => (inputRefs.current[index] = ref)}
+            style={[styles.groceryListInput, { flex: 2 }]}
+            placeholder="Item"
+            placeholderTextColor={lightCream}
+            value={item.name}
+            returnKeyType="next"
+            onChangeText={(text) => handleChange(index, "name", text)}
+            onSubmitEditing={() => {
+              if (item.name.trim() !== "") handleAddItem();
+            }}
+          />
+          <TextInput
+            style={[
+              styles.groceryListInput,
+              { flex: 1, marginHorizontal: 5, textAlign: "center" },
+            ]}
+            placeholder="Pcs"
+            placeholderTextColor={lightCream}
+            keyboardType="numeric"
+            value={item.pcs}
+            returnKeyType="done"
+            onChangeText={(text) => handleChange(index, "pcs", text)}
+            onSubmitEditing={() => {
+              if (item.name.trim() !== "") handleAddItem();
+            }}
+          />
+          <TextInput
+            style={[
+              styles.groceryListInput,
+              { flex: 1, marginRight: 5, textAlign: "center" },
+            ]}
+            placeholder="Price"
+            placeholderTextColor={lightCream}
+            keyboardType="numeric"
+            value={item.price}
+            returnKeyType="done"
+            onChangeText={(text) => handleChange(index, "price", text)}
+            onSubmitEditing={() => {
+              if (item.name.trim() !== "") handleAddItem();
+            }}
+          />
+          <TouchableOpacity
+            style={styles.deleteBtnNoBg}
+            onPress={() => handleDeleteItem(index)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <MaterialIcons name="delete" size={24} color={darkPink} />
+          </TouchableOpacity>
+        </View>
+      ))}
+
+      <View style={styles.footerRow}>
+        <Text style={styles.totalText}>
+          Total: {formatCurrency(totalPrice)}
+        </Text>
+        <Button title="+ Add Item" onPress={handleAddItem} color={darkPink} />
+      </View>
+    </ScrollView>
   );
 }
