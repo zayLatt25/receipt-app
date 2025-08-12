@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   View,
   TextInput,
@@ -9,12 +9,53 @@ import {
 } from "react-native";
 import { styles, lightCream, darkPink } from "../styles/styles";
 import { MaterialIcons } from "@expo/vector-icons";
+import { db } from "../firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function App() {
+  const { user, authLoading } = useAuth();
   const [items, setItems] = useState([{ name: "", pcs: "", price: "" }]);
   const inputRefs = useRef([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const formatCurrency = (num) => "$" + num.toFixed(2);
+
+  // Load grocery list from Firestore when user is ready
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchData = async () => {
+      try {
+        const docRef = doc(db, "users", user.uid, "groceryLists", "myList");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setItems(docSnap.data().items || []);
+        }
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsDataLoaded(true);
+      }
+    };
+    fetchData();
+  }, [user]);
+
+  // Save grocery list to Firestore whenever items change and user is available
+  useEffect(() => {
+    if (!user || !isDataLoaded) return;
+
+    const saveData = async () => {
+      try {
+        const docRef = doc(db, "users", user.uid, "groceryLists", "myList");
+        await setDoc(docRef, { items });
+      } catch (error) {
+        console.error("Error saving data:", error);
+      }
+    };
+    saveData();
+  }, [items, user, isDataLoaded]);
 
   const handleChange = (index, field, value) => {
     const updatedItems = [...items];
@@ -41,7 +82,6 @@ export default function App() {
 
   const handleDeleteItem = (index) => {
     if (items.length === 1) {
-      // Clear the only row's data instead of deleting it
       setItems([{ name: "", pcs: "", price: "" }]);
     } else {
       const updatedItems = items.filter((_, i) => i !== index);
@@ -56,6 +96,10 @@ export default function App() {
       return sum + pcs * price;
     }, 0);
   }, [items]);
+
+  if (authLoading || !isDataLoaded) {
+    return <LoadingSpinner size="large" color={darkPink} />;
+  }
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
