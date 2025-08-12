@@ -152,7 +152,8 @@ export default function GroceryList() {
           <View style={{ width: 60 }} />
         </View>
       </View>
-      <ScrollView style={{ paddingHorizontal: 16, marginBottom: 70 }}>
+
+      <ScrollView style={styles.scrollViewContent}>
         {items.map((item, index) => (
           <View key={index} style={styles.itemRow}>
             <TouchableOpacity
@@ -166,7 +167,7 @@ export default function GroceryList() {
 
             <TextInput
               ref={(ref) => (inputRefs.current[index] = ref)}
-              style={[styles.groceryListInput, { flex: 2 }]}
+              style={styles.itemNameInput}
               placeholder="Item"
               placeholderTextColor={"grey"}
               value={item.name}
@@ -177,10 +178,7 @@ export default function GroceryList() {
               }}
             />
             <TextInput
-              style={[
-                styles.groceryListInput,
-                { flex: 1, textAlign: "center" },
-              ]}
+              style={styles.itemPcsInput}
               placeholder="Pcs"
               placeholderTextColor="grey"
               keyboardType="numeric"
@@ -189,10 +187,7 @@ export default function GroceryList() {
               onChangeText={(text) => handleChange(index, "pcs", text)}
             />
             <TextInput
-              style={[
-                styles.groceryListInput,
-                { flex: 1, textAlign: "center" },
-              ]}
+              style={styles.itemPriceInput}
               placeholder="Price"
               placeholderTextColor="grey"
               keyboardType="numeric"
