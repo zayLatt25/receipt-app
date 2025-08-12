@@ -197,7 +197,11 @@ export default function GroceryList() {
             <TouchableOpacity
               style={styles.deleteBtnCircle}
               onPress={() => handleDeleteItem(index)}
-              accessibilityLabel={`Delete item ${item.name || index + 1}`}
+              accessibilityLabel={
+                item.name && item.name.trim()
+                  ? `Delete item ${item.name}`
+                  : `Delete item at position ${index + 1}`
+              }
             >
               <MaterialIcons name="delete" size={24} color={lightCream} />
             </TouchableOpacity>
