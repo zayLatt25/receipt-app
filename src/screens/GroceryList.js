@@ -140,7 +140,7 @@ export default function GroceryList() {
 
         <View style={styles.columnHeaderRow}>
           <View style={styles.checkboxHeader} />
-          <Text style={styles.columnHeaderText}>Item</Text>
+          <Text style={styles.firstTableColumnText}>Item</Text>
           <Text style={styles.tableColumnText}>Pcs</Text>
           <Text style={styles.tableColumnText}>Price</Text>
           <View style={{ width: 60 }} />

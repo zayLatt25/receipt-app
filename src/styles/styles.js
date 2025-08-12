@@ -431,7 +431,7 @@ export const styles = StyleSheet.create({
     zIndex: 10,
     width: "100%",
   },
-  columnHeaderText: {
+  firstTableColumnText: {
     flex: 2,
     textAlign: "left",
     color: lightCream,
