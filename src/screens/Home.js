@@ -9,6 +9,7 @@ import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const { user, authLoading } = useAuth();
@@ -62,29 +63,31 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <CustomCalendar
-        selectedDate={selectedDate}
-        onDaySelect={setSelectedDate}
-      />
+    <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <CustomCalendar
+          selectedDate={selectedDate}
+          onDaySelect={setSelectedDate}
+        />
 
-      <View style={styles.divider} />
+        <View style={styles.divider} />
 
-      {expenses.length === 0 ? (
-        <Text style={styles.bodyText}>No expenses for this day!</Text>
-      ) : (
-        <ExpenseList expenses={expenses} />
-      )}
+        {expenses.length === 0 ? (
+          <Text style={styles.bodyText}>No expenses for this day!</Text>
+        ) : (
+          <ExpenseList expenses={expenses} />
+        )}
 
-      <FloatingActionButton onPress={() => setModalVisible(true)} />
+        <FloatingActionButton onPress={() => setModalVisible(true)} />
 
-      <AddExpenseModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={handleAddExpense}
-        initialDate={selectedDate}
-      />
-    </View>
+        <AddExpenseModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSave={handleAddExpense}
+          initialDate={selectedDate}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 

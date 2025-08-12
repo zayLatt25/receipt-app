@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: scale(20),
-    paddingTop: verticalScale(10),
     backgroundColor: navyBlue,
   },
   safeAreaView: {
