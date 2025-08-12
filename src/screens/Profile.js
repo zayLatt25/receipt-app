@@ -3,26 +3,33 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { styles } from "../styles/styles";
 import FormButton from "../components/FormButton";
-import { auth } from "../firebase";
+import { useAuth } from "../context/AuthContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
+  const { logout } = useAuth();
   const [logoutLoading, setLogoutLoading] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLogoutLoading(true);
-    auth.signOut();
-    setLogoutLoading(false);
+    try {
+      await logout();
+    } finally {
+      setLogoutLoading(false);
+    }
   };
 
   return (
-    <View style={styles.centerContainer}>
-      <Text style={styles.title}>Profile Screen</Text>
+    <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Profile</Text>
 
-      <FormButton
-        title="Logout"
-        onPress={handleLogout}
-        loading={logoutLoading}
-      />
-    </View>
+        <FormButton
+          title="Logout"
+          onPress={handleLogout}
+          loading={logoutLoading}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
