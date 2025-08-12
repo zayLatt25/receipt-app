@@ -13,16 +13,36 @@ import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const LOCAL_STORAGE_KEY = "groceryList";
 
 export default function App() {
   const { user, authLoading } = useAuth();
   const [items, setItems] = useState([{ name: "", pcs: "", price: "" }]);
   const inputRefs = useRef([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // 🔹 Saving indicator state
+  const saveTimeoutRef = useRef(null);
 
   const formatCurrency = (num) => "$" + num.toFixed(2);
 
-  // Load grocery list from Firestore when user is ready
+  // Load grocery list from AsyncStorage first (fast load), then Firestore
+  useEffect(() => {
+    const loadLocalData = async () => {
+      try {
+        const savedData = await AsyncStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedData) {
+          setItems(JSON.parse(savedData));
+        }
+      } catch (error) {
+        console.error("Error loading local data:", error);
+      }
+    };
+    loadLocalData();
+  }, []);
+
+  // Load grocery list from Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -42,19 +62,36 @@ export default function App() {
     fetchData();
   }, [user]);
 
-  // Save grocery list to Firestore whenever items change and user is available
+  // Debounced save to Firestore + AsyncStorage
   useEffect(() => {
     if (!user || !isDataLoaded) return;
 
-    const saveData = async () => {
+    // Clear previous save timer
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Wait for 2 seconds after user stops typing before saving
+    saveTimeoutRef.current = setTimeout(async () => {
       try {
+        setIsSaving(true);
+        console.log("Saving data...");
+
+        // Save to Firestore
         const docRef = doc(db, "users", user.uid, "groceryLists", "myList");
         await setDoc(docRef, { items });
+
+        // Save to AsyncStorage
+        await AsyncStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
       } catch (error) {
         console.error("Error saving data:", error);
+      } finally {
+        setIsSaving(false);
+        console.log("Data saved successfully.");
       }
-    };
-    saveData();
+    }, 2000);
+
+    return () => clearTimeout(saveTimeoutRef.current);
   }, [items, user, isDataLoaded]);
 
   const handleChange = (index, field, value) => {
@@ -103,6 +140,15 @@ export default function App() {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      {/* 🔹 Saving indicator */}
+      {isSaving && (
+        <Text
+          style={{ textAlign: "center", color: darkPink, marginVertical: 5 }}
+        >
+          Saving...
+        </Text>
+      )}
+
       <Text style={styles.title}>Item List</Text>
 
       {items.map((item, index) => (
