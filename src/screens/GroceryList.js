@@ -2,47 +2,29 @@ import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
-import { styles, lightCream, darkPink } from "../styles/styles";
+import { styles, lightCream, darkPink, navyBlue } from "../styles/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const LOCAL_STORAGE_KEY = "groceryList";
 
 export default function App() {
   const { user, authLoading } = useAuth();
   const [items, setItems] = useState([{ name: "", pcs: "", price: "" }]);
   const inputRefs = useRef([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [isSaving, setIsSaving] = useState(false); // 🔹 Saving indicator state
+  const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false);
 
   const formatCurrency = (num) => "$" + num.toFixed(2);
 
-  // Load grocery list from AsyncStorage first (fast load), then Firestore
-  useEffect(() => {
-    const loadLocalData = async () => {
-      try {
-        const savedData = await AsyncStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedData) {
-          setItems(JSON.parse(savedData));
-        }
-      } catch (error) {
-        console.error("Error loading local data:", error);
-      }
-    };
-    loadLocalData();
-  }, []);
-
-  // Load grocery list from Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -62,39 +44,34 @@ export default function App() {
     fetchData();
   }, [user]);
 
-  // Debounced save to Firestore + AsyncStorage
+  // Updated save effect with proper debounce and delayed saving status
   useEffect(() => {
     if (!user || !isDataLoaded) return;
 
-    // Clear previous save timer
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    // Wait for 2 seconds after user stops typing before saving
+    // Set timeout to save after 2 seconds of no typing
     saveTimeoutRef.current = setTimeout(async () => {
-      try {
-        setIsSaving(true);
-        console.log("Saving data...");
+      setIsTyping(false); // User stopped typing
+      setIsSaving(true); // Start saving indicator
 
-        // Save to Firestore
+      try {
         const docRef = doc(db, "users", user.uid, "groceryLists", "myList");
         await setDoc(docRef, { items });
-
-        // Save to AsyncStorage
-        await AsyncStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
       } catch (error) {
         console.error("Error saving data:", error);
       } finally {
-        setIsSaving(false);
-        console.log("Data saved successfully.");
+        setIsSaving(false); // End saving indicator
       }
     }, 2000);
 
-    return () => clearTimeout(saveTimeoutRef.current);
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
   }, [items, user, isDataLoaded]);
 
   const handleChange = (index, field, value) => {
+    setIsTyping(true); // User is typing now
     const updatedItems = [...items];
     updatedItems[index][field] = value;
     setItems(updatedItems);
@@ -138,79 +115,77 @@ export default function App() {
     return <LoadingSpinner size="large" color={darkPink} />;
   }
 
+  let savingText = "Saved";
+  if (isTyping) savingText = "Waiting to save...";
+  if (isSaving) savingText = "Saving...";
+
   return (
-    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      {/* 🔹 Saving indicator */}
-      {isSaving && (
-        <Text
-          style={{ textAlign: "center", color: darkPink, marginVertical: 5 }}
-        >
-          Saving...
-        </Text>
-      )}
+    <SafeAreaView style={{ flex: 1, backgroundColor: navyBlue }}>
+      <View style={{ paddingHorizontal: 16 }}>
+        <Text style={styles.title}>Item List</Text>
+        <Text style={styles.savingIndicator}>{savingText}</Text>
+      </View>
 
-      <Text style={styles.title}>Item List</Text>
+      <ScrollView
+        style={{ padding: 16, marginBottom: 70 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        {items.map((item, index) => (
+          <View key={index} style={styles.itemCard}>
+            <TextInput
+              ref={(ref) => (inputRefs.current[index] = ref)}
+              style={[styles.groceryListInput, { flex: 2 }]}
+              placeholder="Item"
+              placeholderTextColor={lightCream}
+              value={item.name}
+              returnKeyType="next"
+              onChangeText={(text) => handleChange(index, "name", text)}
+              onSubmitEditing={() => {
+                if (item.name.trim() !== "") handleAddItem();
+              }}
+            />
+            <TextInput
+              style={[
+                styles.groceryListInput,
+                { flex: 1, textAlign: "center" },
+              ]}
+              placeholder="Pcs"
+              placeholderTextColor={lightCream}
+              keyboardType="numeric"
+              value={item.pcs}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange(index, "pcs", text)}
+            />
+            <TextInput
+              style={[
+                styles.groceryListInput,
+                { flex: 1, textAlign: "center" },
+              ]}
+              placeholder="Price"
+              placeholderTextColor={lightCream}
+              keyboardType="numeric"
+              value={item.price}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange(index, "price", text)}
+            />
+            <TouchableOpacity
+              style={styles.deleteBtnCircle}
+              onPress={() => handleDeleteItem(index)}
+            >
+              <MaterialIcons name="delete" size={20} color={lightCream} />
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
 
-      {items.map((item, index) => (
-        <View key={index} style={styles.itemRow}>
-          <TextInput
-            ref={(ref) => (inputRefs.current[index] = ref)}
-            style={[styles.groceryListInput, { flex: 2 }]}
-            placeholder="Item"
-            placeholderTextColor={lightCream}
-            value={item.name}
-            returnKeyType="next"
-            onChangeText={(text) => handleChange(index, "name", text)}
-            onSubmitEditing={() => {
-              if (item.name.trim() !== "") handleAddItem();
-            }}
-          />
-          <TextInput
-            style={[
-              styles.groceryListInput,
-              { flex: 1, marginHorizontal: 5, textAlign: "center" },
-            ]}
-            placeholder="Pcs"
-            placeholderTextColor={lightCream}
-            keyboardType="numeric"
-            value={item.pcs}
-            returnKeyType="done"
-            onChangeText={(text) => handleChange(index, "pcs", text)}
-            onSubmitEditing={() => {
-              if (item.name.trim() !== "") handleAddItem();
-            }}
-          />
-          <TextInput
-            style={[
-              styles.groceryListInput,
-              { flex: 1, marginRight: 5, textAlign: "center" },
-            ]}
-            placeholder="Price"
-            placeholderTextColor={lightCream}
-            keyboardType="numeric"
-            value={item.price}
-            returnKeyType="done"
-            onChangeText={(text) => handleChange(index, "price", text)}
-            onSubmitEditing={() => {
-              if (item.name.trim() !== "") handleAddItem();
-            }}
-          />
-          <TouchableOpacity
-            style={styles.deleteBtnNoBg}
-            onPress={() => handleDeleteItem(index)}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <MaterialIcons name="delete" size={24} color={darkPink} />
-          </TouchableOpacity>
-        </View>
-      ))}
-
-      <View style={styles.footerRow}>
+      <View style={styles.footerSticky}>
         <Text style={styles.totalText}>
           Total: {formatCurrency(totalPrice)}
         </Text>
-        <Button title="+ Add Item" onPress={handleAddItem} color={darkPink} />
+        <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+          <Text style={styles.addButtonText}>+ Add Item</Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
