@@ -6,15 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
-  Platform,
 } from "react-native";
-import { styles, lightCream, darkPink, navyBlue } from "../styles/styles";
+import { styles, lightCream, darkPink } from "../styles/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Swipeable } from "react-native-gesture-handler";
 
 export default function GroceryList() {
   const { user, authLoading } = useAuth();
@@ -48,16 +46,14 @@ export default function GroceryList() {
     fetchData();
   }, [user]);
 
-  // Updated save effect with proper debounce and delayed saving status
   useEffect(() => {
     if (!user || !isDataLoaded) return;
 
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    // Set timeout to save after 2 seconds of no typing
     saveTimeoutRef.current = setTimeout(async () => {
-      setIsTyping(false); // User stopped typing
-      setIsSaving(true); // Start saving indicator
+      setIsTyping(false);
+      setIsSaving(true);
 
       try {
         const docRef = doc(db, "users", user.uid, "groceryLists", "myList");
@@ -65,7 +61,7 @@ export default function GroceryList() {
       } catch (error) {
         console.error("Error saving data:", error);
       } finally {
-        setIsSaving(false); // End saving indicator
+        setIsSaving(false);
       }
     }, 2000);
 
@@ -81,7 +77,6 @@ export default function GroceryList() {
     setItems(updatedItems);
   };
 
-  // Toggle check state
   const toggleCheck = (index) => {
     const updatedItems = [...items];
     updatedItems[index].checked = !updatedItems[index].checked;
@@ -117,18 +112,6 @@ export default function GroceryList() {
     }
   };
 
-  // Render right action for Swipeable (Delete button)
-  const renderRightActions = (index) => {
-    return (
-      <TouchableOpacity
-        style={styles.swipeDeleteButton}
-        onPress={() => handleDeleteItem(index)}
-      >
-        <MaterialIcons name="delete" size={24} color={lightCream} />
-      </TouchableOpacity>
-    );
-  };
-
   const totalPrice = useMemo(() => {
     return items.reduce((sum, item) => {
       const pcs = parseFloat(item.pcs) || 0;
@@ -154,8 +137,7 @@ export default function GroceryList() {
         </View>
 
         <View style={styles.columnHeaderRow}>
-          <View style={styles.checkboxHeader} />{" "}
-          {/* empty space for checkbox column */}
+          <View style={styles.checkboxHeader} />
           <Text style={[styles.columnHeaderText, { flex: 2 }]}>Item</Text>
           <Text
             style={[styles.columnHeaderText, { flex: 1, textAlign: "center" }]}
@@ -167,73 +149,71 @@ export default function GroceryList() {
           >
             Price
           </Text>
+          <View style={{ width: 40 }} /> {/* For Delete Icon space */}
         </View>
       </View>
       <ScrollView
         style={{ paddingHorizontal: 16, marginBottom: 70 }}
         keyboardShouldPersistTaps="handled"
       >
-        {/* List items */}
         {items.map((item, index) => (
-          <Swipeable
-            key={index}
-            renderRightActions={() => renderRightActions(index)}
-          >
-            <View style={styles.itemRow}>
-              <TouchableOpacity
-                style={[
-                  styles.checkbox,
-                  item.checked && styles.checkboxChecked,
-                ]}
-                onPress={() => toggleCheck(index)}
-              >
-                {item.checked && (
-                  <MaterialIcons name="check" size={18} color={darkPink} />
-                )}
-              </TouchableOpacity>
+          <View key={index} style={styles.itemRow}>
+            <TouchableOpacity
+              style={[styles.checkbox, item.checked && styles.checkboxChecked]}
+              onPress={() => toggleCheck(index)}
+            >
+              {item.checked && (
+                <MaterialIcons name="check" size={18} color={darkPink} />
+              )}
+            </TouchableOpacity>
 
-              <TextInput
-                ref={(ref) => (inputRefs.current[index] = ref)}
-                style={[styles.groceryListInput, { flex: 2 }]}
-                placeholder="Item"
-                placeholderTextColor={lightCream}
-                value={item.name}
-                returnKeyType="next"
-                onChangeText={(text) => handleChange(index, "name", text)}
-                onSubmitEditing={() => {
-                  if (item.name.trim() !== "") handleAddItem();
-                }}
-              />
-              <TextInput
-                style={[
-                  styles.groceryListInput,
-                  { flex: 1, textAlign: "center" },
-                ]}
-                placeholder="Pcs"
-                placeholderTextColor="grey"
-                keyboardType="numeric"
-                value={item.pcs}
-                returnKeyType="done"
-                onChangeText={(text) => handleChange(index, "pcs", text)}
-              />
-              <TextInput
-                style={[
-                  styles.groceryListInput,
-                  { flex: 1, textAlign: "center" },
-                ]}
-                placeholder="Price"
-                placeholderTextColor="grey"
-                keyboardType="numeric"
-                value={item.price}
-                returnKeyType="done"
-                onChangeText={(text) => handleChange(index, "price", text)}
-              />
-            </View>
-          </Swipeable>
+            <TextInput
+              ref={(ref) => (inputRefs.current[index] = ref)}
+              style={[styles.groceryListInput, { flex: 2 }]}
+              placeholder="Item"
+              placeholderTextColor={lightCream}
+              value={item.name}
+              returnKeyType="next"
+              onChangeText={(text) => handleChange(index, "name", text)}
+              onSubmitEditing={() => {
+                if (item.name.trim() !== "") handleAddItem();
+              }}
+            />
+            <TextInput
+              style={[
+                styles.groceryListInput,
+                { flex: 1, textAlign: "center" },
+              ]}
+              placeholder="Pcs"
+              placeholderTextColor="grey"
+              keyboardType="numeric"
+              value={item.pcs}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange(index, "pcs", text)}
+            />
+            <TextInput
+              style={[
+                styles.groceryListInput,
+                { flex: 1, textAlign: "center" },
+              ]}
+              placeholder="Price"
+              placeholderTextColor="grey"
+              keyboardType="numeric"
+              value={item.price}
+              returnKeyType="done"
+              onChangeText={(text) => handleChange(index, "price", text)}
+            />
+            <TouchableOpacity
+              style={styles.deleteBtnCircle}
+              onPress={() => handleDeleteItem(index)}
+              accessibilityLabel={`Delete item ${item.name || index + 1}`}
+            >
+              <MaterialIcons name="delete" size={24} color={lightCream} />
+            </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
 
-      {/* Footer sticky as before */}
       <View style={styles.footerSticky}>
         <Text style={styles.totalText}>
           Total: {formatCurrency(totalPrice)}
