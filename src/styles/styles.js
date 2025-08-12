@@ -310,11 +310,6 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
-  // itemRow: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginBottom: 12,
-  // },
   deleteBtn: {
     backgroundColor: darkPink,
     paddingHorizontal: 12,
@@ -341,13 +336,6 @@ export const styles = StyleSheet.create({
     color: lightCream,
     fontFamily: mainFont,
   },
-  // itemRow: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   borderBottomWidth: 1,
-  //   borderBottomColor: "rgba(255,255,255,0.2)",
-  //   paddingVertical: verticalScale(10),
-  // },
   checkbox: {
     width: scale(24),
     height: scale(24),
@@ -481,6 +469,12 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingRight: scale(8),
+  },
+  deleteBtnColumn: {
+    width: scale(65),
+  },
+  keyboardAwareViewStyle: {
+    paddingBottom: verticalScale(50),
   },
   itemNameInput: {
     flex: 2,

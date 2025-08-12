@@ -143,14 +143,14 @@ export default function GroceryList() {
           <Text style={styles.firstTableColumnText}>Item</Text>
           <Text style={styles.tableColumnText}>Pcs</Text>
           <Text style={styles.tableColumnText}>Price</Text>
-          <View style={{ width: 60 }} />
+          <View style={styles.deleteBtnColumn} />
         </View>
       </View>
 
       <KeyboardAwareScrollView
         style={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: 50 }}
+        contentContainerStyle={styles.keyboardAwareViewStyle}
         enableOnAndroid={true}
       >
         {items.map((item, index) => (
