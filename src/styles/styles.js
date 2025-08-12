@@ -54,13 +54,6 @@ export const styles = StyleSheet.create({
     marginBottom: 0,
     flex: 1,
   },
-  titleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: scale(10),
-    marginBottom: verticalScale(10),
-  },
   subtitle: {
     fontSize: normalizeFont(30),
     textAlign: "center",
@@ -441,5 +434,34 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: scale(16),
     marginBottom: verticalScale(10),
+  },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: scale(25),
+    marginBottom: verticalScale(10),
+  },
+  stickyHeaderContainer: {
+    backgroundColor: navyBlue,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: lightCream,
+    zIndex: 10,
+    width: "100%",
+  },
+  columnHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxHeader: {
+    width: 24,
+    marginRight: 12,
+  },
+  columnHeaderText: {
+    color: lightCream,
+    fontWeight: "bold",
+    fontSize: normalizeFont(16),
   },
 });

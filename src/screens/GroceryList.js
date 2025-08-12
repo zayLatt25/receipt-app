@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { styles, lightCream, darkPink, navyBlue } from "../styles/styles";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -146,15 +147,33 @@ export default function GroceryList() {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.titleRow}>
-        <Text style={styles.pageTitle}>Item List</Text>
-        <Text style={styles.savingIndicator}>{savingText}</Text>
-      </View>
+      <View style={styles.stickyHeaderContainer}>
+        <View style={styles.titleRow}>
+          <Text style={styles.pageTitle}>Item List</Text>
+          <Text style={styles.savingIndicator}>{savingText}</Text>
+        </View>
 
+        <View style={styles.columnHeaderRow}>
+          <View style={styles.checkboxHeader} />{" "}
+          {/* empty space for checkbox column */}
+          <Text style={[styles.columnHeaderText, { flex: 2 }]}>Item</Text>
+          <Text
+            style={[styles.columnHeaderText, { flex: 1, textAlign: "center" }]}
+          >
+            Pcs
+          </Text>
+          <Text
+            style={[styles.columnHeaderText, { flex: 1, textAlign: "center" }]}
+          >
+            Price
+          </Text>
+        </View>
+      </View>
       <ScrollView
-        style={{ padding: 16, marginBottom: 70 }}
+        style={{ paddingHorizontal: 16, marginBottom: 70 }}
         keyboardShouldPersistTaps="handled"
       >
+        {/* List items */}
         {items.map((item, index) => (
           <Swipeable
             key={index}
@@ -191,7 +210,7 @@ export default function GroceryList() {
                   { flex: 1, textAlign: "center" },
                 ]}
                 placeholder="Pcs"
-                placeholderTextColor={lightCream}
+                placeholderTextColor="grey"
                 keyboardType="numeric"
                 value={item.pcs}
                 returnKeyType="done"
@@ -203,7 +222,7 @@ export default function GroceryList() {
                   { flex: 1, textAlign: "center" },
                 ]}
                 placeholder="Price"
-                placeholderTextColor={lightCream}
+                placeholderTextColor="grey"
                 keyboardType="numeric"
                 value={item.price}
                 returnKeyType="done"
@@ -214,6 +233,7 @@ export default function GroceryList() {
         ))}
       </ScrollView>
 
+      {/* Footer sticky as before */}
       <View style={styles.footerSticky}>
         <Text style={styles.totalText}>
           Total: {formatCurrency(totalPrice)}
