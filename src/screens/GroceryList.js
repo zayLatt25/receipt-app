@@ -149,13 +149,10 @@ export default function GroceryList() {
           >
             Price
           </Text>
-          <View style={{ width: 40 }} /> {/* For Delete Icon space */}
+          <View style={{ width: 60 }} />
         </View>
       </View>
-      <ScrollView
-        style={{ paddingHorizontal: 16, marginBottom: 70 }}
-        keyboardShouldPersistTaps="handled"
-      >
+      <ScrollView style={{ paddingHorizontal: 16, marginBottom: 70 }}>
         {items.map((item, index) => (
           <View key={index} style={styles.itemRow}>
             <TouchableOpacity
@@ -171,7 +168,7 @@ export default function GroceryList() {
               ref={(ref) => (inputRefs.current[index] = ref)}
               style={[styles.groceryListInput, { flex: 2 }]}
               placeholder="Item"
-              placeholderTextColor={lightCream}
+              placeholderTextColor={"grey"}
               value={item.name}
               returnKeyType="next"
               onChangeText={(text) => handleChange(index, "name", text)}
