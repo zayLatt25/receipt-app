@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   Text,
-  ScrollView,
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
@@ -13,6 +12,9 @@ import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
+
+// Import the KeyboardAwareScrollView
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function GroceryList() {
   const { user, authLoading } = useAuth();
@@ -153,7 +155,12 @@ export default function GroceryList() {
         </View>
       </View>
 
-      <ScrollView style={styles.scrollViewContent}>
+      <KeyboardAwareScrollView
+        style={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 50 }}
+        enableOnAndroid={true}
+      >
         {items.map((item, index) => (
           <View key={index} style={styles.itemRow}>
             <TouchableOpacity
@@ -171,7 +178,7 @@ export default function GroceryList() {
               placeholder="Item"
               placeholderTextColor={"grey"}
               value={item.name}
-              returnKeyType="next"
+              returnKeyType="done"
               onChangeText={(text) => handleChange(index, "name", text)}
               onSubmitEditing={() => {
                 if (item.name.trim() !== "") handleAddItem();
@@ -204,7 +211,7 @@ export default function GroceryList() {
             </TouchableOpacity>
           </View>
         ))}
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <View style={styles.footerSticky}>
         <Text style={styles.totalText}>
