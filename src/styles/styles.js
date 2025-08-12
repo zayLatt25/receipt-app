@@ -432,6 +432,16 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   columnHeaderText: {
+    flex: 2,
+    textAlign: "left",
+    color: lightCream,
+    fontWeight: "bold",
+    paddingLeft: scale(23),
+    fontSize: normalizeFont(16),
+  },
+  tableColumnText: {
+    flex: 1,
+    textAlign: "center",
     color: lightCream,
     fontWeight: "bold",
     fontSize: normalizeFont(16),

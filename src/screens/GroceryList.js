@@ -140,17 +140,9 @@ export default function GroceryList() {
 
         <View style={styles.columnHeaderRow}>
           <View style={styles.checkboxHeader} />
-          <Text style={[styles.columnHeaderText, { flex: 2 }]}>Item</Text>
-          <Text
-            style={[styles.columnHeaderText, { flex: 1, textAlign: "center" }]}
-          >
-            Pcs
-          </Text>
-          <Text
-            style={[styles.columnHeaderText, { flex: 1, textAlign: "center" }]}
-          >
-            Price
-          </Text>
+          <Text style={styles.columnHeaderText}>Item</Text>
+          <Text style={styles.tableColumnText}>Pcs</Text>
+          <Text style={styles.tableColumnText}>Price</Text>
           <View style={{ width: 60 }} />
         </View>
       </View>
