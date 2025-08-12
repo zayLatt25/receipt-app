@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Swipeable } from "react-native-gesture-handler";
 
-export default function App() {
+export default function GroceryList() {
   const { user, authLoading } = useAuth();
   const [items, setItems] = useState([
     { name: "", pcs: "", price: "", checked: false },
