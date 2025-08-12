@@ -21,7 +21,6 @@ export default function CustomCalendar({ selectedDate, onDaySelect }) {
         hideExtraDays={true}
         enableSwipeMonths={true}
         theme={styles.calendarTheme}
-        style={styles.calendarStyle}
       />
     </View>
   );
