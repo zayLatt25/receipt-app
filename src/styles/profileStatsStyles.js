@@ -10,6 +10,7 @@ export const profileStatsStyles = StyleSheet.create({
   profileText: {
     color: colors.lightCream,
     fontSize: normalizeFont(16),
+    alignSelf: "center",
   },
   statsSectionHeader: {
     fontSize: normalizeFont(18),

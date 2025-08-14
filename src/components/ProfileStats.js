@@ -208,12 +208,15 @@ export default function ProfileStats() {
             />
             <VictoryAxis
               dependentAxis
-              tickFormat={(t) => `$${t}`}
+              tickFormat={(t) =>
+                t >= 1000 ? `$${(t / 1000).toFixed(1)}k` : `$${t}`
+              }
               style={{
                 tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
               }}
               domain={[0, Math.max(...monthlyTotals) * 1.2]}
             />
+
             <VictoryBar
               data={monthlyTotals.map((amt, idx) => ({ x: idx, y: amt }))}
               barRatio={0.7}
