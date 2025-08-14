@@ -4,7 +4,7 @@ import { View, Text, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import styles from "../styles/SignupScreenStyles";
+import { authStyles } from "../styles/AuthScreenStyles";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import LinkText from "../components/LinkText";
@@ -75,8 +75,8 @@ const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.centerContainer}>
-      <Text style={styles.title}>Sign Up</Text>
+    <View style={authStyles.centerContainer}>
+      <Text style={authStyles.title}>Sign Up</Text>
 
       {/* Name input */}
       <FormInput placeholder="Full Name" value={name} onChangeText={setName} />
@@ -105,7 +105,7 @@ const SignupScreen = ({ navigation }) => {
         title="Sign Up"
         onPress={handleSignup}
         loading={loading}
-        style={styles.loginSignupButton}
+        style={authStyles.loginSignupButton}
       />
 
       <LinkText

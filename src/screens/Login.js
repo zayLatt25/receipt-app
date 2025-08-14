@@ -1,9 +1,8 @@
-// screens/LoginScreen.js
 import React, { useState } from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { styles } from "../styles/styles";
+import { authStyles } from "../styles/AuthScreenStyles";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import LinkText from "../components/LinkText";
@@ -25,16 +24,12 @@ const LoginScreen = ({ navigation }) => {
           errorMessage = "Please enter a valid email address.";
           break;
         case "auth/user-not-found":
-          errorMessage = "Incorrect email or password.";
-          break;
         case "auth/wrong-password":
           errorMessage = "Incorrect email or password.";
           break;
         case "auth/missing-password":
           errorMessage = "Please enter your password.";
           break;
-        default:
-          errorMessage = "Something went wrong. Please try again.";
       }
 
       Alert.alert("Login Error", errorMessage);
@@ -44,9 +39,9 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.centerContainer}>
-      <Text style={styles.subtitle}>Hi, Welcome to</Text>
-      <Text style={[styles.title]}>Receipt</Text>
+    <View style={authStyles.centerContainer}>
+      <Text style={authStyles.subtitle}>Hi, Welcome to</Text>
+      <Text style={authStyles.title}>Receipt</Text>
 
       <FormInput
         placeholder="Email"
@@ -65,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
         title="Login"
         onPress={handleLogin}
         loading={loading}
-        style={styles.loginSignupButton}
+        style={authStyles.loginSignupButton}
       />
 
       <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
