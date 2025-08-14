@@ -7,7 +7,6 @@ import CustomCalendar from "../components/Calendar";
 import FloatingActionButton from "../components/FloatingActionButton";
 import AddExpenseModal from "../components/AddExpenseModal";
 import ExpenseList from "../components/ExpenseList";
-
 import {
   collection,
   addDoc,
@@ -20,6 +19,7 @@ import {
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { homeStyles as styles } from "../styles/HomeScreenStyles";
+import { colors } from "../styles/theme";
 
 const HomeScreen = () => {
   const { user, authLoading } = useAuth();
@@ -138,18 +138,33 @@ const HomeScreen = () => {
     const datesWithExpenses = {};
 
     monthExpenses.forEach((exp) => {
-      datesWithExpenses[exp.date] = { marked: true, dotColor: "#ff69b4" };
+      datesWithExpenses[exp.date] = {
+        marked: true,
+        dotColor: "#ff69b4",
+        dotStyle: { width: 5, height: 5, marginTop: 2 }, // smaller and centered
+      };
     });
 
-    return {
-      ...datesWithExpenses,
-      [selectedDate]: {
-        ...(datesWithExpenses[selectedDate] || {}),
+    if (datesWithExpenses[selectedDate]) {
+      // Selected day with expenses
+      datesWithExpenses[selectedDate] = {
+        ...datesWithExpenses[selectedDate],
         selected: true,
         selectedColor: "#ff69b4",
         selectedTextColor: "#fff",
-      },
-    };
+        dotColor: colors.lightCream,
+        dotStyle: { width: 5, height: 5, marginTop: 2 }, // ensure dot inside circle
+      };
+    } else {
+      // Selected day without expenses
+      datesWithExpenses[selectedDate] = {
+        selected: true,
+        selectedColor: "#ff69b4",
+        selectedTextColor: "#fff",
+      };
+    }
+
+    return datesWithExpenses;
   }, [monthlyExpensesCache, selectedDate, currentMonthKey]);
 
   // Handle month change in calendar

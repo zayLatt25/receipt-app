@@ -7,28 +7,26 @@ export default function CustomCalendar({
   selectedDate,
   onDaySelect,
   markedDates,
+  onMonthChange,
 }) {
-  const updatedMarkedDates = {
-    ...markedDates,
-    [selectedDate]: {
-      ...(markedDates[selectedDate] || {}),
-      selected: true,
-      selectedColor: colors.darkPink,
-      selectedTextColor: colors.lightCream,
-      marked: true,
-      dotColor: colors.darkPink,
-    },
-  };
-
   return (
     <View style={styles.calendarWrapper}>
       <Calendar
         onDayPress={(day) => onDaySelect(day.dateString)}
         current={selectedDate}
-        markedDates={updatedMarkedDates}
+        markedDates={markedDates}
         hideExtraDays={true}
         enableSwipeMonths={true}
-        theme={styles.calendarTheme}
+        theme={{
+          ...styles.calendarTheme,
+          dotStyle: { marginTop: -2 },
+          todayTextColor: colors.darkPink,
+          arrowColor: colors.darkPink,
+          monthTextColor: colors.darkPink,
+          textDayFontWeight: "500",
+          textMonthFontWeight: "600",
+        }}
+        onMonthChange={(month) => onMonthChange?.(month.dateString)}
       />
     </View>
   );
