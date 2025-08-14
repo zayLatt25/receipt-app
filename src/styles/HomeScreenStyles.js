@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { colors, fonts } from "./theme";
 import { scale, verticalScale, normalizeFont } from "../utils/sizes";
 
-export const homeStyles = StyleSheet.create({
+export const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
     backgroundColor: colors.background,

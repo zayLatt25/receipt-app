@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
-import { homeStyles as styles } from "../styles/HomeScreenStyles";
+import { styles } from "../styles/HomeScreenStyles";
 import { colors } from "../styles/theme";
 
 const HomeScreen = () => {
