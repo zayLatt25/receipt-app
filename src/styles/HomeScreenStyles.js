@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-import { colors, fonts, metrics } from "./theme";
+import { colors, fonts } from "./theme";
+import { scale, verticalScale, normalizeFont } from "../utils/sizes";
 
 export const homeStyles = StyleSheet.create({
   safeAreaView: {
@@ -8,19 +9,19 @@ export const homeStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: metrics.scale(16),
-    paddingTop: metrics.verticalScale(10),
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(10),
   },
   divider: {
     height: 1,
     backgroundColor: colors.divider,
-    marginBottom: metrics.verticalScale(20),
+    marginBottom: verticalScale(20),
   },
   bodyText: {
     textAlign: "center",
-    fontSize: metrics.normalizeFont(16),
+    fontSize: normalizeFont(16),
     fontFamily: fonts.main,
     color: colors.lightCream,
-    marginBottom: metrics.verticalScale(16),
+    marginBottom: verticalScale(16),
   },
 });
