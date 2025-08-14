@@ -28,16 +28,16 @@ export default function ProfileStats() {
 
   // Chart colors for pie
   const chartColors = [
-    "#e8e5d9", // light cream
-    "#781d4e", // dark pink
-    "#f7b267", // orange
-    "#f4845f", // coral
-    "#4f5d75", // slate blue
-    "#bfc0c0", // light gray
-    "#6a994e", // green
-    "#386641", // dark green
-    "#ffb4a2", // light peach
-    "#b5838d", // muted purple
+    "#e8e5d9",
+    "#781d4e",
+    "#f7b267",
+    "#f4845f",
+    "#4f5d75",
+    "#bfc0c0",
+    "#6a994e",
+    "#386641",
+    "#ffb4a2",
+    "#b5838d",
   ];
 
   // Month labels
@@ -87,7 +87,6 @@ export default function ProfileStats() {
           }
         }
       });
-      // Round each value to 2 decimals
       setMonthlyTotals(monthly.map((val) => Number(val.toFixed(2))));
     } catch (err) {
       setMonthlyTotals(Array(12).fill(0));
@@ -116,14 +115,17 @@ export default function ProfileStats() {
           }
         }
       });
-      // Show both category and amount in the name, and round amount
+
+      // Separate name and display label
       const catData = Object.entries(catTotals).map(([cat, amt], i) => ({
-        name: `${cat} ($${Number(amt).toFixed(2)})`,
+        name: cat, // just the category name for internal use
         amount: Number(amt.toFixed(2)),
         color: chartColors[i % chartColors.length],
         legendFontColor: lightCream,
         legendFontSize: 14,
+        displayLabel: `${cat} ($${Number(amt).toFixed(2)})`, // for legend
       }));
+
       setCategoryTotals(catData);
     } catch (err) {
       setCategoryTotals([]);
@@ -219,26 +221,6 @@ export default function ProfileStats() {
           showValuesOnTopOfBars
           withHorizontalLines
           segments={5}
-          renderDotContent={({ x, y, index }) => null}
-          decorator={() => {
-            // Calculate max for y-axis: 125% of budget or max value
-            const maxData = Math.max(...monthlyTotals, 0);
-            const maxBudget = monthlyBudget * 1.25;
-            const max = Math.max(maxData, maxBudget);
-            const chartHeight = styles.statsBarChartHeight || 180;
-            const yPos =
-              ((max - monthlyBudget) / max) * chartHeight +
-              styles.statsBarChartPaddingTop;
-            return (
-              <View pointerEvents="none" style={styles.budgetLine(yPos)}>
-                <View style={styles.budgetLabelContainer}>
-                  <Text style={styles.budgetLabelText}>
-                    Budget (${monthlyBudget})
-                  </Text>
-                </View>
-              </View>
-            );
-          }}
         />
       )}
 
@@ -264,6 +246,7 @@ export default function ProfileStats() {
             color: cat.color,
             legendFontColor: cat.legendFontColor,
             legendFontSize: cat.legendFontSize,
+            legendLabel: cat.displayLabel, // custom label for legend
           }))}
           width={screenWidth}
           height={210}
