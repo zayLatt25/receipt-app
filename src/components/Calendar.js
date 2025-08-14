@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { styles } from "../styles/CalendarStyles";
-import { colors } from "../styles/theme";
+import { normalizeFont, moderateScale } from "../utils/sizes";
 
 export default function CustomCalendar({
   selectedDate,
@@ -19,11 +19,17 @@ export default function CustomCalendar({
         enableSwipeMonths={true}
         theme={{
           ...styles.calendarTheme,
-          dotStyle: { marginTop: -2 },
-          arrowColor: colors.darkPink,
-          monthTextColor: colors.darkPink,
+          // Responsive sizes
+          textDayFontSize: normalizeFont(16),
+          textMonthFontSize: normalizeFont(18),
           textDayFontWeight: "500",
           textMonthFontWeight: "600",
+          dotStyle: {
+            width: moderateScale(5),
+            height: moderateScale(5),
+            marginTop: -1,
+            borderRadius: moderateScale(2.5),
+          },
         }}
         onMonthChange={(month) => onMonthChange?.(month.dateString)}
       />
