@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import { styles } from "../styles/styles";
+import { homeStyles as styles } from "../styles/HomeScreenStyles";
 import dayjs from "dayjs";
 import CustomCalendar from "../components/Calendar";
 import FloatingActionButton from "../components/FloatingActionButton";
@@ -39,9 +39,9 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    if (authLoading) return; // wait until auth is loaded
+    if (authLoading) return;
     if (!user) {
-      setExpenses([]); // clear if logged out
+      setExpenses([]);
       return;
     }
     fetchExpenses(selectedDate);
