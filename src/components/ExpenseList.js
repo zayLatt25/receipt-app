@@ -98,11 +98,7 @@ const ExpenseList = ({ expenses, onDeleteExpense }) => {
         <TouchableOpacity
           style={styles.deleteBtnCircle}
           onPress={() => onDeleteExpense(item.id)}
-          accessibilityLabel={
-            item.description && item.description.trim()
-              ? `Delete item ${item.description}`
-              : `Delete item at position ${index + 1}`
-          }
+          accessibilityLabel={`Delete item ${item.description || index + 1}`}
         >
           <MaterialIcons name="delete" size={24} color="#fff" />
         </TouchableOpacity>

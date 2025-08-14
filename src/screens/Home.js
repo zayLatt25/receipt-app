@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { View, Text } from "react-native";
-import { homeStyles as styles } from "../styles/HomeScreenStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 import dayjs from "dayjs";
+
 import CustomCalendar from "../components/Calendar";
 import FloatingActionButton from "../components/FloatingActionButton";
 import AddExpenseModal from "../components/AddExpenseModal";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
-import { doc, deleteDoc } from "firebase/firestore";
-import { useAuth } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList";
-import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import { useAuth } from "../context/AuthContext";
+import { homeStyles as styles } from "../styles/HomeScreenStyles";
 
 const HomeScreen = () => {
   const { user, authLoading } = useAuth();
@@ -19,8 +28,12 @@ const HomeScreen = () => {
     dayjs().format("YYYY-MM-DD")
   );
   const [expenses, setExpenses] = useState([]);
+  const [monthlyExpensesCache, setMonthlyExpensesCache] = useState({}); // Cache per month
   const [modalVisible, setModalVisible] = useState(false);
 
+  const currentMonthKey = dayjs(selectedDate).format("YYYY-MM");
+
+  // --- Fetch daily expenses ---
   const fetchExpenses = async (date) => {
     if (!user) return;
     try {
@@ -35,29 +48,56 @@ const HomeScreen = () => {
       }));
       setExpenses(expensesData);
     } catch (error) {
-      console.error("Error fetching expenses:", error);
+      console.error("Error fetching daily expenses:", error);
     }
   };
 
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      setExpenses([]);
-      return;
-    }
-    fetchExpenses(selectedDate);
-  }, [selectedDate, authLoading, user]);
+  // --- Fetch monthly expenses only if not cached ---
+  const fetchMonthlyExpenses = async (monthKey) => {
+    if (!user || monthlyExpensesCache[monthKey]) return;
 
+    try {
+      const startOfMonth = dayjs(monthKey + "-01")
+        .startOf("month")
+        .format("YYYY-MM-DD");
+      const endOfMonth = dayjs(monthKey + "-01")
+        .endOf("month")
+        .format("YYYY-MM-DD");
+
+      const q = query(
+        collection(db, "users", user.uid, "expenses"),
+        where("date", ">=", startOfMonth),
+        where("date", "<=", endOfMonth)
+      );
+
+      const snapshot = await getDocs(q);
+      const expensesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setMonthlyExpensesCache((prev) => ({
+        ...prev,
+        [monthKey]: expensesData,
+      }));
+    } catch (error) {
+      console.error("Error fetching monthly expenses:", error);
+    }
+  };
+
+  // --- Refresh both daily and monthly expenses ---
+  const refreshExpenses = async (date = selectedDate) => {
+    await fetchExpenses(date);
+    await fetchMonthlyExpenses(dayjs(date).format("YYYY-MM"));
+  };
+
+  // --- Add / Delete expense handlers ---
   const handleAddExpense = async (expense) => {
     if (!user) return;
     try {
-      const docRef = await addDoc(
-        collection(db, "users", user.uid, "expenses"),
-        expense
-      );
-
-      setExpenses((prev) => [...prev, { id: docRef.id, ...expense }]);
+      await addDoc(collection(db, "users", user.uid, "expenses"), expense);
       setModalVisible(false);
+      await refreshExpenses(selectedDate);
     } catch (error) {
       console.error("Error adding expense:", error);
     }
@@ -65,14 +105,49 @@ const HomeScreen = () => {
 
   const handleDeleteExpense = async (expenseId) => {
     if (!user) return;
-
     try {
       await deleteDoc(doc(db, "users", user.uid, "expenses", expenseId));
-      // Remove from local state
-      setExpenses((prev) => prev.filter((exp) => exp.id !== expenseId));
+      await refreshExpenses(selectedDate);
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
+  };
+
+  // --- Load data when auth or selectedDate changes ---
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      setExpenses([]);
+      setMonthlyExpensesCache({});
+      return;
+    }
+    refreshExpenses(selectedDate);
+  }, [selectedDate, authLoading, user]);
+
+  // --- Prepare marked dates ---
+  const markedDates = useMemo(() => {
+    const monthExpenses = monthlyExpensesCache[currentMonthKey] || [];
+    const datesWithExpenses = {};
+
+    monthExpenses.forEach((exp) => {
+      datesWithExpenses[exp.date] = { marked: true, dotColor: "#ff69b4" };
+    });
+
+    return {
+      ...datesWithExpenses,
+      [selectedDate]: {
+        ...(datesWithExpenses[selectedDate] || {}),
+        selected: true,
+        selectedColor: "#ff69b4",
+        selectedTextColor: "#fff",
+      },
+    };
+  }, [monthlyExpensesCache, selectedDate, currentMonthKey]);
+
+  // --- Handle month change in calendar ---
+  const handleMonthChange = async (monthDateString) => {
+    const monthKey = dayjs(monthDateString + "-01").format("YYYY-MM");
+    await fetchMonthlyExpenses(monthKey);
   };
 
   return (
@@ -81,6 +156,8 @@ const HomeScreen = () => {
         <CustomCalendar
           selectedDate={selectedDate}
           onDaySelect={setSelectedDate}
+          markedDates={markedDates}
+          onMonthChange={handleMonthChange}
         />
 
         <View style={styles.divider} />

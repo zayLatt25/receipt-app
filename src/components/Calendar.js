@@ -1,22 +1,17 @@
-// components/Calendar.js
 import { View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { styles } from "../styles/CalendarStyles";
-import { colors } from "../styles/theme";
 
-export default function CustomCalendar({ selectedDate, onDaySelect }) {
-  const markedDates = {
-    [selectedDate]: {
-      selected: true,
-      selectedColor: colors.darkPink,
-      selectedTextColor: colors.lightCream,
-    },
-  };
-
+export default function CustomCalendar({
+  selectedDate,
+  onDaySelect,
+  markedDates,
+}) {
   return (
     <View style={styles.calendarWrapper}>
       <Calendar
         onDayPress={(day) => onDaySelect(day.dateString)}
+        current={selectedDate}
         markedDates={markedDates}
         hideExtraDays={true}
         enableSwipeMonths={true}
