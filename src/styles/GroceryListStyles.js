@@ -90,10 +90,6 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(10),
     paddingRight: scale(8),
   },
-  checkboxHeader: {
-    width: scale(24),
-    marginRight: scale(12),
-  },
   checkboxChecked: {
     backgroundColor: colors.lightCream,
     justifyContent: "center",
