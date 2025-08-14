@@ -1,7 +1,7 @@
 // src/screens/Camera.js
 import React from "react";
 import { View, Text } from "react-native";
-import styles from "./CameraStyles";
+import styles from "../styles/CameraStyles";
 
 export default function CameraScreen() {
   return (

@@ -188,38 +188,7 @@ export const styles = StyleSheet.create({
     color: navyBlue,
     fontWeight: "normal",
   },
-  categoryButtonTextSelected: {
-    color: lightCream,
-    fontWeight: "bold",
-  },
-  customCategoryRow: {
-    flexDirection: "row",
-    marginBottom: verticalScale(12),
-    alignItems: "center",
-  },
-  customCategoryInput: {
-    flex: 1,
-    height: verticalScale(40),
-    borderColor: navyBlue,
-    borderWidth: 1,
-    borderRadius: moderateScale(8),
-    paddingHorizontal: scale(10),
-    color: navyBlue,
-  },
-  addCategoryButton: {
-    marginLeft: scale(10),
-    backgroundColor: navyBlue,
-    paddingVertical: verticalScale(10),
-    paddingHorizontal: scale(15),
-    borderRadius: moderateScale(8),
-  },
-  addCategoryButtonDisabled: {
-    backgroundColor: "#999",
-  },
-  addCategoryButtonText: {
-    color: lightCream,
-    fontWeight: "bold",
-  },
+
   cancelButton: {
     marginRight: scale(20),
   },
