@@ -11,7 +11,7 @@ import {
 export const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: colors.lightCream,
+    backgroundColor: colors.background,
   },
   stickyHeaderContainer: {
     backgroundColor: colors.navyBlue,
@@ -26,16 +26,15 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: scale(25),
+    paddingHorizontal: scale(20),
     marginBottom: verticalScale(10),
   },
-  pageTitle: {
-    fontSize: normalizeFont(40),
+  title: {
+    fontSize: fonts.titleSize,
     fontFamily: fonts.main,
     fontWeight: "bold",
     color: colors.lightCream,
-    marginBottom: 0,
-    flex: 1,
+    marginBottom: verticalScale(10),
   },
   savingIndicator: {
     color: colors.lightCream,

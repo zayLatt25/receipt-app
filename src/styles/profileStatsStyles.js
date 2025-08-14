@@ -5,7 +5,7 @@ import { scale, verticalScale, normalizeFont } from "../utils/sizes";
 
 export const profileStatsStyles = StyleSheet.create({
   statsScrollContent: {
-    padding: scale(20),
+    padding: scale(15),
   },
   profileText: {
     color: colors.lightCream,

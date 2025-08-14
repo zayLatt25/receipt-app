@@ -135,7 +135,7 @@ export default function GroceryList() {
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.stickyHeaderContainer}>
         <View style={styles.titleRow}>
-          <Text style={styles.pageTitle}>Item List</Text>
+          <Text style={styles.title}>Item List</Text>
           <Text style={styles.savingIndicator}>{savingText}</Text>
         </View>
 

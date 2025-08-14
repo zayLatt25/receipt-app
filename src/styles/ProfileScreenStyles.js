@@ -13,7 +13,7 @@ export default StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollViewContent: {
-    paddingHorizontal: scale(16),
+    paddingHorizontal: scale(20),
     paddingBottom: verticalScale(40),
     backgroundColor: colors.navyBlue,
     flexGrow: 1,
@@ -23,14 +23,12 @@ export default StyleSheet.create({
     marginTop: verticalScale(10),
   },
   title: {
-    fontSize: normalizeFont(40),
+    fontSize: fonts.titleSize,
     fontFamily: fonts.main,
     fontWeight: "bold",
-    textAlign: "left",
     color: colors.lightCream,
-    marginBottom: verticalScale(30),
+    marginBottom: verticalScale(10),
   },
-
   profileText: {
     fontSize: normalizeFont(16),
     color: colors.lightCream,
@@ -42,7 +40,7 @@ export default StyleSheet.create({
     borderRadius: moderateScale(8),
     marginBottom: verticalScale(10),
     alignSelf: "center",
-    width: "95%",
+    width: "100%",
     height: verticalScale(30),
     justifyContent: "center",
     alignItems: "center",

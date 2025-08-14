@@ -16,6 +16,7 @@ export const colors = {
 
 export const fonts = {
   main: "Montserrat",
+  titleSize: normalizeFont(30),
 };
 
 export const metrics = {

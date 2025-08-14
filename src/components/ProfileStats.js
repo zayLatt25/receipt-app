@@ -197,7 +197,7 @@ export default function ProfileStats() {
           <VictoryChart
             width={screenWidth}
             domainPadding={{ x: 20 }}
-            padding={{ top: 20, bottom: 30, left: 40, right: 10 }}
+            padding={{ top: 10, bottom: 30, left: 40, right: 0 }}
           >
             <VictoryAxis
               tickValues={months.map((_, idx) => idx)}
