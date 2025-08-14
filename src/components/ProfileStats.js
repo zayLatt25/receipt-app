@@ -17,7 +17,7 @@ import {
   VictoryAxis,
   VictoryPie,
 } from "victory-native";
-import { profileStatsStyles as styles } from "../styles/profileStatsStyles";
+import { profileStatsStyles as styles } from "../styles/ProfileStatsStyles";
 import { darkPink, lightCream } from "../styles/styles";
 import { normalizeFont } from "../utils/sizes";
 
