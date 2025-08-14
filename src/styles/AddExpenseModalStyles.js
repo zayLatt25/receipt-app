@@ -1,6 +1,12 @@
 // styles/AddExpenseModalStyles.js
 import { StyleSheet } from "react-native";
-import { colors, fonts, metrics } from "./theme";
+import { colors, fonts } from "./theme";
+import {
+  scale,
+  verticalScale,
+  moderateScale,
+  normalizeFont,
+} from "../utils/sizes";
 
 export default StyleSheet.create({
   modalOverlay: {
@@ -11,30 +17,30 @@ export default StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.lightCream,
-    padding: metrics.scale(20),
-    borderRadius: metrics.moderateScale(12),
+    padding: scale(20),
+    borderRadius: moderateScale(12),
     width: "85%",
   },
   modalTitle: {
-    fontSize: metrics.normalizeFont(18),
+    fontSize: normalizeFont(18),
     fontWeight: "bold",
-    marginBottom: metrics.verticalScale(12),
+    marginBottom: verticalScale(12),
     color: colors.navyBlue,
   },
   modalSubtitle: {
     color: colors.navyBlue,
-    marginBottom: metrics.verticalScale(8),
+    marginBottom: verticalScale(8),
     fontWeight: "600",
   },
   categoryScroll: {
-    marginBottom: metrics.verticalScale(12),
+    marginBottom: verticalScale(12),
   },
   categoryButton: {
     backgroundColor: colors.lightCream,
-    paddingVertical: metrics.verticalScale(8),
-    paddingHorizontal: metrics.scale(14),
-    borderRadius: metrics.moderateScale(20),
-    marginRight: metrics.scale(10),
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(14),
+    borderRadius: moderateScale(20),
+    marginRight: scale(10),
     borderWidth: 1,
     borderColor: colors.navyBlue,
   },
@@ -51,24 +57,24 @@ export default StyleSheet.create({
   },
   customCategoryRow: {
     flexDirection: "row",
-    marginBottom: metrics.verticalScale(12),
+    marginBottom: verticalScale(12),
     alignItems: "center",
   },
   customCategoryInput: {
     flex: 1,
-    height: metrics.verticalScale(40),
+    height: verticalScale(40),
     borderColor: colors.navyBlue,
     borderWidth: 1,
-    borderRadius: metrics.moderateScale(8),
-    paddingHorizontal: metrics.scale(10),
+    borderRadius: moderateScale(8),
+    paddingHorizontal: scale(10),
     color: colors.navyBlue,
   },
   addCategoryButton: {
-    marginLeft: metrics.scale(10),
+    marginLeft: scale(10),
     backgroundColor: colors.navyBlue,
-    paddingVertical: metrics.verticalScale(10),
-    paddingHorizontal: metrics.scale(15),
-    borderRadius: metrics.moderateScale(8),
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: scale(15),
+    borderRadius: moderateScale(8),
   },
   addCategoryButtonDisabled: {
     backgroundColor: "#999",
@@ -79,17 +85,17 @@ export default StyleSheet.create({
   },
   errorText: {
     color: colors.darkPink,
-    fontSize: metrics.normalizeFont(14),
-    marginBottom: metrics.verticalScale(8),
+    fontSize: normalizeFont(14),
+    marginBottom: verticalScale(8),
     fontFamily: fonts.main,
   },
   modalButtons: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: metrics.verticalScale(10),
+    marginTop: verticalScale(10),
   },
   cancelButton: {
-    marginRight: metrics.scale(20),
+    marginRight: scale(20),
   },
   cancelButtonText: {
     color: colors.navyBlue,
