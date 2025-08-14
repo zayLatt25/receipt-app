@@ -45,6 +45,14 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
+  expenseItemRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  expenseDetails: {
+    flex: 1,
+  },
   expenseText: {
     color: colors.navyBlue,
     fontSize: normalizeFont(16),
@@ -58,6 +66,18 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: normalizeFont(16),
   },
+  deleteBtnColumn: {
+    width: scale(65),
+  },
+  deleteBtnCircle: {
+    backgroundColor: colors.darkPink,
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: scale(6),
+  },
   dayTotalContainer: {
     backgroundColor: colors.lightCream,
     marginBottom: verticalScale(10),
@@ -70,5 +90,8 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFont(16),
     fontWeight: "bold",
     color: colors.navyBlue,
+  },
+  sectionListContainer: {
+    paddingBottom: scale(100),
   },
 });

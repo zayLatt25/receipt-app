@@ -73,6 +73,15 @@ export const styles = StyleSheet.create({
   deleteBtnColumn: {
     width: scale(65),
   },
+  deleteBtnCircle: {
+    backgroundColor: colors.darkPink,
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: scale(6),
+  },
   scrollViewContent: {
     paddingHorizontal: scale(16),
     paddingBottom: verticalScale(40),
@@ -126,15 +135,6 @@ export const styles = StyleSheet.create({
     color: colors.lightCream,
     backgroundColor: "transparent",
     fontSize: normalizeFont(16),
-  },
-  deleteBtnCircle: {
-    backgroundColor: colors.darkPink,
-    width: scale(36),
-    height: scale(36),
-    borderRadius: scale(18),
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: scale(6),
   },
   footerSticky: {
     flexDirection: "row",
