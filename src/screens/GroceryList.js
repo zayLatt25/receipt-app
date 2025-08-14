@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import { styles, lightCream, darkPink } from "../styles/styles";
+import { styles } from "../styles/GroceryListStyles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { colors } from "../styles/theme";
 
 // Import the KeyboardAwareScrollView
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -123,7 +124,7 @@ export default function GroceryList() {
   }, [items]);
 
   if (authLoading || !isDataLoaded) {
-    return <LoadingSpinner size="large" color={darkPink} />;
+    return <LoadingSpinner size="large" color={colors.darkPink} />;
   }
 
   let savingText = "Saved";
@@ -134,7 +135,7 @@ export default function GroceryList() {
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.stickyHeaderContainer}>
         <View style={styles.titleRow}>
-          <Text style={styles.pageTitle}>Item List</Text>
+          <Text style={styles.title}>Item List</Text>
           <Text style={styles.savingIndicator}>{savingText}</Text>
         </View>
 
@@ -160,7 +161,7 @@ export default function GroceryList() {
               onPress={() => toggleCheck(index)}
             >
               {item.checked && (
-                <MaterialIcons name="check" size={18} color={darkPink} />
+                <MaterialIcons name="check" size={18} color={colors.darkPink} />
               )}
             </TouchableOpacity>
 
@@ -203,7 +204,11 @@ export default function GroceryList() {
                   : `Delete item at position ${index + 1}`
               }
             >
-              <MaterialIcons name="delete" size={24} color={lightCream} />
+              <MaterialIcons
+                name="delete"
+                size={24}
+                color={colors.lightCream}
+              />
             </TouchableOpacity>
           </View>
         ))}

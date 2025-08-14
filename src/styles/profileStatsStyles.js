@@ -1,20 +1,16 @@
 // styles/profileStatsStyles.js
 import { StyleSheet } from "react-native";
-import {
-  scale,
-  verticalScale,
-  moderateScale,
-  normalizeFont,
-} from "../utils/sizes";
-import { navyBlue, lightCream, darkPink } from "./styles";
+import { colors } from "./theme";
+import { scale, verticalScale, normalizeFont } from "../utils/sizes";
 
 export const profileStatsStyles = StyleSheet.create({
   statsScrollContent: {
-    padding: scale(20),
+    padding: scale(15),
   },
   profileText: {
-    color: lightCream,
+    color: colors.lightCream,
     fontSize: normalizeFont(16),
+    alignSelf: "center",
   },
   statsSectionHeader: {
     fontSize: normalizeFont(18),
@@ -35,13 +31,13 @@ export const profileStatsStyles = StyleSheet.create({
     borderRadius: scale(4),
     marginRight: scale(6),
     marginBottom: verticalScale(6),
-    backgroundColor: navyBlue,
+    backgroundColor: colors.navyBlue,
   },
   monthPickerButtonActive: {
-    backgroundColor: darkPink,
+    backgroundColor: colors.darkPink,
   },
   monthPickerText: {
-    color: lightCream,
+    color: colors.lightCream,
     fontSize: normalizeFont(14),
   },
   monthPickerTextActive: {
@@ -58,13 +54,13 @@ export const profileStatsStyles = StyleSheet.create({
     borderRadius: scale(4),
     marginRight: scale(6),
     marginBottom: verticalScale(6),
-    backgroundColor: navyBlue,
+    backgroundColor: colors.navyBlue,
   },
   yearPickerButtonActive: {
-    backgroundColor: darkPink,
+    backgroundColor: colors.darkPink,
   },
   yearPickerText: {
-    color: lightCream,
+    color: colors.lightCream,
     fontSize: normalizeFont(14),
   },
   yearPickerTextActive: {
@@ -72,7 +68,7 @@ export const profileStatsStyles = StyleSheet.create({
   },
   pieBudgetLabel: {
     fontSize: normalizeFont(13),
-    color: lightCream,
+    color: colors.lightCream,
   },
   pieLegendItem: {
     flexDirection: "row",
@@ -87,7 +83,7 @@ export const profileStatsStyles = StyleSheet.create({
     borderRadius: scale(3),
   },
   pieLegendText: {
-    color: lightCream,
+    color: colors.lightCream,
     fontSize: normalizeFont(14),
   },
 });

@@ -1,10 +1,11 @@
-// src/screens/Profile.js
+// src/screens/Camera.js
 import React from "react";
 import { View, Text } from "react-native";
+import styles from "../styles/CameraStyles";
 
 export default function CameraScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={styles.container}>
       <Text>Camera Screen</Text>
     </View>
   );

@@ -17,7 +17,7 @@ import {
   VictoryAxis,
   VictoryPie,
 } from "victory-native";
-import { profileStatsStyles as styles } from "../styles/profileStatsStyles";
+import { profileStatsStyles as styles } from "../styles/ProfileStatsStyles";
 import { darkPink, lightCream } from "../styles/styles";
 import { normalizeFont } from "../utils/sizes";
 
@@ -197,7 +197,7 @@ export default function ProfileStats() {
           <VictoryChart
             width={screenWidth}
             domainPadding={{ x: 20 }}
-            padding={{ top: 20, bottom: 30, left: 40, right: 10 }}
+            padding={{ top: 10, bottom: 30, left: 40, right: 0 }}
           >
             <VictoryAxis
               tickValues={months.map((_, idx) => idx)}
@@ -208,12 +208,15 @@ export default function ProfileStats() {
             />
             <VictoryAxis
               dependentAxis
-              tickFormat={(t) => `$${t}`}
+              tickFormat={(t) =>
+                t >= 1000 ? `$${(t / 1000).toFixed(1)}k` : `$${t}`
+              }
               style={{
                 tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
               }}
               domain={[0, Math.max(...monthlyTotals) * 1.2]}
             />
+
             <VictoryBar
               data={monthlyTotals.map((amt, idx) => ({ x: idx, y: amt }))}
               barRatio={0.7}

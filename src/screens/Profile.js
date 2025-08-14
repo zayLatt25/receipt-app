@@ -1,16 +1,15 @@
 // src/screens/Profile.js
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
-import { styles } from "../styles/styles";
+import { View, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native-gesture-handler";
+import styles from "../styles/ProfileScreenStyles";
 import FormButton from "../components/FormButton";
 import { useAuth } from "../context/AuthContext";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { TouchableOpacity } from "react-native";
 import ProfileStats from "../components/ProfileStats";
 import ProfileSettings from "../components/ProfileSettings";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function ProfileScreen() {
   const { logout } = useAuth();

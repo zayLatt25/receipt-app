@@ -1,15 +1,15 @@
 // components/Calendar.js
-import React from "react";
 import { View } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { styles, darkPink } from "../styles/styles";
+import { styles } from "../styles/CalendarStyles";
+import { colors } from "../styles/theme";
 
 export default function CustomCalendar({ selectedDate, onDaySelect }) {
   const markedDates = {
     [selectedDate]: {
       selected: true,
-      selectedColor: darkPink,
-      selectedTextColor: "#fff",
+      selectedColor: colors.darkPink,
+      selectedTextColor: colors.lightCream,
     },
   };
 
