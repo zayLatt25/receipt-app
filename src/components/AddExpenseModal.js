@@ -1,3 +1,5 @@
+// components/AddExpenseModal.js
+
 import React, { useState, useEffect } from "react";
 import {
   Modal,
@@ -7,7 +9,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import { styles } from "../styles/styles";
+import styles from "../styles/AddExpenseModalStyles";
 import FormInput from "./FormInput";
 import dayjs from "dayjs";
 
