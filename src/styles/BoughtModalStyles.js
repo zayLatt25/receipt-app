@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     color: colors.navyBlue,
   },
   modalSubtitle: {
-    color: navyBlue,
+    color: colors.navyBlue,
     marginBottom: verticalScale(8),
     fontWeight: "600",
   },
