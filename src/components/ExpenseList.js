@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { View, Text, SectionList, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { styles } from "../styles/styles";
+import { styles } from "../styles/ExpenseListStyles";
 
 const STORAGE_KEY = "collapsedCategories";
 

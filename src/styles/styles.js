@@ -224,43 +224,6 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFont(18),
     marginRight: scale(8),
   },
-  expenseItem: {
-    backgroundColor: lightCream,
-    padding: scale(16),
-    borderRadius: moderateScale(10),
-    marginBottom: verticalScale(10),
-    flexDirection: "row",
-  },
-  expenseText: {
-    color: navyBlue,
-    fontSize: normalizeFont(16),
-    fontFamily: mainFont,
-  },
-  expenseItemBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  expenseDescription: {
-    flex: 1,
-    fontWeight: "600",
-  },
-  expenseAmount: {
-    fontWeight: "bold",
-    fontSize: normalizeFont(16),
-  },
-  dayTotalContainer: {
-    backgroundColor: lightCream,
-    marginBottom: verticalScale(10),
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: scale(16),
-    alignItems: "center",
-    borderRadius: moderateScale(10),
-  },
-  dayTotalText: {
-    fontSize: normalizeFont(16),
-    fontWeight: "bold",
-    color: navyBlue,
-  },
   reminderItem: {
     flexDirection: "row",
     alignItems: "center",
