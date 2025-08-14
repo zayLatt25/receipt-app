@@ -33,7 +33,7 @@ const HomeScreen = () => {
 
   const currentMonthKey = dayjs(selectedDate).format("YYYY-MM");
 
-  // --- Fetch daily expenses ---
+  // Fetch daily expenses
   const fetchExpenses = async (date) => {
     if (!user) return;
     try {
@@ -52,9 +52,10 @@ const HomeScreen = () => {
     }
   };
 
-  // --- Fetch monthly expenses only if not cached ---
-  const fetchMonthlyExpenses = async (monthKey) => {
-    if (!user || monthlyExpensesCache[monthKey]) return;
+  // Fetch monthly expenses only if not cached
+  const fetchMonthlyExpenses = async (monthKey, forceRefresh = false) => {
+    if (!user) return;
+    if (!forceRefresh && monthlyExpensesCache[monthKey]) return;
 
     try {
       const startOfMonth = dayjs(monthKey + "-01")
@@ -85,35 +86,42 @@ const HomeScreen = () => {
     }
   };
 
-  // --- Refresh both daily and monthly expenses ---
-  const refreshExpenses = async (date = selectedDate) => {
+  // Refresh both daily and monthly expenses
+  const refreshExpenses = async (
+    date = selectedDate,
+    forceMonthRefresh = false
+  ) => {
     await fetchExpenses(date);
-    await fetchMonthlyExpenses(dayjs(date).format("YYYY-MM"));
+    const monthKey = dayjs(date).format("YYYY-MM");
+    await fetchMonthlyExpenses(monthKey, forceMonthRefresh);
   };
 
-  // --- Add / Delete expense handlers ---
+  // Add expense
   const handleAddExpense = async (expense) => {
     if (!user) return;
     try {
       await addDoc(collection(db, "users", user.uid, "expenses"), expense);
       setModalVisible(false);
-      await refreshExpenses(selectedDate);
+      // Force refresh month so dot appears immediately
+      await refreshExpenses(selectedDate, true);
     } catch (error) {
       console.error("Error adding expense:", error);
     }
   };
 
+  // delete expense
   const handleDeleteExpense = async (expenseId) => {
     if (!user) return;
     try {
       await deleteDoc(doc(db, "users", user.uid, "expenses", expenseId));
-      await refreshExpenses(selectedDate);
+      // Refresh daily expenses and force refresh month to update calendar dots
+      await refreshExpenses(selectedDate, true);
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
   };
 
-  // --- Load data when auth or selectedDate changes ---
+  // Load data when auth or selectedDate changes
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
@@ -124,7 +132,7 @@ const HomeScreen = () => {
     refreshExpenses(selectedDate);
   }, [selectedDate, authLoading, user]);
 
-  // --- Prepare marked dates ---
+  // Prepare marked dates
   const markedDates = useMemo(() => {
     const monthExpenses = monthlyExpensesCache[currentMonthKey] || [];
     const datesWithExpenses = {};
@@ -144,7 +152,7 @@ const HomeScreen = () => {
     };
   }, [monthlyExpensesCache, selectedDate, currentMonthKey]);
 
-  // --- Handle month change in calendar ---
+  // Handle month change in calendar
   const handleMonthChange = async (monthDateString) => {
     const monthKey = dayjs(monthDateString + "-01").format("YYYY-MM");
     await fetchMonthlyExpenses(monthKey);
