@@ -518,23 +518,40 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(8),
   },
-  tabBar: {
-    flexDirection: "row",
-    justifyContent: "center",
+  tabBarContainer: {
     alignItems: "center",
     marginTop: 16,
     marginBottom: 16,
-    gap: 12,
+  },
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: "#fff2",
+    borderRadius: 20,
+    overflow: "hidden",
+    width: 220,
+    height: 38,
+    elevation: 2,
   },
   tabPill: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 6,
-    paddingHorizontal: 22,
-    borderRadius: 20,
-    backgroundColor: "#fff2",
-    marginHorizontal: 4,
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    marginHorizontal: 0,
+    height: "100%",
   },
   tabPillActive: {
     backgroundColor: "#e8e5d9",
+  },
+  tabPillLeftActive: {
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+  },
+  tabPillRightActive: {
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
   },
   tabPillText: {
     color: "#e8e5d9",
@@ -543,9 +560,5 @@ export const styles = StyleSheet.create({
   },
   tabPillTextActive: {
     color: "#0c2d5d",
-  },
-  tabContent: {
-    marginTop: 18,
-    flex: 1,
   },
 });

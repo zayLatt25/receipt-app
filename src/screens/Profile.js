@@ -8,6 +8,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { TouchableOpacity } from "react-native";
+import ProfileStats from "../components/ProfileStats";
+import ProfileSettings from "../components/ProfileSettings";
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
@@ -66,57 +68,49 @@ export default function ProfileScreen() {
         />
 
         {/* Pill Tabs */}
-        <View style={styles.tabBar}>
-          <TouchableOpacity
-            style={[
-              styles.tabPill,
-              selectedTab === "stats" && styles.tabPillActive,
-            ]}
-            onPress={() => setSelectedTab("stats")}
-          >
-            <Text
+        <View style={styles.tabBarContainer}>
+          <View style={styles.tabBar}>
+            <TouchableOpacity
               style={[
-                styles.tabPillText,
-                selectedTab === "stats" && styles.tabPillTextActive,
+                styles.tabPill,
+                selectedTab === "stats" && styles.tabPillActive,
+                selectedTab === "stats" && styles.tabPillLeftActive,
               ]}
+              onPress={() => setSelectedTab("stats")}
             >
-              Stats
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.tabPill,
-              selectedTab === "settings" && styles.tabPillActive,
-            ]}
-            onPress={() => setSelectedTab("settings")}
-          >
-            <Text
+              <Text
+                style={[
+                  styles.tabPillText,
+                  selectedTab === "stats" && styles.tabPillTextActive,
+                ]}
+              >
+                Stats
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.tabPillText,
-                selectedTab === "settings" && styles.tabPillTextActive,
+                styles.tabPill,
+                selectedTab === "settings" && styles.tabPillActive,
+                selectedTab === "settings" && styles.tabPillRightActive,
               ]}
+              onPress={() => setSelectedTab("settings")}
             >
-              Settings
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.tabPillText,
+                  selectedTab === "settings" && styles.tabPillTextActive,
+                ]}
+              >
+                Settings
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Tab Content */}
         <View style={styles.tabContent}>
-          {selectedTab === "stats" && (
-            <View>
-              <Text style={styles.profileText}>Stats content goes here.</Text>
-              {/* TODO: Add more stats content here */}
-            </View>
-          )}
-          {selectedTab === "settings" && (
-            <View>
-              <Text style={styles.profileText}>
-                Settings content goes here.
-              </Text>
-              {/* TODO: Add more settings content here */}
-            </View>
-          )}
+          {selectedTab === "stats" && <ProfileStats />}
+          {selectedTab === "settings" && <ProfileSettings />}
         </View>
       </View>
     </SafeAreaView>
