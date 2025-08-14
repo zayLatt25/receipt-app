@@ -1,5 +1,11 @@
 import { StyleSheet } from "react-native";
-import { colors, metrics } from "./theme";
+import { colors, fonts } from "./theme";
+import {
+  scale,
+  verticalScale,
+  moderateScale,
+  normalizeFont,
+} from "../utils/sizes";
 
 export default StyleSheet.create({
   safeAreaView: {
@@ -7,70 +13,90 @@ export default StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollViewContent: {
-    padding: metrics.scale(20),
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(40),
+    backgroundColor: colors.navyBlue,
+    flexGrow: 1,
   },
   profileInfoContainer: {
-    marginBottom: metrics.verticalScale(20),
+    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
   },
   title: {
-    fontSize: metrics.moderateScale(24),
+    fontSize: normalizeFont(40),
+    fontFamily: fonts.main,
     fontWeight: "bold",
-    marginBottom: metrics.verticalScale(10),
-    color: colors.textPrimary,
+    textAlign: "left",
+    color: colors.lightCream,
+    marginBottom: verticalScale(30),
   },
-  profileInfo: {
-    backgroundColor: colors.cardBackground,
-    padding: metrics.scale(15),
-    borderRadius: metrics.moderateScale(10),
-  },
+
   profileText: {
-    fontSize: metrics.moderateScale(16),
-    color: colors.textSecondary,
-    marginBottom: metrics.verticalScale(5),
+    fontSize: normalizeFont(16),
+    color: colors.lightCream,
+    fontFamily: fonts.main,
+    marginBottom: verticalScale(8),
   },
   logoutButton: {
-    marginTop: metrics.verticalScale(10),
-    marginBottom: metrics.verticalScale(20),
-    backgroundColor: colors.error,
+    backgroundColor: colors.lightCream,
+    borderRadius: moderateScale(8),
+    marginBottom: verticalScale(10),
+    alignSelf: "center",
+    width: "95%",
+    height: verticalScale(30),
+    justifyContent: "center",
+    alignItems: "center",
   },
   logoutButtonText: {
-    color: colors.white,
+    color: colors.lightCream,
     fontWeight: "bold",
+    fontSize: normalizeFont(14),
   },
   tabBarContainer: {
-    marginBottom: metrics.verticalScale(15),
+    alignItems: "center",
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(5),
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: colors.cardBackground,
-    borderRadius: metrics.moderateScale(25),
+    backgroundColor: "#fff2",
+    borderRadius: verticalScale(20),
     overflow: "hidden",
+    width: 220,
+    height: 38,
+    elevation: 2,
   },
   tabPill: {
     flex: 1,
-    paddingVertical: metrics.verticalScale(8),
+    justifyContent: "center",
     alignItems: "center",
+    paddingVertical: verticalScale(8),
+    borderRadius: verticalScale(0),
+    backgroundColor: "transparent",
+    marginHorizontal: scale(2),
+    height: "100%",
   },
   tabPillActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#e8e5d9",
   },
   tabPillLeftActive: {
-    borderTopLeftRadius: metrics.moderateScale(25),
-    borderBottomLeftRadius: metrics.moderateScale(25),
+    borderTopLeftRadius: verticalScale(20),
+    borderBottomLeftRadius: verticalScale(20),
   },
   tabPillRightActive: {
-    borderTopRightRadius: metrics.moderateScale(25),
-    borderBottomRightRadius: metrics.moderateScale(25),
+    borderTopRightRadius: verticalScale(20),
+    borderBottomRightRadius: verticalScale(20),
   },
   tabPillText: {
-    fontSize: metrics.moderateScale(14),
-    color: colors.textPrimary,
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
   },
   tabPillTextActive: {
-    color: colors.white,
-    fontWeight: "bold",
+    color: "#0c2d5d",
   },
   tabContent: {
-    marginTop: metrics.verticalScale(10),
+    flexGrow: 1,
+    minHeight: verticalScale(400),
   },
 });

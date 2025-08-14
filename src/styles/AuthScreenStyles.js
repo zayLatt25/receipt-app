@@ -1,28 +1,41 @@
 import { StyleSheet } from "react-native";
-import { colors, metrics } from "./theme";
+import { colors, fonts } from "./theme";
+import {
+  scale,
+  verticalScale,
+  moderateScale,
+  normalizeFont,
+} from "../utils/sizes";
 
 export const authStyles = StyleSheet.create({
   centerContainer: {
     flex: 1,
+    padding: scale(20),
     justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: metrics.scale(20),
     backgroundColor: colors.background,
   },
   title: {
-    fontSize: metrics.moderateScale(32),
+    fontSize: normalizeFont(40),
+    fontFamily: fonts.main,
     fontWeight: "bold",
-    color: colors.textPrimary,
-    marginBottom: metrics.verticalScale(10),
+    textAlign: "left",
+    color: colors.lightCream,
+    marginBottom: verticalScale(30),
   },
   subtitle: {
-    fontSize: metrics.moderateScale(18),
-    color: colors.textSecondary,
-    marginBottom: metrics.verticalScale(15),
+    fontSize: normalizeFont(30),
+    textAlign: "center",
+    color: colors.lightCream,
+    fontFamily: fonts.main,
+    marginBottom: verticalScale(16),
   },
   loginSignupButton: {
+    backgroundColor: colors.lightCream,
+    borderWidth: 1,
+    paddingVertical: verticalScale(14),
+    borderRadius: moderateScale(10),
+    alignItems: "center",
+    marginVertical: verticalScale(10),
     width: "100%",
-    marginTop: metrics.verticalScale(10),
-    backgroundColor: colors.primary,
   },
 });

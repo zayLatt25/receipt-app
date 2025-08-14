@@ -66,15 +66,6 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(16),
   },
-  loginSignUpButton: {
-    backgroundColor: lightCream,
-    borderWidth: 1,
-    paddingVertical: verticalScale(14),
-    borderRadius: moderateScale(10),
-    alignItems: "center",
-    marginVertical: verticalScale(10),
-    width: "100%",
-  },
   buttonText: {
     color: navyBlue,
     fontSize: normalizeFont(16),
@@ -364,20 +355,6 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(8),
   },
-  tabBarContainer: {
-    alignItems: "center",
-    marginTop: verticalScale(10),
-    marginBottom: verticalScale(5),
-  },
-  tabBar: {
-    flexDirection: "row",
-    backgroundColor: "#fff2",
-    borderRadius: verticalScale(20),
-    overflow: "hidden",
-    width: 220,
-    height: 38,
-    elevation: 2,
-  },
   tabPill: {
     flex: 1,
     justifyContent: "center",
@@ -388,25 +365,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: scale(2),
     height: "100%",
   },
-  tabPillActive: {
-    backgroundColor: "#e8e5d9",
-  },
-  tabPillLeftActive: {
-    borderTopLeftRadius: verticalScale(20),
-    borderBottomLeftRadius: verticalScale(20),
-  },
-  tabPillRightActive: {
-    borderTopRightRadius: verticalScale(20),
-    borderBottomRightRadius: verticalScale(20),
-  },
-  tabPillText: {
-    color: "#e8e5d9",
-    fontWeight: "bold",
-    fontSize: normalizeFont(14),
-  },
-  tabPillTextActive: {
-    color: "#0c2d5d",
-  },
+
   scrollViewContent: {
     paddingHorizontal: scale(16),
     paddingBottom: verticalScale(40),
@@ -417,21 +376,7 @@ export const styles = StyleSheet.create({
     marginBottom: verticalScale(10),
     marginTop: verticalScale(10),
   },
-  logoutButton: {
-    backgroundColor: lightCream,
-    borderRadius: moderateScale(8),
-    marginBottom: verticalScale(10),
-    alignSelf: "center",
-    width: "95%",
-    height: verticalScale(30),
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  logoutButtonText: {
-    color: lightCream,
-    fontWeight: "bold",
-    fontSize: normalizeFont(14),
-  },
+
   tabContent: {
     flexGrow: 1,
     minHeight: verticalScale(400),
