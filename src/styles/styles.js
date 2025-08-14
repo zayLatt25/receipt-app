@@ -510,7 +510,9 @@ export const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingHorizontal: scale(16),
-    marginBottom: verticalScale(70),
+    paddingBottom: verticalScale(40),
+    backgroundColor: navyBlue,
+    flexGrow: 1,
   },
   profileText: {
     fontSize: normalizeFont(16),
@@ -561,4 +563,129 @@ export const styles = StyleSheet.create({
   tabPillTextActive: {
     color: "#0c2d5d",
   },
+  scrollViewContent: {
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(40),
+    backgroundColor: navyBlue,
+    flexGrow: 1,
+  },
+  profileInfoContainer: {
+    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
+  },
+  logoutButton: {
+    backgroundColor: darkPink,
+    borderRadius: moderateScale(8),
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(20),
+    alignSelf: "flex-end",
+    marginBottom: verticalScale(10),
+    width: scale(110),
+    height: verticalScale(36),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoutButtonText: {
+    color: lightCream,
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  tabContent: {
+    flexGrow: 1,
+    minHeight: verticalScale(400),
+  },
+  statsScrollContent: {
+    paddingBottom: verticalScale(40),
+  },
+  statsSectionHeader: {
+    fontWeight: "bold",
+    fontSize: normalizeFont(18),
+    marginBottom: verticalScale(10),
+  },
+  statsBudgetLabel: {
+    fontWeight: "normal",
+    fontSize: normalizeFont(14),
+    color: "#fff9",
+  },
+  statsBarChart: {
+    marginVertical: verticalScale(8),
+    borderRadius: moderateScale(16),
+  },
+  monthPickerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: verticalScale(10),
+    flexWrap: "wrap",
+  },
+  monthPickerButton: {
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: scale(12),
+    borderRadius: moderateScale(16),
+    backgroundColor: "#fff2",
+    marginHorizontal: scale(3),
+    marginBottom: verticalScale(5),
+  },
+  monthPickerButtonActive: {
+    backgroundColor: "#781d4e",
+  },
+  monthPickerText: {
+    color: "#e8e5d9",
+    fontSize: normalizeFont(14),
+  },
+  monthPickerTextActive: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  yearPickerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: verticalScale(10),
+  },
+  yearPickerButton: {
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: scale(14),
+    borderRadius: moderateScale(16),
+    backgroundColor: "#fff2",
+    marginHorizontal: scale(3),
+  },
+  yearPickerButtonActive: {
+    backgroundColor: "#781d4e",
+  },
+  yearPickerText: {
+    color: "#e8e5d9",
+    fontSize: normalizeFont(14),
+  },
+  yearPickerTextActive: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  statsCategoryHeader: {
+    marginTop: verticalScale(24),
+  },
+  // Responsive decorator for budget line in BarChart
+  budgetLine: (yPos) => ({
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: yPos,
+    height: verticalScale(2),
+    backgroundColor: darkPink,
+    opacity: 0.7,
+  }),
+  budgetLabelContainer: {
+    position: "absolute",
+    right: 0,
+    top: -verticalScale(16),
+    backgroundColor: "transparent",
+  },
+  budgetLabelText: {
+    color: darkPink,
+    fontWeight: "bold",
+    fontSize: normalizeFont(12),
+  },
+  // For BarChart decorator math
+  statsBarChartHeight: verticalScale(180),
+  statsBarChartPaddingTop: verticalScale(32),
 });

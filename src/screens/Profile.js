@@ -10,6 +10,7 @@ import { db } from "../firebase";
 import { TouchableOpacity } from "react-native";
 import ProfileStats from "../components/ProfileStats";
 import ProfileSettings from "../components/ProfileSettings";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
@@ -51,20 +52,28 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
-        {profileData ? (
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileText}>Name: {profileData.name}</Text>
-            <Text style={styles.profileText}>Email: {profileData.email}</Text>
-          </View>
-        ) : (
-          <Text style={styles.profileText}>Error Fetching User</Text>
-        )}
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profileInfoContainer}>
+          <Text style={styles.title}>Profile</Text>
+          {profileData ? (
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileText}>Name: {profileData.name}</Text>
+              <Text style={styles.profileText}>Email: {profileData.email}</Text>
+            </View>
+          ) : (
+            <Text style={styles.profileText}>Error Fetching User</Text>
+          )}
+        </View>
+
         <FormButton
           title="Logout"
           onPress={handleLogout}
           loading={logoutLoading}
+          style={styles.logoutButton}
+          textStyle={styles.logoutButtonText}
         />
 
         {/* Pill Tabs */}
@@ -112,7 +121,7 @@ export default function ProfileScreen() {
           {selectedTab === "stats" && <ProfileStats />}
           {selectedTab === "settings" && <ProfileSettings />}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
