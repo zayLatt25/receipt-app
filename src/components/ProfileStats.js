@@ -26,7 +26,6 @@ export default function ProfileStats() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
 
-  // Chart colors for pie
   const chartColors = [
     "#e8e5d9",
     "#781d4e",
@@ -40,7 +39,6 @@ export default function ProfileStats() {
     "#b5838d",
   ];
 
-  // Month labels
   const months = [
     "Jan",
     "Feb",
@@ -56,16 +54,13 @@ export default function ProfileStats() {
     "Dec",
   ];
 
-  // Allow user to pick from 5 years (current and previous 4)
   const years = Array.from({ length: 5 }, (_, i) => dayjs().year() - i);
 
-  // Fetch yearly stats when year or user changes
   useEffect(() => {
     if (!user) return;
     fetchYearlyStats();
   }, [user, selectedYear]);
 
-  // Fetch category stats when month, year, or user changes
   useEffect(() => {
     if (!user) return;
     fetchCategoryStats();
@@ -116,16 +111,13 @@ export default function ProfileStats() {
         }
       });
 
-      // Separate name and display label
       const catData = Object.entries(catTotals).map(([cat, amt], i) => ({
-        name: cat, // just the category name for internal use
+        name: cat,
         amount: Number(amt.toFixed(2)),
         color: chartColors[i % chartColors.length],
         legendFontColor: lightCream,
         legendFontSize: 14,
-        displayLabel: `${cat} ($${Number(amt).toFixed(2)})`, // for legend
       }));
-
       setCategoryTotals(catData);
     } catch (err) {
       setCategoryTotals([]);
@@ -133,7 +125,6 @@ export default function ProfileStats() {
     setLoadingCategory(false);
   };
 
-  // Month Picker UI
   const MonthPicker = () => (
     <View style={styles.monthPickerContainer}>
       {months.map((m, idx) => (
@@ -158,7 +149,6 @@ export default function ProfileStats() {
     </View>
   );
 
-  // Year Picker UI
   const YearPicker = () => (
     <View style={styles.yearPickerContainer}>
       {years.map((y) => (
@@ -239,26 +229,58 @@ export default function ProfileStats() {
       ) : categoryTotals.length === 0 ? (
         <Text style={styles.profileText}>No data for this month.</Text>
       ) : (
-        <PieChart
-          data={categoryTotals.map((cat) => ({
-            name: cat.name,
-            population: cat.amount,
-            color: cat.color,
-            legendFontColor: cat.legendFontColor,
-            legendFontSize: cat.legendFontSize,
-            legendLabel: cat.displayLabel, // custom label for legend
-          }))}
-          width={screenWidth}
-          height={210}
-          chartConfig={{
-            color: () => lightCream,
-            labelColor: () => lightCream,
-          }}
-          accessor="population"
-          backgroundColor="transparent"
-          paddingLeft="0"
-          absolute
-        />
+        <>
+          {/* Centered Pie Chart */}
+          <View style={{ alignItems: "center" }}>
+            <PieChart
+              data={categoryTotals.map((cat) => ({
+                name: cat.name,
+                population: cat.amount,
+                color: cat.color,
+                legendFontColor: cat.legendFontColor,
+                legendFontSize: cat.legendFontSize,
+              }))}
+              width={screenWidth}
+              height={210}
+              chartConfig={{
+                color: () => lightCream,
+                labelColor: () => lightCream,
+              }}
+              accessor="population"
+              backgroundColor="transparent"
+              paddingLeft="0"
+              absolute
+              hasLegend={false}
+            />
+          </View>
+
+          {/* Single-line custom legend */}
+          <View style={{ marginTop: 10 }}>
+            {categoryTotals.map((cat) => (
+              <View
+                key={cat.name}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
+                <View
+                  style={{
+                    width: 14,
+                    height: 14,
+                    backgroundColor: cat.color,
+                    marginRight: 6,
+                    borderRadius: 3,
+                  }}
+                />
+                <Text style={{ color: lightCream, fontSize: 14 }}>
+                  ${cat.amount.toFixed(2)} {cat.name}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </>
       )}
     </ScrollView>
   );
