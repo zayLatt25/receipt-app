@@ -508,12 +508,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "transparent",
     fontSize: normalizeFont(16),
   },
-  scrollViewContent: {
-    paddingHorizontal: scale(16),
-    paddingBottom: verticalScale(40),
-    backgroundColor: navyBlue,
-    flexGrow: 1,
-  },
   profileText: {
     fontSize: normalizeFont(16),
     color: lightCream,
