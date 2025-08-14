@@ -101,7 +101,12 @@ const SignupScreen = ({ navigation }) => {
         secureTextEntry
       />
 
-      <FormButton title="Sign Up" onPress={handleSignup} loading={loading} />
+      <FormButton
+        title="Sign Up"
+        onPress={handleSignup}
+        loading={loading}
+        style={styles.loginSignupButton}
+      />
 
       <LinkText
         text="Already have an account?"

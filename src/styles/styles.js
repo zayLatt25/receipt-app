@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(16),
   },
-  button: {
+  loginSignUpButton: {
     backgroundColor: lightCream,
     borderWidth: 1,
     paddingVertical: verticalScale(14),
@@ -508,8 +508,152 @@ export const styles = StyleSheet.create({
     backgroundColor: "transparent",
     fontSize: normalizeFont(16),
   },
+  profileText: {
+    fontSize: normalizeFont(16),
+    color: lightCream,
+    fontFamily: mainFont,
+    marginBottom: verticalScale(8),
+  },
+  tabBarContainer: {
+    alignItems: "center",
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(5),
+  },
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: "#fff2",
+    borderRadius: verticalScale(20),
+    overflow: "hidden",
+    width: 220,
+    height: 38,
+    elevation: 2,
+  },
+  tabPill: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: verticalScale(8),
+    borderRadius: verticalScale(0),
+    backgroundColor: "transparent",
+    marginHorizontal: scale(2),
+    height: "100%",
+  },
+  tabPillActive: {
+    backgroundColor: "#e8e5d9",
+  },
+  tabPillLeftActive: {
+    borderTopLeftRadius: verticalScale(20),
+    borderBottomLeftRadius: verticalScale(20),
+  },
+  tabPillRightActive: {
+    borderTopRightRadius: verticalScale(20),
+    borderBottomRightRadius: verticalScale(20),
+  },
+  tabPillText: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  tabPillTextActive: {
+    color: "#0c2d5d",
+  },
   scrollViewContent: {
     paddingHorizontal: scale(16),
-    marginBottom: verticalScale(70),
+    paddingBottom: verticalScale(40),
+    backgroundColor: navyBlue,
+    flexGrow: 1,
+  },
+  profileInfoContainer: {
+    marginBottom: verticalScale(10),
+    marginTop: verticalScale(10),
+  },
+  logoutButton: {
+    backgroundColor: lightCream,
+    borderRadius: moderateScale(8),
+    marginBottom: verticalScale(10),
+    alignSelf: "center",
+    width: "95%",
+    height: verticalScale(30),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logoutButtonText: {
+    color: lightCream,
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  tabContent: {
+    flexGrow: 1,
+    minHeight: verticalScale(400),
+  },
+  statsScrollContent: {
+    paddingBottom: verticalScale(40),
+  },
+  statsSectionHeader: {
+    fontWeight: "bold",
+    fontSize: normalizeFont(18),
+    marginBottom: verticalScale(10),
+  },
+  statsBudgetLabel: {
+    fontWeight: "normal",
+    fontSize: normalizeFont(14),
+    color: "#fff9",
+  },
+  statsBarChart: {
+    marginVertical: verticalScale(8),
+    borderRadius: moderateScale(16),
+  },
+  monthPickerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: verticalScale(10),
+    flexWrap: "wrap",
+  },
+  monthPickerButton: {
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: scale(12),
+    borderRadius: moderateScale(16),
+    backgroundColor: "#fff2",
+    marginHorizontal: scale(3),
+    marginBottom: verticalScale(5),
+  },
+  monthPickerButtonActive: {
+    backgroundColor: "#781d4e",
+  },
+  monthPickerText: {
+    color: "#e8e5d9",
+    fontSize: normalizeFont(14),
+  },
+  monthPickerTextActive: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  yearPickerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: verticalScale(10),
+  },
+  yearPickerButton: {
+    paddingVertical: verticalScale(6),
+    paddingHorizontal: scale(14),
+    borderRadius: moderateScale(16),
+    backgroundColor: "#fff2",
+    marginHorizontal: scale(3),
+  },
+  yearPickerButtonActive: {
+    backgroundColor: "#781d4e",
+  },
+  yearPickerText: {
+    color: "#e8e5d9",
+    fontSize: normalizeFont(14),
+  },
+  yearPickerTextActive: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: normalizeFont(14),
+  },
+  statsCategoryHeader: {
+    marginTop: verticalScale(24),
   },
 });

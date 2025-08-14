@@ -61,7 +61,12 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
       />
 
-      <FormButton title="Login" onPress={handleLogin} loading={loading} />
+      <FormButton
+        title="Login"
+        onPress={handleLogin}
+        loading={loading}
+        style={styles.loginSignupButton}
+      />
 
       <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
         <LinkText
