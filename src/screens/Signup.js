@@ -4,7 +4,7 @@ import { View, Text, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { styles } from "../styles/styles";
+import styles from "../styles/SignupScreenStyles";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import LinkText from "../components/LinkText";
