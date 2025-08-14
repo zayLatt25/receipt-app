@@ -87,7 +87,8 @@ export default function ProfileStats() {
           }
         }
       });
-      setMonthlyTotals(monthly);
+      // Round each value to 2 decimals
+      setMonthlyTotals(monthly.map((val) => Number(val.toFixed(2))));
     } catch (err) {
       setMonthlyTotals(Array(12).fill(0));
     }
@@ -115,9 +116,10 @@ export default function ProfileStats() {
           }
         }
       });
+      // Show both category and amount in the name, and round amount
       const catData = Object.entries(catTotals).map(([cat, amt], i) => ({
-        name: cat,
-        amount: amt,
+        name: `${cat} ($${Number(amt).toFixed(2)})`,
+        amount: Number(amt.toFixed(2)),
         color: chartColors[i % chartColors.length],
         legendFontColor: lightCream,
         legendFontSize: 14,
@@ -207,7 +209,7 @@ export default function ProfileStats() {
             backgroundGradientFrom: navyBlue,
             backgroundGradientTo: navyBlue,
             decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(232, 229, 217, ${opacity})`,
+            color: () => lightCream,
             labelColor: () => lightCream,
             propsForBackgroundLines: { stroke: "#fff2" },
             barPercentage: 0.7,
@@ -219,8 +221,10 @@ export default function ProfileStats() {
           segments={5}
           renderDotContent={({ x, y, index }) => null}
           decorator={() => {
-            const max = Math.max(...monthlyTotals, monthlyBudget, 1000);
-            // Use responsive values for chartHeight, yPos, and decorator text
+            // Calculate max for y-axis: 125% of budget or max value
+            const maxData = Math.max(...monthlyTotals, 0);
+            const maxBudget = monthlyBudget * 1.25;
+            const max = Math.max(maxData, maxBudget);
             const chartHeight = styles.statsBarChartHeight || 180;
             const yPos =
               ((max - monthlyBudget) / max) * chartHeight +
@@ -269,7 +273,7 @@ export default function ProfileStats() {
           }}
           accessor="population"
           backgroundColor="transparent"
-          paddingLeft="10"
+          paddingLeft="0"
           absolute
         />
       )}
