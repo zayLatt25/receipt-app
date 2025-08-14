@@ -7,6 +7,7 @@ import FloatingActionButton from "../components/FloatingActionButton";
 import AddExpenseModal from "../components/AddExpenseModal";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import ExpenseList from "../components/ExpenseList";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -62,6 +63,18 @@ const HomeScreen = () => {
     }
   };
 
+  const handleDeleteExpense = async (expenseId) => {
+    if (!user) return;
+
+    try {
+      await deleteDoc(doc(db, "users", user.uid, "expenses", expenseId));
+      // Remove from local state
+      setExpenses((prev) => prev.filter((exp) => exp.id !== expenseId));
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
+  };
+
   return (
     <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -75,7 +88,10 @@ const HomeScreen = () => {
         {expenses.length === 0 ? (
           <Text style={styles.bodyText}>No expenses for this day!</Text>
         ) : (
-          <ExpenseList expenses={expenses} />
+          <ExpenseList
+            expenses={expenses}
+            onDeleteExpense={handleDeleteExpense}
+          />
         )}
 
         <FloatingActionButton onPress={() => setModalVisible(true)} />

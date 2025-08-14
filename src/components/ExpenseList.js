@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { View, Text, SectionList, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "../styles/ExpenseListStyles";
 
 const STORAGE_KEY = "collapsedCategories";
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = ({ expenses, onDeleteExpense }) => {
   const [collapsed, setCollapsed] = useState({});
 
   useEffect(() => {
@@ -32,7 +33,6 @@ const ExpenseList = ({ expenses }) => {
     [collapsed]
   );
 
-  // Memoize grouping for performance
   const grouped = useMemo(() => {
     const sectionMap = new Map();
     for (const expense of expenses) {
@@ -52,7 +52,6 @@ const ExpenseList = ({ expenses }) => {
     return Array.from(sectionMap.values());
   }, [expenses]);
 
-  // Calculate total for the day
   const dayTotal = useMemo(() => {
     return expenses.reduce((sum, exp) => sum + exp.amount, 0);
   }, [expenses]);
@@ -80,14 +79,33 @@ const ExpenseList = ({ expenses }) => {
         style={[
           styles.expenseItem,
           index === section.data.length - 1 ? null : styles.expenseItemBorder,
+          {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          },
         ]}
       >
-        <Text style={[styles.expenseText, styles.expenseDescription]}>
-          {item.description}
-        </Text>
-        <Text style={[styles.expenseText, styles.expenseAmount]}>
-          ${item.amount.toFixed(2)}
-        </Text>
+        <View style={{ flex: 1 }}>
+          <Text style={[styles.expenseText, styles.expenseDescription]}>
+            {item.description}
+          </Text>
+          <Text style={[styles.expenseText, styles.expenseAmount]}>
+            ${item.amount.toFixed(2)}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.deleteBtnCircle}
+          onPress={() => onDeleteExpense(item.id)}
+          accessibilityLabel={
+            item.description && item.description.trim()
+              ? `Delete item ${item.description}`
+              : `Delete item at position ${index + 1}`
+          }
+        >
+          <MaterialIcons name="delete" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
     );
   };

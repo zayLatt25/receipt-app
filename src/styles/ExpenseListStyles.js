@@ -58,6 +58,18 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: normalizeFont(16),
   },
+  deleteBtnColumn: {
+    width: scale(65),
+  },
+  deleteBtnCircle: {
+    backgroundColor: colors.darkPink,
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: scale(6),
+  },
   dayTotalContainer: {
     backgroundColor: colors.lightCream,
     marginBottom: verticalScale(10),
