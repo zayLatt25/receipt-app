@@ -10,7 +10,6 @@ export const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: scale(16),
-    paddingTop: verticalScale(10),
   },
   divider: {
     height: 1,

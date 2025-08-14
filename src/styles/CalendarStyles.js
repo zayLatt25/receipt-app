@@ -1,17 +1,11 @@
 import { StyleSheet } from "react-native";
 import { colors } from "./theme";
-import {
-  scale,
-  verticalScale,
-  moderateScale,
-  normalizeFont,
-} from "../utils/sizes";
+import { scale, verticalScale, normalizeFont } from "../utils/sizes";
 
 export const styles = StyleSheet.create({
   calendarWrapper: {
     backgroundColor: colors.navyBlue,
-    padding: scale(5),
-    marginBottom: verticalScale(5),
+    marginBottom: verticalScale(10),
   },
   calendarTheme: {
     backgroundColor: colors.navyBlue,
