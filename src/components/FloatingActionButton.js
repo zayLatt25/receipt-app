@@ -2,7 +2,8 @@
 import React, { useRef, useEffect } from "react";
 import { Animated, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { styles, navyBlue } from "../styles/styles";
+import { styles } from "../styles/FloatingActionButtonStyles";
+import { colors } from "../styles/theme";
 
 const FloatingActionButton = ({ onPress }) => {
   // for fade+scale in
@@ -43,7 +44,7 @@ const FloatingActionButton = ({ onPress }) => {
         }}
         style={styles.fabButton}
       >
-        <Ionicons name="add" size={32} color={navyBlue} />
+        <Ionicons name="add" size={32} color={colors.navyBlue} />
       </TouchableOpacity>
     </Animated.View>
   );
