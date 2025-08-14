@@ -518,4 +518,34 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(8),
   },
+  tabBar: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 16,
+    marginBottom: 16,
+    gap: 12,
+  },
+  tabPill: {
+    paddingVertical: 6,
+    paddingHorizontal: 22,
+    borderRadius: 20,
+    backgroundColor: "#fff2",
+    marginHorizontal: 4,
+  },
+  tabPillActive: {
+    backgroundColor: "#e8e5d9",
+  },
+  tabPillText: {
+    color: "#e8e5d9",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  tabPillTextActive: {
+    color: "#0c2d5d",
+  },
+  tabContent: {
+    marginTop: 18,
+    flex: 1,
+  },
 });

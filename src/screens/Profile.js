@@ -7,11 +7,13 @@ import { useAuth } from "../context/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { TouchableOpacity } from "react-native";
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [profileData, setProfileData] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("stats");
   const { user } = useAuth();
 
   const handleLogout = async () => {
@@ -62,6 +64,60 @@ export default function ProfileScreen() {
           onPress={handleLogout}
           loading={logoutLoading}
         />
+
+        {/* Pill Tabs */}
+        <View style={styles.tabBar}>
+          <TouchableOpacity
+            style={[
+              styles.tabPill,
+              selectedTab === "stats" && styles.tabPillActive,
+            ]}
+            onPress={() => setSelectedTab("stats")}
+          >
+            <Text
+              style={[
+                styles.tabPillText,
+                selectedTab === "stats" && styles.tabPillTextActive,
+              ]}
+            >
+              Stats
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tabPill,
+              selectedTab === "settings" && styles.tabPillActive,
+            ]}
+            onPress={() => setSelectedTab("settings")}
+          >
+            <Text
+              style={[
+                styles.tabPillText,
+                selectedTab === "settings" && styles.tabPillTextActive,
+              ]}
+            >
+              Settings
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Tab Content */}
+        <View style={styles.tabContent}>
+          {selectedTab === "stats" && (
+            <View>
+              <Text style={styles.profileText}>Stats content goes here.</Text>
+              {/* TODO: Add more stats content here */}
+            </View>
+          )}
+          {selectedTab === "settings" && (
+            <View>
+              <Text style={styles.profileText}>
+                Settings content goes here.
+              </Text>
+              {/* TODO: Add more settings content here */}
+            </View>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
