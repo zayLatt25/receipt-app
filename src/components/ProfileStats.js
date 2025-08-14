@@ -7,18 +7,19 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { styles, navyBlue, lightCream, darkPink } from "../styles/styles";
-import { BarChart, PieChart } from "react-native-chart-kit";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import dayjs from "dayjs";
 import { collection, getDocs } from "firebase/firestore";
 import {
-  VictoryBar,
   VictoryChart,
+  VictoryBar,
   VictoryAxis,
   VictoryPie,
 } from "victory-native";
+import { profileStatsStyles as styles } from "../styles/profileStatsStyles";
+import { darkPink, lightCream } from "../styles/styles";
+import { normalizeFont } from "../utils/sizes";
 
 const screenWidth = Dimensions.get("window").width - 40;
 
@@ -31,6 +32,7 @@ export default function ProfileStats() {
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month());
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
+  const pieSize = screenWidth * 0.8;
 
   const chartColors = [
     "#e8e5d9",
@@ -121,8 +123,6 @@ export default function ProfileStats() {
         name: cat,
         amount: Number(amt.toFixed(2)),
         color: chartColors[i % chartColors.length],
-        legendFontColor: lightCream,
-        legendFontSize: 14,
       }));
       setCategoryTotals(catData);
     } catch (err) {
@@ -179,6 +179,8 @@ export default function ProfileStats() {
     </View>
   );
 
+  const maxMonthly = Math.max(...monthlyTotals, monthlyBudget);
+
   return (
     <ScrollView
       contentContainerStyle={styles.statsScrollContent}
@@ -186,9 +188,6 @@ export default function ProfileStats() {
     >
       <Text style={[styles.profileText, styles.statsSectionHeader]}>
         Yearly Spending ({selectedYear}){" "}
-        <Text style={styles.statsBudgetLabel}>
-          (Budget: ${monthlyBudget}/mo)
-        </Text>
       </Text>
       <YearPicker />
       {loadingYearly ? (
@@ -197,40 +196,32 @@ export default function ProfileStats() {
         <View style={{ alignItems: "center" }}>
           <VictoryChart
             width={screenWidth}
-            height={240}
-            domainPadding={{ x: 20, y: 20 }}
+            domainPadding={{ x: 20 }}
+            padding={{ top: 20, bottom: 30, left: 40, right: 10 }}
           >
             <VictoryAxis
-              tickValues={months.map((_, i) => i)}
+              tickValues={months.map((_, idx) => idx)}
               tickFormat={months}
               style={{
-                axis: { stroke: lightCream },
-                tickLabels: {
-                  fill: lightCream,
-                  fontSize: 12,
-                  angle: -45,
-                  padding: 15,
-                },
+                tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
               }}
             />
             <VictoryAxis
               dependentAxis
-              tickFormat={(x) => `$${x}`}
+              tickFormat={(t) => `$${t}`}
               style={{
-                axis: { stroke: lightCream },
-                grid: { stroke: "#fff2" },
-                tickLabels: { fill: lightCream, fontSize: 12 },
+                tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
               }}
-              // Optional: set max Y-axis
-              domain={[0, Math.max(...monthlyTotals, monthlyBudget)]}
+              domain={[0, Math.max(...monthlyTotals) * 1.2]}
             />
             <VictoryBar
-              data={monthlyTotals.map((val, i) => ({ x: i, y: val }))}
+              data={monthlyTotals.map((amt, idx) => ({ x: idx, y: amt }))}
+              barRatio={0.7}
               style={{
-                data: { fill: darkPink, width: 20 },
-                labels: { fill: lightCream },
+                data: { fill: darkPink },
+                labels: { fill: lightCream, fontSize: normalizeFont(12) },
               }}
-              labels={({ datum }) => `$${datum.y}`}
+              labels={({ datum }) => `$${datum.y.toFixed(0)}`}
             />
           </VictoryChart>
         </View>
@@ -245,47 +236,37 @@ export default function ProfileStats() {
       >
         Category Breakdown ({months[selectedMonth]} {selectedYear})
       </Text>
+      <Text style={styles.pieBudgetLabel}>(Budget: ${maxMonthly})</Text>
       <MonthPicker />
       {loadingCategory ? (
         <ActivityIndicator color={lightCream} size="large" />
       ) : categoryTotals.length === 0 ? (
         <Text style={styles.profileText}>No data for this month.</Text>
       ) : (
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", marginTop: 20 }}>
           <VictoryPie
             data={categoryTotals.map((cat) => ({ x: cat.name, y: cat.amount }))}
             colorScale={categoryTotals.map((cat) => cat.color)}
+            width={pieSize}
+            height={pieSize}
             labels={({ datum }) => `$${datum.y.toFixed(2)}`}
-            labelRadius={50}
             style={{
-              labels: { fill: lightCream, fontSize: 12 },
+              labels: { fill: lightCream, fontSize: normalizeFont(14) },
             }}
-            width={screenWidth}
-            height={210}
           />
 
-          {/* Custom Legend */}
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 15, width: pieSize }}>
             {categoryTotals.map((cat) => (
-              <View
-                key={cat.name}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginBottom: 8,
-                }}
-              >
+              <View key={cat.name} style={styles.pieLegendItem}>
                 <View
-                  style={{
-                    width: 14,
-                    height: 14,
-                    backgroundColor: cat.color,
-                    marginRight: 6,
-                    borderRadius: 3,
-                  }}
+                  style={[
+                    styles.pieLegendColor,
+                    { backgroundColor: cat.color },
+                  ]}
                 />
-                <Text style={{ color: lightCream, fontSize: 14 }}>
-                  ${cat.amount.toFixed(2)} {cat.name}
+                <Text style={styles.pieLegendText}>{cat.name}</Text>
+                <Text style={styles.pieLegendText}>
+                  ${cat.amount.toFixed(2)}
                 </Text>
               </View>
             ))}

@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
     fontFamily: mainFont,
     marginBottom: verticalScale(16),
   },
-  button: {
+  loginSignUpButton: {
     backgroundColor: lightCream,
     borderWidth: 1,
     paddingVertical: verticalScale(14),
@@ -568,14 +568,11 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(10),
   },
   logoutButton: {
-    backgroundColor: darkPink,
+    backgroundColor: lightCream,
     borderRadius: moderateScale(8),
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: scale(20),
-    alignSelf: "flex-end",
-    marginBottom: verticalScale(10),
-    width: scale(110),
-    height: verticalScale(36),
+    alignSelf: "center",
+    width: "95%",
+    height: verticalScale(30),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -658,28 +655,4 @@ export const styles = StyleSheet.create({
   statsCategoryHeader: {
     marginTop: verticalScale(24),
   },
-  // Responsive decorator for budget line in BarChart
-  budgetLine: (yPos) => ({
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: yPos,
-    height: verticalScale(2),
-    backgroundColor: darkPink,
-    opacity: 0.7,
-  }),
-  budgetLabelContainer: {
-    position: "absolute",
-    right: 0,
-    top: -verticalScale(16),
-    backgroundColor: "transparent",
-  },
-  budgetLabelText: {
-    color: darkPink,
-    fontWeight: "bold",
-    fontSize: normalizeFont(12),
-  },
-  // For BarChart decorator math
-  statsBarChartHeight: verticalScale(180),
-  statsBarChartPaddingTop: verticalScale(32),
 });
