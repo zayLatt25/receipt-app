@@ -13,6 +13,12 @@ import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import dayjs from "dayjs";
 import { collection, getDocs } from "firebase/firestore";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryAxis,
+  VictoryPie,
+} from "victory-native";
 
 const screenWidth = Dimensions.get("window").width - 40;
 
@@ -188,30 +194,46 @@ export default function ProfileStats() {
       {loadingYearly ? (
         <ActivityIndicator color={lightCream} size="large" />
       ) : (
-        <BarChart
-          data={{
-            labels: months,
-            datasets: [{ data: monthlyTotals }],
-          }}
-          width={screenWidth}
-          height={240}
-          yAxisLabel="$"
-          chartConfig={{
-            backgroundColor: navyBlue,
-            backgroundGradientFrom: navyBlue,
-            backgroundGradientTo: navyBlue,
-            decimalPlaces: 0,
-            color: () => lightCream,
-            labelColor: () => lightCream,
-            propsForBackgroundLines: { stroke: "#fff2" },
-            barPercentage: 0.7,
-          }}
-          style={styles.statsBarChart}
-          fromZero
-          showValuesOnTopOfBars
-          withHorizontalLines
-          segments={5}
-        />
+        <View style={{ alignItems: "center" }}>
+          <VictoryChart
+            width={screenWidth}
+            height={240}
+            domainPadding={{ x: 20, y: 20 }}
+          >
+            <VictoryAxis
+              tickValues={months.map((_, i) => i)}
+              tickFormat={months}
+              style={{
+                axis: { stroke: lightCream },
+                tickLabels: {
+                  fill: lightCream,
+                  fontSize: 12,
+                  angle: -45,
+                  padding: 15,
+                },
+              }}
+            />
+            <VictoryAxis
+              dependentAxis
+              tickFormat={(x) => `$${x}`}
+              style={{
+                axis: { stroke: lightCream },
+                grid: { stroke: "#fff2" },
+                tickLabels: { fill: lightCream, fontSize: 12 },
+              }}
+              // Optional: set max Y-axis
+              domain={[0, Math.max(...monthlyTotals, monthlyBudget)]}
+            />
+            <VictoryBar
+              data={monthlyTotals.map((val, i) => ({ x: i, y: val }))}
+              style={{
+                data: { fill: darkPink, width: 20 },
+                labels: { fill: lightCream },
+              }}
+              labels={({ datum }) => `$${datum.y}`}
+            />
+          </VictoryChart>
+        </View>
       )}
 
       <Text
@@ -229,32 +251,20 @@ export default function ProfileStats() {
       ) : categoryTotals.length === 0 ? (
         <Text style={styles.profileText}>No data for this month.</Text>
       ) : (
-        <>
-          {/* Centered Pie Chart */}
-          <View style={{ alignItems: "center" }}>
-            <PieChart
-              data={categoryTotals.map((cat) => ({
-                name: cat.name,
-                population: cat.amount,
-                color: cat.color,
-                legendFontColor: cat.legendFontColor,
-                legendFontSize: cat.legendFontSize,
-              }))}
-              width={screenWidth}
-              height={210}
-              chartConfig={{
-                color: () => lightCream,
-                labelColor: () => lightCream,
-              }}
-              accessor="population"
-              backgroundColor="transparent"
-              paddingLeft="0"
-              absolute
-              hasLegend={false}
-            />
-          </View>
+        <View style={{ alignItems: "center" }}>
+          <VictoryPie
+            data={categoryTotals.map((cat) => ({ x: cat.name, y: cat.amount }))}
+            colorScale={categoryTotals.map((cat) => cat.color)}
+            labels={({ datum }) => `$${datum.y.toFixed(2)}`}
+            labelRadius={50}
+            style={{
+              labels: { fill: lightCream, fontSize: 12 },
+            }}
+            width={screenWidth}
+            height={210}
+          />
 
-          {/* Single-line custom legend */}
+          {/* Custom Legend */}
           <View style={{ marginTop: 10 }}>
             {categoryTotals.map((cat) => (
               <View
@@ -280,7 +290,7 @@ export default function ProfileStats() {
               </View>
             ))}
           </View>
-        </>
+        </View>
       )}
     </ScrollView>
   );
