@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     color: colors.navyBlue,
   },
   modalSubtitle: {
-    color: navyBlue,
+    color: colors.navyBlue,
     marginBottom: verticalScale(8),
     fontWeight: "600",
   },
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   buttonText: {
-    color: navyBlue,
+    color: colors.navyBlue,
     fontSize: normalizeFont(16),
     fontWeight: "bold",
   },
