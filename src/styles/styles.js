@@ -512,4 +512,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     marginBottom: verticalScale(70),
   },
+  profileText: {
+    fontSize: normalizeFont(16),
+    color: lightCream,
+    fontFamily: mainFont,
+    marginBottom: verticalScale(8),
+  },
 });
