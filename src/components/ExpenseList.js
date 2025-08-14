@@ -79,14 +79,10 @@ const ExpenseList = ({ expenses, onDeleteExpense }) => {
         style={[
           styles.expenseItem,
           index === section.data.length - 1 ? null : styles.expenseItemBorder,
-          {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          },
+          styles.expenseItemRow,
         ]}
       >
-        <View style={{ flex: 1 }}>
+        <View style={styles.expenseDetails}>
           <Text style={[styles.expenseText, styles.expenseDescription]}>
             {item.description}
           </Text>
@@ -118,7 +114,7 @@ const ExpenseList = ({ expenses, onDeleteExpense }) => {
         keyExtractor={(item) => item.id}
         renderSectionHeader={renderSectionHeader}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={styles.sectionListContainer}
         stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
         extraData={collapsed}
