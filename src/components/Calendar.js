@@ -20,7 +20,6 @@ export default function CustomCalendar({
         theme={{
           ...styles.calendarTheme,
           dotStyle: { marginTop: -2 },
-          todayTextColor: colors.darkPink,
           arrowColor: colors.darkPink,
           monthTextColor: colors.darkPink,
           textDayFontWeight: "500",
