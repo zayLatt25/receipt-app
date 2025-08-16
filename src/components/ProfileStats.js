@@ -24,7 +24,7 @@ import { chartColors, predefinedCategories, months } from "../utils/constants";
 
 const screenWidth = Dimensions.get("window").width - 40;
 
-export default function ProfileStats({ navigation }) {
+export default function ProfileStats({}) {
   const { user } = useAuth();
   const [loadingYearly, setLoadingYearly] = useState(true);
   const [loadingCategory, setLoadingCategory] = useState(true);
@@ -225,15 +225,6 @@ export default function ProfileStats({ navigation }) {
           <Text style={styles.emptyStateText}>
             No expenses recorded for {months[selectedMonth]} {selectedYear}.
           </Text>
-          <TouchableOpacity
-            style={styles.emptyStateButton}
-            onPress={() => {
-              // Navigate to add expense screen
-              navigation.navigate("AddExpense");
-            }}
-          >
-            <Text style={styles.emptyStateButtonText}>Add Expense</Text>
-          </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.pieContainer}>
