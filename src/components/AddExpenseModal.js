@@ -5,17 +5,7 @@ import { Modal, View, Text, TouchableOpacity } from "react-native";
 import styles from "../styles/AddExpenseModalStyles";
 import FormInput from "./FormInput";
 import dayjs from "dayjs";
-
-const predefinedCategories = [
-  "Grocery",
-  "Transport",
-  "Bills",
-  "Entertainment",
-  "Eating Out",
-  "Health",
-  "Shopping",
-  "Others",
-];
+import { predefinedCategories } from "../utils/constants";
 
 const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
   const [description, setDescription] = useState("");

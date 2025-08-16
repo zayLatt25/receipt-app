@@ -86,4 +86,24 @@ export const profileStatsStyles = StyleSheet.create({
     color: colors.lightCream,
     fontSize: normalizeFont(14),
   },
+  chartContainer: {
+    alignItems: "center",
+  },
+  chartPadding: { top: 10, bottom: 30, left: 40, right: 0 },
+  axisStyle: {
+    tickLabels: { fill: colors.lightCream, fontSize: normalizeFont(12) },
+  },
+  barStyle: {
+    data: { fill: colors.darkPink },
+    labels: { fill: colors.lightCream, fontSize: normalizeFont(12) },
+  },
+  pieContainer: {
+    alignItems: "center",
+  },
+  pieStyle: {
+    labels: { fill: colors.lightCream, fontSize: normalizeFont(14) },
+  },
+  pieLegendContainer: {
+    marginTop: scale(10),
+  },
 });
