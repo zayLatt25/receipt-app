@@ -69,6 +69,8 @@ export const profileStatsStyles = StyleSheet.create({
   pieBudgetLabel: {
     fontSize: normalizeFont(13),
     color: colors.lightCream,
+    alignSelf: "center",
+    marginTop: verticalScale(5),
   },
   pieLegendItem: {
     flexDirection: "row",
@@ -105,5 +107,29 @@ export const profileStatsStyles = StyleSheet.create({
   },
   pieLegendContainer: {
     marginTop: scale(10),
+  },
+
+  // New empty state styles
+  emptyStateContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: verticalScale(40),
+  },
+  emptyStateText: {
+    fontSize: normalizeFont(16),
+    color: colors.lightCream,
+    textAlign: "center",
+    marginBottom: verticalScale(15),
+  },
+  emptyStateButton: {
+    backgroundColor: colors.darkPink,
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: scale(20),
+    borderRadius: scale(6),
+  },
+  emptyStateButtonText: {
+    color: colors.lightCream,
+    fontSize: normalizeFont(14),
+    fontWeight: "bold",
   },
 });

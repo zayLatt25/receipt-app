@@ -24,7 +24,7 @@ import { chartColors, predefinedCategories, months } from "../utils/constants";
 
 const screenWidth = Dimensions.get("window").width - 40;
 
-export default function ProfileStats() {
+export default function ProfileStats({ navigation }) {
   const { user } = useAuth();
   const [loadingYearly, setLoadingYearly] = useState(true);
   const [loadingCategory, setLoadingCategory] = useState(true);
@@ -41,6 +41,7 @@ export default function ProfileStats() {
     if (!user) return;
     fetchYearlyStats();
   }, [user, selectedYear]);
+
   useEffect(() => {
     if (!user) return;
     fetchCategoryStats();
@@ -82,6 +83,7 @@ export default function ProfileStats() {
         acc[cat] = 0;
         return acc;
       }, {});
+
       expenses.forEach((exp) => {
         if (exp.date && exp.category) {
           const expDate = dayjs(exp.date);
@@ -158,6 +160,9 @@ export default function ProfileStats() {
 
   const maxMonthly = Math.max(...monthlyTotals, monthlyBudget);
 
+  // Check if current month has any expenses
+  const monthHasData = categoryTotals.some((cat) => cat.amount > 0);
+
   return (
     <ScrollView
       contentContainerStyle={styles.statsScrollContent}
@@ -214,8 +219,22 @@ export default function ProfileStats() {
 
       {loadingCategory ? (
         <ActivityIndicator color={colors.lightCream} size="large" />
-      ) : categoryTotals.length === 0 ? (
-        <Text style={styles.profileText}>No data for this month.</Text>
+      ) : !monthHasData ? (
+        // Friendly empty state
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>
+            No expenses recorded for {months[selectedMonth]} {selectedYear}.
+          </Text>
+          <TouchableOpacity
+            style={styles.emptyStateButton}
+            onPress={() => {
+              // Navigate to add expense screen
+              navigation.navigate("AddExpense");
+            }}
+          >
+            <Text style={styles.emptyStateButtonText}>Add Expense</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
         <View style={styles.pieContainer}>
           <VictoryPie
