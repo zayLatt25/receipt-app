@@ -174,7 +174,15 @@ export default function ProfileStats({}) {
       <YearPicker />
 
       {loadingYearly ? (
-        <ActivityIndicator color={colors.lightCream} size="large" />
+        <View
+          style={{
+            height: 250,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator color={colors.lightCream} size="large" />
+        </View>
       ) : (
         <View style={styles.chartContainer}>
           <VictoryChart
@@ -218,7 +226,9 @@ export default function ProfileStats({}) {
       <MonthPicker />
 
       {loadingCategory ? (
-        <ActivityIndicator color={colors.lightCream} size="large" />
+        <View style={styles.emptyStateContainer}>
+          <ActivityIndicator color={colors.lightCream} size="large" />
+        </View>
       ) : !monthHasData ? (
         // Friendly empty state
         <View style={styles.emptyStateContainer}>

@@ -113,7 +113,7 @@ export const profileStatsStyles = StyleSheet.create({
   emptyStateContainer: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: verticalScale(40),
+    paddingVertical: verticalScale(200),
   },
   emptyStateText: {
     fontSize: normalizeFont(16),
