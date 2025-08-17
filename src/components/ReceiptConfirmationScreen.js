@@ -40,7 +40,7 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
   const updateItem = (index, key, value) => {
     const updated = [...items];
     if (key === "pieces" || key === "unitPrice") {
-      updated[index][key] = value.replace(/[^0-9.]/g, ""); // sanitize numeric input
+      updated[index][key] = value.replace(/[^0-9.]/g, "");
     } else {
       updated[index][key] = value;
     }

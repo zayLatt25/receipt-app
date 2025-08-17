@@ -1,31 +1,28 @@
 // src/styles/CameraStyles.js
 import { StyleSheet } from "react-native";
+import { colors } from "./theme";
+import { verticalScale, moderateScale, normalizeFont } from "../utils/sizes";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
   button: {
-    backgroundColor: "#2563eb",
-    paddingVertical: 14,
-    paddingHorizontal: 28,
-    borderRadius: 12,
-    marginVertical: 10,
-    width: "80%",
+    backgroundColor: colors.lightCream,
+    borderWidth: 1,
+    paddingVertical: verticalScale(14),
+    borderRadius: moderateScale(10),
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    marginVertical: verticalScale(10),
+    width: "90%",
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
+    color: colors.navyBlue,
+    fontSize: normalizeFont(16),
+    fontFamily: "bold",
   },
 });

@@ -159,10 +159,6 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Receipt Scanner
-      </Text>
-
       {loading ? (
         <ActivityIndicator size="large" color="#2563eb" />
       ) : (
