@@ -86,7 +86,7 @@ const processReceipt = async (imageUrl) => {
     const receiptData = data?.choices?.[0]?.message?.content?.trim() || "";
 
     if (!receiptData) {
-      return { errorTitle: "Error Occured", error: "Please try again!" };
+      return { errorTitle: "Error Occurred", error: "Please try again!" };
     }
 
     let parsed;
