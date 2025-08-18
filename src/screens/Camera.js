@@ -101,7 +101,10 @@ const processReceipt = async (imageUrl) => {
 
     return parsed;
   } catch (error) {
-    return { errorTitle: "Error", error: "Receipt unreadable" };
+    return {
+      errorTitle: "Error",
+      error: "Receipt unreadable, please try again!",
+    };
   }
 };
 
@@ -110,8 +113,6 @@ export default function CameraScreen() {
   const [loading, setLoading] = useState(false);
   const [receiptData, setReceiptData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentStorageRef, setCurrentStorageRef] = useState(null);
-
   const storage = getStorage();
 
   const requestPermissions = async () => {
@@ -153,7 +154,6 @@ export default function CameraScreen() {
         const blob = await response.blob();
         const fileName = `receipts/${user?.uid || "guest"}_${Date.now()}.jpg`;
         const storageRef = ref(storage, fileName);
-        setCurrentStorageRef(storageRef);
 
         try {
           await uploadBytes(storageRef, blob);
@@ -247,7 +247,8 @@ export default function CameraScreen() {
 
           <Text style={styles.disclaimer}>
             Note: Receipt images are uploaded temporarily and deleted
-            automatically after processing.
+            automatically after processing. In case of errors, it will be
+            manually deleted.
           </Text>
         </>
       )}
