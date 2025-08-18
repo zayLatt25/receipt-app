@@ -73,7 +73,7 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
         createdAt: new Date(),
       };
 
-      await handleAddExpense(expense, user);
+      await handleAddExpense(expense);
       Alert.alert("Success", "Expense saved!");
       onClose();
     } catch (error) {
