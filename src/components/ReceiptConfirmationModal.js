@@ -121,9 +121,7 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View
-        style={{ flex: 1, backgroundColor: "white", paddingTop: insets.top }}
-      >
+      <View style={{ ...styles.container, paddingTop: insets.top }}>
         {/* Sticky Header */}
         <View style={{ paddingHorizontal: 16, paddingBottom: 10 }}>
           <Text style={styles.title}>Confirm Receipt</Text>
@@ -137,25 +135,32 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
           />
 
           <Text style={styles.label}>Category</Text>
-          <FlatList
-            data={predefinedCategories}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => setCategory(item)}
-                style={[
-                  styles.categoryButton,
-                  category === item
-                    ? styles.selectedCategory
-                    : styles.unselectedCategory,
-                ]}
-              >
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
+          <View style={styles.categoryGrid}>
+            {predefinedCategories.map((cat) => {
+              const selected = category === cat;
+              return (
+                <TouchableOpacity
+                  key={cat}
+                  onPress={() => setCategory(cat)}
+                  style={[
+                    styles.categoryButton,
+                    selected
+                      ? styles.selectedCategory
+                      : styles.unselectedCategory,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.categoryButtonText,
+                      selected && styles.categoryButtonTextSelected,
+                    ]}
+                  >
+                    {cat}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
 
         {/* Scrollable Items List */}
@@ -174,14 +179,7 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
         </KeyboardAvoidingView>
 
         {/* Sticky Footer */}
-        <View
-          style={{
-            padding: 16,
-            borderTopWidth: 1,
-            borderColor: "#ddd",
-            backgroundColor: "white",
-          }}
-        >
+        <View style={styles.footerContainer}>
           <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
 
           <View style={styles.actionsContainer}>
