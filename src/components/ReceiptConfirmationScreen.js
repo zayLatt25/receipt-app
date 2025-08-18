@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,6 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState("");
 
   // Initialize state from receiptData whenever modal opens
   useEffect(() => {
@@ -24,7 +23,6 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
       setPurchaseDate(receiptData.purchaseDate || "");
       setCategory(receiptData.suggestedCategory || "Others");
       setItems(receiptData.items || []);
-      setTotalAmount(receiptData.totalAmount?.toString() || "");
     }
   }, [receiptData]);
 
@@ -39,7 +37,7 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
 
   const updateItem = (index, key, value) => {
     const updated = [...items];
-    if (key === "pieces" || key === "unitPrice") {
+    if (key === "pieces" || key === "price") {
       updated[index][key] = value.replace(/[^0-9.]/g, "");
     } else {
       updated[index][key] = value;
@@ -47,8 +45,17 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
     setItems(updated);
   };
 
+  // Auto-calculate total
+  const totalAmount = useMemo(() => {
+    return items.reduce((sum, i) => {
+      const qty = parseFloat(i.pieces) || 0;
+      const price = parseFloat(i.price) || 0;
+      return sum + qty * price;
+    }, 0);
+  }, [items]);
+
   const handleConfirm = async () => {
-    if (!purchaseDate || !items.length || !totalAmount) {
+    if (!purchaseDate || !items.length) {
       Alert.alert("Validation Error", "Please fill all required fields.");
       return;
     }
@@ -56,12 +63,12 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
     try {
       const expense = {
         date: purchaseDate,
-        category,
-        total: parseFloat(totalAmount),
+        category: predefinedCategories.includes(category) ? category : "Others",
+        total: totalAmount,
         items: items.map((i) => ({
-          name: i.name,
-          pieces: parseFloat(i.pieces),
-          unitPrice: parseFloat(i.unitPrice),
+          name: i.name || "Unknown",
+          pieces: isNaN(parseFloat(i.pieces)) ? 0 : parseFloat(i.pieces),
+          price: isNaN(parseFloat(i.price)) ? 0 : parseFloat(i.price),
         })),
         createdAt: new Date(),
       };
@@ -120,8 +127,8 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
         }}
         placeholder="Price"
         keyboardType="numeric"
-        value={item.unitPrice?.toString() || ""}
-        onChangeText={(text) => updateItem(index, "unitPrice", text)}
+        value={item.price?.toString() || ""}
+        onChangeText={(text) => updateItem(index, "price", text)}
       />
     </View>
   );
@@ -180,20 +187,12 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
           renderItem={renderItem}
         />
 
-        {/* Total */}
-        <Text style={{ marginTop: 10 }}>Total Amount</Text>
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: "#ccc",
-            borderRadius: 8,
-            padding: 8,
-            marginVertical: 5,
-          }}
-          keyboardType="numeric"
-          value={totalAmount}
-          onChangeText={setTotalAmount}
-        />
+        {/* Auto Total */}
+        <View style={{ marginTop: 20, alignItems: "flex-end" }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            Total: ${totalAmount.toFixed(2)}
+          </Text>
+        </View>
 
         {/* Actions */}
         <View
