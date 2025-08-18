@@ -12,7 +12,12 @@ import { addDoc, collection } from "firebase/firestore";
 import { predefinedCategories } from "../utils/constants";
 import { db } from "../firebase";
 
-const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
+export const ReceiptConfirmationModal = ({
+  visible,
+  onClose,
+  receiptData,
+  user,
+}) => {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
@@ -233,5 +238,3 @@ const ReceiptConfirmationScreen = ({ visible, onClose, receiptData, user }) => {
     </Modal>
   );
 };
-
-export default ReceiptConfirmationScreen;

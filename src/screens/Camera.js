@@ -16,7 +16,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import styles from "../styles/CameraStyles";
-import ReceiptConfirmationScreen from "../components/ReceiptConfirmationScreen";
+import ReceiptConfirmationModal from "../components/ReceiptConfirmationModal";
 import { AI_RECEIPT_CONFIG } from "../config/receipt-ai.js";
 import { useAuth } from "../context/AuthContext";
 import { predefinedCategories } from "../utils/constants";
@@ -251,7 +251,7 @@ export default function CameraScreen() {
       )}
 
       {receiptData && (
-        <ReceiptConfirmationScreen
+        <ReceiptConfirmationModal
           visible={modalVisible}
           onClose={handleCloseModal}
           receiptData={receiptData}
