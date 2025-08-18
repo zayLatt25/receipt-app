@@ -1,3 +1,4 @@
+// ProfileStats.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -18,12 +19,12 @@ import {
   VictoryPie,
 } from "victory-native";
 import { profileStatsStyles as styles } from "../styles/ProfileStatsStyles";
-import { darkPink, lightCream } from "../styles/styles";
-import { normalizeFont } from "../utils/sizes";
+import { colors } from "../styles/theme";
+import { chartColors, predefinedCategories, months } from "../utils/constants";
 
 const screenWidth = Dimensions.get("window").width - 40;
 
-export default function ProfileStats() {
+export default function ProfileStats({}) {
   const { user } = useAuth();
   const [loadingYearly, setLoadingYearly] = useState(true);
   const [loadingCategory, setLoadingCategory] = useState(true);
@@ -33,34 +34,6 @@ export default function ProfileStats() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const pieSize = screenWidth * 0.8;
-
-  const chartColors = [
-    "#e8e5d9",
-    "#781d4e",
-    "#f7b267",
-    "#f4845f",
-    "#4f5d75",
-    "#bfc0c0",
-    "#6a994e",
-    "#386641",
-    "#ffb4a2",
-    "#b5838d",
-  ];
-
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const years = Array.from({ length: 5 }, (_, i) => dayjs().year() - i);
 
@@ -77,19 +50,22 @@ export default function ProfileStats() {
   const fetchYearlyStats = async () => {
     setLoadingYearly(true);
     try {
-      const expensesRef = collection(db, "users", user.uid, "expenses");
-      const snapshot = await getDocs(expensesRef);
+      const snapshot = await getDocs(
+        collection(db, "users", user.uid, "expenses")
+      );
       const expenses = snapshot.docs.map((doc) => doc.data());
-
       const monthly = Array(12).fill(0);
+
       expenses.forEach((exp) => {
         if (exp.date) {
           const expDate = dayjs(exp.date);
-          if (expDate.year() === selectedYear) {
-            monthly[expDate.month()] += Number(exp.amount) || 0;
-          }
+          if (expDate.year() === selectedYear)
+            if (expDate.year() === selectedYear) {
+              monthly[expDate.month()] += Number(exp.amount) || 0;
+            }
         }
       });
+
       setMonthlyTotals(monthly.map((val) => Number(val.toFixed(2))));
     } catch (err) {
       setMonthlyTotals(Array(12).fill(0));
@@ -100,30 +76,35 @@ export default function ProfileStats() {
   const fetchCategoryStats = async () => {
     setLoadingCategory(true);
     try {
-      const expensesRef = collection(db, "users", user.uid, "expenses");
-      const snapshot = await getDocs(expensesRef);
+      const snapshot = await getDocs(
+        collection(db, "users", user.uid, "expenses")
+      );
       const expenses = snapshot.docs.map((doc) => doc.data());
 
-      const catTotals = {};
+      const catTotals = predefinedCategories.reduce((acc, cat) => {
+        acc[cat] = 0;
+        return acc;
+      }, {});
+
       expenses.forEach((exp) => {
-        if (exp.date) {
+        if (exp.date && exp.category) {
           const expDate = dayjs(exp.date);
           if (
             expDate.year() === selectedYear &&
             expDate.month() === selectedMonth &&
-            exp.category
+            predefinedCategories.includes(exp.category)
           ) {
-            catTotals[exp.category] =
-              (catTotals[exp.category] || 0) + (Number(exp.amount) || 0);
+            catTotals[exp.category] += Number(exp.amount) || 0;
           }
         }
       });
 
-      const catData = Object.entries(catTotals).map(([cat, amt], i) => ({
+      const catData = predefinedCategories.map((cat, i) => ({
         name: cat,
-        amount: Number(amt.toFixed(2)),
+        amount: Number(catTotals[cat].toFixed(2)),
         color: chartColors[i % chartColors.length],
       }));
+
       setCategoryTotals(catData);
     } catch (err) {
       setCategoryTotals([]);
@@ -181,49 +162,53 @@ export default function ProfileStats() {
 
   const maxMonthly = Math.max(...monthlyTotals, monthlyBudget);
 
+  // Check if current month has any expenses
+  const monthHasData = categoryTotals.some((cat) => cat.amount > 0);
+
   return (
     <ScrollView
       contentContainerStyle={styles.statsScrollContent}
       showsVerticalScrollIndicator={false}
     >
       <Text style={[styles.profileText, styles.statsSectionHeader]}>
-        Yearly Spending ({selectedYear}){" "}
+        Yearly Spending ({selectedYear})
       </Text>
       <YearPicker />
+
       {loadingYearly ? (
-        <ActivityIndicator color={lightCream} size="large" />
+        <View
+          style={{
+            height: 250,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator color={colors.lightCream} size="large" />
+        </View>
       ) : (
-        <View style={{ alignItems: "center" }}>
+        <View style={styles.chartContainer}>
           <VictoryChart
             width={screenWidth}
             domainPadding={{ x: 20 }}
-            padding={{ top: 10, bottom: 30, left: 40, right: 0 }}
+            padding={styles.chartPadding}
           >
             <VictoryAxis
               tickValues={months.map((_, idx) => idx)}
               tickFormat={months}
-              style={{
-                tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
-              }}
+              style={styles.axisStyle}
             />
             <VictoryAxis
               dependentAxis
               tickFormat={(t) =>
                 t >= 1000 ? `$${(t / 1000).toFixed(1)}k` : `$${t}`
               }
-              style={{
-                tickLabels: { fill: lightCream, fontSize: normalizeFont(12) },
-              }}
+              style={styles.axisStyle}
               domain={[0, Math.max(...monthlyTotals) * 1.2]}
             />
-
             <VictoryBar
               data={monthlyTotals.map((amt, idx) => ({ x: idx, y: amt }))}
               barRatio={0.7}
-              style={{
-                data: { fill: darkPink },
-                labels: { fill: lightCream, fontSize: normalizeFont(12) },
-              }}
+              style={styles.barStyle}
               labels={({ datum }) => `$${datum.y.toFixed(0)}`}
             />
           </VictoryChart>
@@ -241,24 +226,34 @@ export default function ProfileStats() {
       </Text>
       <Text style={styles.pieBudgetLabel}>(Budget: ${maxMonthly})</Text>
       <MonthPicker />
+
       {loadingCategory ? (
-        <ActivityIndicator color={lightCream} size="large" />
-      ) : categoryTotals.length === 0 ? (
-        <Text style={styles.profileText}>No data for this month.</Text>
+        <View style={styles.emptyStateContainer}>
+          <ActivityIndicator color={colors.lightCream} size="large" />
+        </View>
+      ) : !monthHasData ? (
+        // Friendly empty state
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>
+            No expenses recorded for {months[selectedMonth]} {selectedYear}.
+          </Text>
+        </View>
       ) : (
-        <View style={{ alignItems: "center", marginTop: 20 }}>
+        <View style={styles.pieContainer}>
           <VictoryPie
-            data={categoryTotals.map((cat) => ({ x: cat.name, y: cat.amount }))}
-            colorScale={categoryTotals.map((cat) => cat.color)}
+            data={categoryTotals
+              .filter((cat) => cat.amount > 0)
+              .map((cat) => ({ x: cat.name, y: cat.amount }))}
+            colorScale={categoryTotals
+              .filter((cat) => cat.amount > 0)
+              .map((cat) => cat.color)}
             width={pieSize}
             height={pieSize}
             labels={({ datum }) => `$${datum.y.toFixed(2)}`}
-            style={{
-              labels: { fill: lightCream, fontSize: normalizeFont(14) },
-            }}
+            style={styles.pieStyle}
           />
 
-          <View style={{ marginTop: 15, width: pieSize }}>
+          <View style={[styles.pieLegendContainer, { width: pieSize }]}>
             {categoryTotals.map((cat) => (
               <View key={cat.name} style={styles.pieLegendItem}>
                 <View

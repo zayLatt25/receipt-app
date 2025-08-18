@@ -1,19 +1,34 @@
-// src/screens/CameraStyles.js
+// src/styles/CameraStyles.js
 import { StyleSheet } from "react-native";
-import { colors, fonts } from "./theme";
-import {
-  scale,
-  verticalScale,
-  moderateScale,
-  normalizeFont,
-} from "../utils/sizes";
+import { colors } from "./theme";
+import { verticalScale, moderateScale, normalizeFont } from "../utils/sizes";
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: colors.background,
     alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  button: {
+    backgroundColor: colors.lightCream,
+    borderWidth: 1,
+    paddingVertical: verticalScale(14),
+    borderRadius: moderateScale(10),
+    alignItems: "center",
+    marginVertical: verticalScale(10),
+    width: "90%",
+  },
+  buttonText: {
+    color: colors.navyBlue,
+    fontSize: normalizeFont(16),
+    fontFamily: "bold",
+  },
+  disclaimer: {
+    marginTop: verticalScale(12),
+    fontSize: normalizeFont(12),
+    color: "#6b7280",
+    textAlign: "center",
   },
 });
-
-export default styles;

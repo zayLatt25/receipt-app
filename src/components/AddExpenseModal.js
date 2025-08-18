@@ -1,35 +1,16 @@
 // components/AddExpenseModal.js
 
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-} from "react-native";
+import { Modal, View, Text, TouchableOpacity } from "react-native";
 import styles from "../styles/AddExpenseModalStyles";
 import FormInput from "./FormInput";
 import dayjs from "dayjs";
-
-const predefinedCategoriesInit = [
-  "Grocery",
-  "Transport",
-  "Bills",
-  "Entertainment",
-  "Eating Out",
-  "Health",
-  "Shopping",
-  "Others",
-];
+import { predefinedCategories } from "../utils/constants";
 
 const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [categories, setCategories] = useState(predefinedCategoriesInit);
   const [category, setCategory] = useState(null);
-  const [customCategory, setCustomCategory] = useState("");
   const [errors, setErrors] = useState({});
   const [expenseDate, setExpenseDate] = useState(
     initialDate ? new Date(initialDate) : new Date()
@@ -40,10 +21,8 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
       setDescription("");
       setAmount("");
       setCategory(null);
-      setCustomCategory("");
       setErrors({});
       setExpenseDate(initialDate ? new Date(initialDate) : new Date());
-      setCategories(predefinedCategoriesInit);
     }
   }, [visible, initialDate]);
 
@@ -59,7 +38,7 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
       }
     }
     if (!category) {
-      newErrors.categories = "Please select or add a category.";
+      newErrors.categories = "Please select a category.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -72,26 +51,6 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
       setCategory(cat);
       if (errors.categories) setErrors({ ...errors, categories: null });
     }
-  };
-
-  const addCustomCategory = () => {
-    const cat = customCategory.trim();
-    if (!cat) return;
-
-    const exists = categories.some(
-      (c) => c.toLowerCase() === cat.toLowerCase()
-    );
-    if (exists) {
-      setCategory(cat);
-      setCustomCategory("");
-      if (errors.categories) setErrors({ ...errors, categories: null });
-      return;
-    }
-
-    setCategories([cat, ...categories]);
-    setCategory(cat);
-    setCustomCategory("");
-    if (errors.categories) setErrors({ ...errors, categories: null });
   };
 
   const handleSave = () => {
@@ -118,15 +77,11 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
             Add Expense - {dayjs(expenseDate).format("DD MMM YYYY")}
           </Text>
 
-          {/* --- CATEGORY SELECTOR --- */}
+          {/* --- CATEGORY SELECTOR (GRID) --- */}
           <Text style={styles.modalSubtitle}>Select Category</Text>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoryScroll}
-          >
-            {categories.map((cat) => {
+          <View style={styles.categoryGrid}>
+            {predefinedCategories.map((cat) => {
               const selected = category === cat;
               return (
                 <TouchableOpacity
@@ -148,35 +103,15 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
                 </TouchableOpacity>
               );
             })}
-          </ScrollView>
-
-          <View style={styles.customCategoryRow}>
-            <TextInput
-              placeholder="Add Custom Category"
-              value={customCategory}
-              onChangeText={setCustomCategory}
-              style={styles.customCategoryInput}
-              onSubmitEditing={addCustomCategory}
-              returnKeyType="done"
-            />
-            <TouchableOpacity
-              onPress={addCustomCategory}
-              disabled={!customCategory.trim()}
-              style={[
-                styles.addCategoryButton,
-                !customCategory.trim() && styles.addCategoryButtonDisabled,
-              ]}
-            >
-              <Text style={styles.addCategoryButtonText}>Add</Text>
-            </TouchableOpacity>
           </View>
+
           {errors.categories && (
             <Text style={styles.errorText}>{errors.categories}</Text>
           )}
 
-          {/* --- DESCRIPTION & AMOUNT BELOW CATEGORY --- */}
+          {/* --- DESCRIPTION & AMOUNT --- */}
           <FormInput
-            placeholder="Description"
+            placeholder="Expense name"
             value={description}
             onChangeText={(text) => {
               setDescription(text);

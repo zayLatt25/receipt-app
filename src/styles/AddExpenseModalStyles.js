@@ -26,62 +26,13 @@ export default StyleSheet.create({
     fontWeight: "bold",
     marginBottom: verticalScale(12),
     color: colors.navyBlue,
+    fontFamily: fonts.main,
   },
   modalSubtitle: {
     color: colors.navyBlue,
     marginBottom: verticalScale(8),
     fontWeight: "600",
-  },
-  categoryScroll: {
-    marginBottom: verticalScale(12),
-  },
-  categoryButton: {
-    backgroundColor: colors.lightCream,
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: scale(14),
-    borderRadius: moderateScale(20),
-    marginRight: scale(10),
-    borderWidth: 1,
-    borderColor: colors.navyBlue,
-  },
-  categoryButtonSelected: {
-    backgroundColor: colors.navyBlue,
-  },
-  categoryButtonText: {
-    color: colors.navyBlue,
-    fontWeight: "normal",
-  },
-  categoryButtonTextSelected: {
-    color: colors.lightCream,
-    fontWeight: "bold",
-  },
-  customCategoryRow: {
-    flexDirection: "row",
-    marginBottom: verticalScale(12),
-    alignItems: "center",
-  },
-  customCategoryInput: {
-    flex: 1,
-    height: verticalScale(40),
-    borderColor: colors.navyBlue,
-    borderWidth: 1,
-    borderRadius: moderateScale(8),
-    paddingHorizontal: scale(10),
-    color: colors.navyBlue,
-  },
-  addCategoryButton: {
-    marginLeft: scale(10),
-    backgroundColor: colors.navyBlue,
-    paddingVertical: verticalScale(10),
-    paddingHorizontal: scale(15),
-    borderRadius: moderateScale(8),
-  },
-  addCategoryButtonDisabled: {
-    backgroundColor: "#999",
-  },
-  addCategoryButtonText: {
-    color: colors.lightCream,
-    fontWeight: "bold",
+    fontFamily: fonts.main,
   },
   errorText: {
     color: colors.darkPink,
@@ -99,9 +50,39 @@ export default StyleSheet.create({
   },
   cancelButtonText: {
     color: colors.navyBlue,
+    fontFamily: fonts.main,
   },
   saveButtonText: {
     color: colors.navyBlue,
     fontWeight: "bold",
+    fontFamily: fonts.main,
+  },
+  categoryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginVertical: verticalScale(10),
+  },
+  categoryButton: {
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(20),
+    borderWidth: 1,
+    borderColor: colors.navyBlue,
+    backgroundColor: colors.lightCream,
+    marginBottom: verticalScale(10),
+    marginRight: scale(10),
+  },
+  categoryButtonSelected: {
+    backgroundColor: colors.navyBlue,
+  },
+  categoryButtonText: {
+    color: colors.navyBlue,
+    fontWeight: "400",
+    fontFamily: fonts.main,
+  },
+  categoryButtonTextSelected: {
+    color: colors.lightCream,
+    fontWeight: "600",
+    fontFamily: fonts.main,
   },
 });
