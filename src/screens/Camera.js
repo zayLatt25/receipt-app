@@ -199,7 +199,6 @@ export default function CameraScreen() {
             onPress: async () => {
               try {
                 await deleteObject(storageRef);
-                console.log("Image deleted after cancel.");
               } catch (err) {
                 console.error("Failed to delete after cancel:", err);
               }
