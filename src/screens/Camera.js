@@ -157,7 +157,6 @@ export default function CameraScreen() {
         try {
           await uploadBytes(storageRef, blob);
           const downloadUrl = await getDownloadURL(storageRef);
-          console.log("Uploaded image URL:", downloadUrl);
 
           await attemptProcess(downloadUrl, storageRef);
         } catch (uploadError) {
@@ -213,7 +212,6 @@ export default function CameraScreen() {
       // delete after success
       try {
         await deleteObject(storageRef);
-        console.log("Image deleted after success.");
       } catch (err) {
         console.error("Failed to delete after success:", err);
       }
