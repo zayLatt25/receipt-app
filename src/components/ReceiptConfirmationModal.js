@@ -11,18 +11,14 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import { predefinedCategories } from "../utils/constants";
 import { db } from "../firebase";
+import { styles } from "../styles/ReceiptConfirmationStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export const ReceiptConfirmationModal = ({
-  visible,
-  onClose,
-  receiptData,
-  user,
-}) => {
+const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
 
-  // Initialize state from receiptData whenever modal opens
   useEffect(() => {
     if (receiptData) {
       setPurchaseDate(receiptData.purchaseDate || "");
@@ -50,7 +46,6 @@ export const ReceiptConfirmationModal = ({
     setItems(updated);
   };
 
-  // Auto-calculate total
   const totalAmount = useMemo(() => {
     return items.reduce((sum, i) => {
       const qty = parseFloat(i.pieces) || 0;
@@ -88,48 +83,22 @@ export const ReceiptConfirmationModal = ({
   };
 
   const renderItem = ({ item, index }) => (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginVertical: 5,
-      }}
-    >
+    <View style={styles.itemRow}>
       <TextInput
-        style={{
-          flex: 2,
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 6,
-          padding: 5,
-          marginRight: 5,
-        }}
+        style={[styles.itemInput, { flex: 2, marginRight: 5 }]}
         placeholder="Name"
         value={item.name}
         onChangeText={(text) => updateItem(index, "name", text)}
       />
       <TextInput
-        style={{
-          flex: 1,
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 6,
-          padding: 5,
-          marginRight: 5,
-        }}
+        style={[styles.itemInput, { flex: 1, marginRight: 5 }]}
         placeholder="Qty"
         keyboardType="numeric"
         value={item.pieces?.toString() || ""}
         onChangeText={(text) => updateItem(index, "pieces", text)}
       />
       <TextInput
-        style={{
-          flex: 1,
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 6,
-          padding: 5,
-        }}
+        style={[styles.itemInput, { flex: 1 }]}
         placeholder="Price"
         keyboardType="numeric"
         value={item.price?.toString() || ""}
@@ -139,102 +108,68 @@ export const ReceiptConfirmationModal = ({
   );
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-          Confirm Receipt
-        </Text>
+    <SafeAreaView style={styles.safeAreaView}>
+      <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Confirm Receipt</Text>
 
-        {/* Purchase Date */}
-        <Text style={{ marginTop: 10 }}>Purchase Date</Text>
-        <TextInput
-          style={{
-            borderWidth: 1,
-            borderColor: "#ccc",
-            borderRadius: 8,
-            padding: 8,
-            marginVertical: 5,
-          }}
-          placeholder="YYYY-MM-DD"
-          value={purchaseDate}
-          onChangeText={setPurchaseDate}
-        />
+          <Text style={styles.label}>Purchase Date</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="YYYY-MM-DD"
+            value={purchaseDate}
+            onChangeText={setPurchaseDate}
+          />
 
-        {/* Category */}
-        <Text style={{ marginTop: 10 }}>Category</Text>
-        <FlatList
-          data={predefinedCategories}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => setCategory(item)}
-              style={{
-                padding: 10,
-                borderWidth: 1,
-                borderColor: category === item ? "blue" : "#ccc",
-                borderRadius: 20,
-                marginRight: 8,
-                backgroundColor: category === item ? "#dbeafe" : "#fff",
-              }}
-            >
-              <Text>{item}</Text>
+          <Text style={styles.label}>Category</Text>
+          <FlatList
+            data={predefinedCategories}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => setCategory(item)}
+                style={[
+                  styles.categoryButton,
+                  category === item
+                    ? styles.selectedCategory
+                    : styles.unselectedCategory,
+                ]}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+
+          <Text style={styles.itemsContainer}>Items</Text>
+          <FlatList
+            data={items}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={renderItem}
+          />
+
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalText}>
+              Total: ${totalAmount.toFixed(2)}
+            </Text>
+          </View>
+
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
+              <Text>Cancel</Text>
             </TouchableOpacity>
-          )}
-        />
-
-        {/* Items */}
-        <Text style={{ marginTop: 15, fontWeight: "bold" }}>Items</Text>
-        <FlatList
-          data={items}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={renderItem}
-        />
-
-        {/* Auto Total */}
-        <View style={{ marginTop: 20, alignItems: "flex-end" }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Total: ${totalAmount.toFixed(2)}
-          </Text>
+            <TouchableOpacity
+              onPress={handleConfirm}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.confirmButtonText}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* Actions */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 20,
-          }}
-        >
-          <TouchableOpacity
-            onPress={onClose}
-            style={{
-              padding: 12,
-              backgroundColor: "#f3f4f6",
-              borderRadius: 8,
-              flex: 1,
-              marginRight: 5,
-              alignItems: "center",
-            }}
-          >
-            <Text>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleConfirm}
-            style={{
-              padding: 12,
-              backgroundColor: "#2563eb",
-              borderRadius: 8,
-              flex: 1,
-              marginLeft: 5,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Confirm</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
+      </Modal>
+    </SafeAreaView>
   );
 };
+
+export default ReceiptConfirmationModal;
