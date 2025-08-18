@@ -60,7 +60,9 @@ export default function ProfileStats({}) {
         if (exp.date) {
           const expDate = dayjs(exp.date);
           if (expDate.year() === selectedYear)
+          if (expDate.year() === selectedYear) {
             monthly[expDate.month()] += Number(exp.amount) || 0;
+          }
         }
       });
 
