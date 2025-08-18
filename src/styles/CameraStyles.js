@@ -25,4 +25,10 @@ export default StyleSheet.create({
     fontSize: normalizeFont(16),
     fontFamily: "bold",
   },
+  disclaimer: {
+    marginTop: verticalScale(12),
+    fontSize: normalizeFont(12),
+    color: "#6b7280",
+    textAlign: "center",
+  },
 });

@@ -8,11 +8,41 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import styles from "../styles/CameraStyles";
 import ReceiptConfirmationScreen from "../components/ReceiptConfirmationScreen";
 import { AI_RECEIPT_CONFIG } from "../config/receipt-ai.js";
 import { useAuth } from "../context/AuthContext";
+import { predefinedCategories } from "../utils/constants";
+
+const prompt = {
+  type: "text",
+  text: `Extract the following from this receipt: 
+        1. Purchase date as 'purchaseDate' (YYYY-MM-DD format)
+        2. Suggested category as 'suggestedCategory' from 
+        ${predefinedCategories.join(", ")}
+        3. Items array with 'name', 'pieces', 'price'
+        Note: 'name' should be the item name, 'pieces' is the quantity, and 'price' is the cost per piece.
+        Return strictly JSON in this format with no other text or quotations. 
+        If any field is not available, return an empty string or 0 for numbers.
+        Example:
+        {
+          "purchaseDate": "2023-10-01",
+          "suggestedCategory": "Grocery",
+          "items": [
+            { "name": "Apple", "pieces": 2, "price": 1 },
+            { "name": "Banana", "pieces": 3, "price": 2 }
+          ]
+        }
+        If the image is not a receipt, return an error JSON object: {"errorTitle":"Not a receipt","error": "Please upload a valid receipt image!"}
+        If the receipt is unreadable, return an error JSON object: {"errorTitle":"Receipt Unreadable","error": "Please take a clearer photo and try again!"}`,
+};
 
 // Send image URL to OpenAI
 const processReceipt = async (imageUrl) => {
@@ -29,20 +59,12 @@ const processReceipt = async (imageUrl) => {
           {
             role: "system",
             content:
-              "You are a receipt parser. Always return valid JSON only in the format the app expects.",
+              "You are a receipt parser. Always return valid JSON only in the expected format.",
           },
           {
             role: "user",
             content: [
-              {
-                type: "text",
-                text: `Extract the following from this receipt: 
-                  1. Purchase date as 'purchaseDate' (YYYY-MM-DD format)
-                  2. Suggested category as 'suggestedCategory'
-                  3. Items array with 'name', 'pieces', 'unitPrice'
-                  4. Total amount as 'totalAmount'
-                  Return strictly JSON in this format.`,
-              },
+              prompt,
               { type: "image_url", image_url: { url: imageUrl } },
             ],
           },
@@ -54,24 +76,32 @@ const processReceipt = async (imageUrl) => {
 
     if (!response.ok) {
       const errText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errText}`);
+      return {
+        errorTitle: `HTTP ${response.status}`,
+        error: errText || "Server error, please try again later",
+      };
     }
 
     const data = await response.json();
-    console.log("OpenAI raw response:", data.choices[0].message.content);
+    const receiptData = data?.choices?.[0]?.message?.content?.trim() || "";
 
-    const rawContent = data.choices[0].message.content.trim();
-    const cleanedContent = rawContent
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```$/i, "")
-      .trim();
+    if (!receiptData) {
+      return { errorTitle: "Error Occured", error: "Please try again!" };
+    }
 
-    const parsed = JSON.parse(cleanedContent);
+    let parsed;
+    try {
+      parsed = JSON.parse(receiptData);
+    } catch {
+      return {
+        errorTitle: "Server Side Error",
+        error: "Invalid JSON response from server, please try again!",
+      };
+    }
+
     return parsed;
   } catch (error) {
-    console.error("Error processing receipt:", error);
-    throw error;
+    return { errorTitle: "Error", error: "Receipt unreadable" };
   }
 };
 
@@ -80,6 +110,7 @@ export default function CameraScreen() {
   const [loading, setLoading] = useState(false);
   const [receiptData, setReceiptData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentStorageRef, setCurrentStorageRef] = useState(null);
 
   const storage = getStorage();
 
@@ -107,40 +138,34 @@ export default function CameraScreen() {
             quality: 0.8,
           });
 
-      if (!result.canceled && result.assets[0]) {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         setLoading(true);
 
-        // 1️⃣ Resize/compress image
         const manipulated = await ImageManipulator.manipulateAsync(
           result.assets[0].uri,
           [{ resize: { width: 1080 } }],
           { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
         );
 
-        if (!manipulated.uri) {
-          throw new Error("Failed to manipulate image");
-        }
+        if (!manipulated?.uri) throw new Error("Failed to process image");
 
-        // 2️⃣ Upload to Firebase Storage
         const response = await fetch(manipulated.uri);
         const blob = await response.blob();
-        const fileName = `receipts/${user.uid}_${Date.now()}.jpg`;
+        const fileName = `receipts/${user?.uid || "guest"}_${Date.now()}.jpg`;
         const storageRef = ref(storage, fileName);
+        setCurrentStorageRef(storageRef);
 
         try {
           await uploadBytes(storageRef, blob);
           const downloadUrl = await getDownloadURL(storageRef);
           console.log("Uploaded image URL:", downloadUrl);
 
-          // 3️⃣ Process receipt using OpenAI
-          const parsedReceipt = await processReceipt(downloadUrl);
-          setReceiptData(parsedReceipt);
-          setModalVisible(true);
+          await attemptProcess(downloadUrl, storageRef);
         } catch (uploadError) {
           console.error("Firebase Storage upload failed:", uploadError);
           Alert.alert(
             "Upload Error",
-            `Failed to upload image to storage: ${uploadError.message}`
+            `Failed to upload: ${uploadError.message}`
           );
         }
       }
@@ -149,6 +174,51 @@ export default function CameraScreen() {
       Alert.alert("Error", "Failed to process receipt. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const attemptProcess = async (downloadUrl, storageRef) => {
+    setLoading(true);
+
+    const parsedReceipt = await processReceipt(downloadUrl);
+
+    setLoading(false);
+
+    if (parsedReceipt.error || parsedReceipt.errorTitle) {
+      Alert.alert(
+        parsedReceipt.errorTitle,
+        parsedReceipt.error,
+        [
+          {
+            text: "Retry",
+            onPress: () => attemptProcess(downloadUrl, storageRef),
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: async () => {
+              try {
+                await deleteObject(storageRef);
+                console.log("Image deleted after cancel.");
+              } catch (err) {
+                console.error("Failed to delete after cancel:", err);
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      setReceiptData(parsedReceipt);
+      setModalVisible(true);
+
+      // delete after success
+      try {
+        await deleteObject(storageRef);
+        console.log("Image deleted after success.");
+      } catch (err) {
+        console.error("Failed to delete after success:", err);
+      }
     }
   };
 
@@ -175,6 +245,11 @@ export default function CameraScreen() {
           >
             <Text style={styles.buttonText}>Pick from Gallery</Text>
           </TouchableOpacity>
+
+          <Text style={styles.disclaimer}>
+            Note: Receipt images are uploaded temporarily and deleted
+            automatically after processing.
+          </Text>
         </>
       )}
 
