@@ -245,7 +245,7 @@ export default function CameraScreen() {
           <Text style={styles.disclaimer}>
             Note: Receipt images are uploaded temporarily and deleted
             automatically after processing. In case of errors, it will be
-            manually deleted.
+            manually deleted after a day.
           </Text>
         </>
       )}
