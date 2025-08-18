@@ -15,6 +15,7 @@ import { predefinedCategories } from "../utils/constants";
 import { db } from "../firebase";
 import { styles } from "../styles/ReceiptConfirmationStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Keyboard } from "react-native";
 
 const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   const insets = useSafeAreaInsets();
@@ -93,66 +94,75 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
         placeholder="Name"
         value={item.name}
         onChangeText={(text) => updateItem(index, "name", text)}
+        onSubmitEditing={() => Keyboard.dismiss()}
       />
+
       <TextInput
         style={[styles.itemInput, { flex: 1, marginRight: 5 }]}
         placeholder="Qty"
         keyboardType="numeric"
         value={item.pieces?.toString() || ""}
         onChangeText={(text) => updateItem(index, "pieces", text)}
+        returnKeyType="done"
+        onSubmitEditing={() => Keyboard.dismiss()}
       />
+
       <TextInput
         style={[styles.itemInput, { flex: 1 }]}
         placeholder="Price"
         keyboardType="numeric"
         value={item.price?.toString() || ""}
         onChangeText={(text) => updateItem(index, "price", text)}
+        returnKeyType="done"
+        onSubmitEditing={() => Keyboard.dismiss()}
       />
     </View>
   );
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: "white" }}
-        behavior={Platform.OS === "ios" ? "padding" : null}
+      <View
+        style={{ flex: 1, backgroundColor: "white", paddingTop: insets.top }}
       >
-        <View style={{ flex: 1, paddingTop: insets.top }}>
-          {/* Sticky Header */}
-          <View style={{ paddingHorizontal: 16, paddingBottom: 10 }}>
-            <Text style={styles.title}>Confirm Receipt</Text>
+        {/* Sticky Header */}
+        <View style={{ paddingHorizontal: 16, paddingBottom: 10 }}>
+          <Text style={styles.title}>Confirm Receipt</Text>
 
-            <Text style={styles.label}>Purchase Date</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              value={purchaseDate}
-              onChangeText={setPurchaseDate}
-            />
+          <Text style={styles.label}>Purchase Date</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="YYYY-MM-DD"
+            value={purchaseDate}
+            onChangeText={setPurchaseDate}
+          />
 
-            <Text style={styles.label}>Category</Text>
-            <FlatList
-              data={predefinedCategories}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => setCategory(item)}
-                  style={[
-                    styles.categoryButton,
-                    category === item
-                      ? styles.selectedCategory
-                      : styles.unselectedCategory,
-                  ]}
-                >
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
+          <Text style={styles.label}>Category</Text>
+          <FlatList
+            data={predefinedCategories}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => setCategory(item)}
+                style={[
+                  styles.categoryButton,
+                  category === item
+                    ? styles.selectedCategory
+                    : styles.unselectedCategory,
+                ]}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
 
-          {/* Scrollable Items List */}
+        {/* Scrollable Items List */}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
           <FlatList
             data={items}
             keyExtractor={(_, index) => index.toString()}
@@ -161,34 +171,32 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
             style={{ flex: 1, paddingHorizontal: 16 }}
             keyboardShouldPersistTaps="handled"
           />
+        </KeyboardAvoidingView>
 
-          {/* Sticky Footer (will be hidden under keyboard) */}
-          <View
-            style={{
-              padding: 16,
-              borderTopWidth: 1,
-              borderColor: "#ddd",
-              backgroundColor: "white",
-            }}
-          >
-            <Text style={styles.totalText}>
-              Total: ${totalAmount.toFixed(2)}
-            </Text>
+        {/* Sticky Footer */}
+        <View
+          style={{
+            padding: 16,
+            borderTopWidth: 1,
+            borderColor: "#ddd",
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
 
-            <View style={styles.actionsContainer}>
-              <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleConfirm}
-                style={styles.confirmButton}
-              >
-                <Text style={styles.confirmButtonText}>Confirm</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleConfirm}
+              style={styles.confirmButton}
+            >
+              <Text style={styles.confirmButtonText}>Confirm</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 };
