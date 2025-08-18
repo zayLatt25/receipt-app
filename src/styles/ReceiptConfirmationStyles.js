@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
   },
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",

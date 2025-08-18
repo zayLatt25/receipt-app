@@ -108,8 +108,8 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   );
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+      <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.container}>
           <Text style={styles.title}>Confirm Receipt</Text>
 
@@ -167,8 +167,8 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </SafeAreaView>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
