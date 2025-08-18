@@ -7,14 +7,18 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { addDoc, collection } from "firebase/firestore";
 import { predefinedCategories } from "../utils/constants";
 import { db } from "../firebase";
 import { styles } from "../styles/ReceiptConfirmationStyles";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
+  const insets = useSafeAreaInsets();
+
   const [purchaseDate, setPurchaseDate] = useState("");
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
@@ -109,65 +113,82 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Confirm Receipt</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1, backgroundColor: "white" }}
+        behavior={Platform.OS === "ios" ? "padding" : null}
+      >
+        <View style={{ flex: 1, paddingTop: insets.top }}>
+          {/* Sticky Header */}
+          <View style={{ paddingHorizontal: 16, paddingBottom: 10 }}>
+            <Text style={styles.title}>Confirm Receipt</Text>
 
-          <Text style={styles.label}>Purchase Date</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="YYYY-MM-DD"
-            value={purchaseDate}
-            onChangeText={setPurchaseDate}
-          />
+            <Text style={styles.label}>Purchase Date</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="YYYY-MM-DD"
+              value={purchaseDate}
+              onChangeText={setPurchaseDate}
+            />
 
-          <Text style={styles.label}>Category</Text>
-          <FlatList
-            data={predefinedCategories}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => setCategory(item)}
-                style={[
-                  styles.categoryButton,
-                  category === item
-                    ? styles.selectedCategory
-                    : styles.unselectedCategory,
-                ]}
-              >
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
+            <Text style={styles.label}>Category</Text>
+            <FlatList
+              data={predefinedCategories}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => setCategory(item)}
+                  style={[
+                    styles.categoryButton,
+                    category === item
+                      ? styles.selectedCategory
+                      : styles.unselectedCategory,
+                  ]}
+                >
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
 
-          <Text style={styles.itemsContainer}>Items</Text>
+          {/* Scrollable Items List */}
           <FlatList
             data={items}
             keyExtractor={(_, index) => index.toString()}
             renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            style={{ flex: 1, paddingHorizontal: 16 }}
+            keyboardShouldPersistTaps="handled"
           />
 
-          <View style={styles.totalContainer}>
+          {/* Sticky Footer (will be hidden under keyboard) */}
+          <View
+            style={{
+              padding: 16,
+              borderTopWidth: 1,
+              borderColor: "#ddd",
+              backgroundColor: "white",
+            }}
+          >
             <Text style={styles.totalText}>
               Total: ${totalAmount.toFixed(2)}
             </Text>
-          </View>
 
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-              <Text>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleConfirm}
-              style={styles.confirmButton}
-            >
-              <Text style={styles.confirmButtonText}>Confirm</Text>
-            </TouchableOpacity>
+            <View style={styles.actionsContainer}>
+              <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleConfirm}
+                style={styles.confirmButton}
+              >
+                <Text style={styles.confirmButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
