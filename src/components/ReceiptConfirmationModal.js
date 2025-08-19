@@ -16,6 +16,7 @@ import { db } from "../firebase";
 import { styles } from "../styles/ReceiptConfirmationStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Keyboard } from "react-native";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   const insets = useSafeAreaInsets();
@@ -23,6 +24,7 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   const [purchaseDate, setPurchaseDate] = useState("");
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (receiptData) {
@@ -65,25 +67,35 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
       return;
     }
 
-    try {
-      const expense = {
-        date: purchaseDate,
-        category: predefinedCategories.includes(category) ? category : "Others",
-        total: totalAmount,
-        items: items.map((i) => ({
-          name: i.name || "Unknown",
-          pieces: isNaN(parseFloat(i.pieces)) ? 0 : parseFloat(i.pieces),
-          price: isNaN(parseFloat(i.price)) ? 0 : parseFloat(i.price),
-        })),
-        createdAt: new Date(),
-      };
+    setLoading(true);
 
-      await handleAddExpense(expense);
+    try {
+      const categoryToUse = predefinedCategories.includes(category)
+        ? category
+        : "Others";
+
+      for (const i of items) {
+        const qty = isNaN(parseFloat(i.pieces)) ? 0 : parseFloat(i.pieces);
+        const price = isNaN(parseFloat(i.price)) ? 0 : parseFloat(i.price);
+
+        const expense = {
+          description: i.name || "Unknown",
+          amount: qty * price,
+          category: categoryToUse,
+          date: purchaseDate,
+          createdAt: new Date(),
+        };
+
+        await handleAddExpense(expense);
+      }
+
       Alert.alert("Success", "Expense saved!");
       onClose();
     } catch (error) {
-      console.error("Error saving expense:", error);
-      Alert.alert("Error", "Failed to save expense. Please try again.");
+      console.error("Error saving expenses:", error);
+      Alert.alert("Error", "Failed to save expenses. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,8 +201,13 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
             <TouchableOpacity
               onPress={handleConfirm}
               style={styles.confirmButton}
+              disabled={loading}
             >
-              <Text style={styles.confirmButtonText}>Confirm</Text>
+              {loading ? (
+                <LoadingSpinner size="small" color="#fff" />
+              ) : (
+                <Text style={styles.confirmButtonText}>Confirm</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
