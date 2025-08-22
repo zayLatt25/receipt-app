@@ -45,66 +45,85 @@ const prompt = {
 };
 
 // Send image URL to OpenAI
-const processReceipt = async (imageUrl) => {
-  try {
-    const response = await fetch(`${AI_RECEIPT_CONFIG.apiUrl}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${AI_RECEIPT_CONFIG.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a receipt parser. Always return valid JSON only in the expected format.",
-          },
-          {
-            role: "user",
-            content: [
-              prompt,
-              { type: "image_url", image_url: { url: imageUrl } },
-            ],
-          },
-        ],
-        max_tokens: 600,
-        temperature: 0.2,
-      }),
-    });
+// const processReceipt = async (imageUrl) => {
+//   try {
+//     const response = await fetch(`${AI_RECEIPT_CONFIG.apiUrl}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${AI_RECEIPT_CONFIG.apiKey}`,
+//       },
+//       body: JSON.stringify({
+//         model: "gpt-4o-mini",
+//         messages: [
+//           {
+//             role: "system",
+//             content:
+//               "You are a receipt parser. Always return valid JSON only in the expected format.",
+//           },
+//           {
+//             role: "user",
+//             content: [
+//               prompt,
+//               { type: "image_url", image_url: { url: imageUrl } },
+//             ],
+//           },
+//         ],
+//         max_tokens: 600,
+//         temperature: 0.2,
+//       }),
+//     });
+//     if (!response.ok) {
+//       return {
+//         errorTitle: `HTTP ${response.status}`,
+//         error: "Server error, please try again later",
+//       };
+//     }
+//     const data = await response.json();
+//     const receiptData = data?.choices?.[0]?.message?.content?.trim() || "";
+//     if (!receiptData) {
+//       return { errorTitle: "Error Occurred", error: "Please try again!" };
+//     }
+//     let parsed;
+//     try {
+//       parsed = JSON.parse(receiptData);
+//     } catch {
+//       return {
+//         errorTitle: "Server Side Error",
+//         error: "Invalid JSON response from server, please try again!",
+//       };
+//     }
+//     return parsed;
+//   } catch (error) {
+//     return {
+//       errorTitle: "Error",
+//       error: "Receipt unreadable, please try again!",
+//     };
+//   }
+// };
 
-    if (!response.ok) {
-      return {
-        errorTitle: `HTTP ${response.status}`,
-        error: "Server error, please try again later",
-      };
-    }
-
-    const data = await response.json();
-    const receiptData = data?.choices?.[0]?.message?.content?.trim() || "";
-
-    if (!receiptData) {
-      return { errorTitle: "Error Occurred", error: "Please try again!" };
-    }
-
-    let parsed;
-    try {
-      parsed = JSON.parse(receiptData);
-    } catch {
-      return {
-        errorTitle: "Server Side Error",
-        error: "Invalid JSON response from server, please try again!",
-      };
-    }
-
-    return parsed;
-  } catch (error) {
-    return {
-      errorTitle: "Error",
-      error: "Receipt unreadable, please try again!",
-    };
-  }
+const processReceipt = async () => {
+  return {
+    items: [
+      { name: "KINGS CARNIVAL 1.2L", pieces: 2, price: 4.59 },
+      { name: "KING CHOC M/CHIP I/C 1.2L", pieces: 2, price: 4.59 },
+      { name: "KNORR CUBES TYAM 60G", pieces: 2, price: 2.11 },
+      { name: "KNORR CUBES BEEF 60G", pieces: 2, price: 2.11 },
+      { name: "VEPO PURE D/WATER 1.5L", pieces: 2, price: 0.7 },
+      { name: "MYS FY XIAO BAI CHYE 200G", pieces: 2, price: 0.75 },
+      { name: "ENOKI MUSHROOM 200G", pieces: 2, price: 1.4 },
+      { name: "C82 COLOUR RICE 100G", pieces: 2, price: 1.4 },
+      { name: "CHKN BONELESS LEG(P) 200G", pieces: 2, price: 2.35 },
+      { name: "CHN H/POTATOES 1.2KG", pieces: 1, price: 4.7 },
+      { name: "CHN PD C/CABBAGE(KG)", pieces: 1, price: 2.09 },
+      { name: "SANREMO 3MIN QK MCRN 500G", pieces: 1, price: 2.25 },
+      { name: "THA PD GREEN MANGO", pieces: 3, price: 1.25 },
+      { name: "PREGI CARBONARA MR 295G", pieces: 1, price: 2.7 },
+      { name: "PREGI TRAD.300G", pieces: 1, price: 2.7 },
+    ],
+    purchaseDate: "2025-08-15",
+    suggestedCategory: "Grocery",
+  };
 };
 
 export default function CameraScreen() {
@@ -197,6 +216,7 @@ export default function CameraScreen() {
             onPress: async () => {
               try {
                 await deleteObject(storageRef);
+                console.log("Deleted receipt image after cancel");
               } catch (err) {
                 console.error("Failed to delete after cancel:", err);
               }
@@ -212,6 +232,7 @@ export default function CameraScreen() {
       // delete after success
       try {
         await deleteObject(storageRef);
+        console.log("Deleted receipt image after success");
       } catch (err) {
         console.error("Failed to delete after success:", err);
       }
