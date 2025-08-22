@@ -18,32 +18,31 @@ jest.mock("firebase/firestore", () => ({
 }));
 
 // Mock Victory charts - use proper React Native components
-jest.mock("victory-native", () => ({
-  VictoryChart: ({ children, width, height }) => (
-    <div data-testid="victory-chart" style={{ width, height }}>
-      {children}
-    </div>
-  ),
-  VictoryBar: ({ data, labels }) => (
-    <div data-testid="victory-bar">
-      {data.map((item, index) => (
-        <div key={index} data-testid={`bar-${index}`}>
-          {labels && labels({ datum: item })}
-        </div>
-      ))}
-    </div>
-  ),
-  VictoryAxis: () => <div data-testid="victory-axis" />,
-  VictoryPie: ({ data, labels }) => (
-    <div data-testid="victory-pie">
-      {data.map((item, index) => (
-        <div key={index} data-testid={`pie-${index}`}>
-          {labels && labels({ datum: item })}
-        </div>
-      ))}
-    </div>
-  ),
-}));
+jest.mock("victory-native", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+
+  return {
+    VictoryChart: ({ children }) => (
+      <View testID="victory-chart">{children}</View>
+    ),
+    VictoryBar: ({ data }) => (
+      <View testID="victory-bar">
+        {data.map((_, index) => (
+          <View key={index} testID={`bar-${index}`} />
+        ))}
+      </View>
+    ),
+    VictoryAxis: () => <View testID="victory-axis" />,
+    VictoryPie: ({ data }) => (
+      <View testID="victory-pie">
+        {data.map((_, index) => (
+          <View key={index} testID={`pie-${index}`} />
+        ))}
+      </View>
+    ),
+  };
+});
 
 // Mock AuthContext
 jest.mock("../../context/AuthContext", () => ({
@@ -54,7 +53,20 @@ jest.mock("../../context/AuthContext", () => ({
 jest.mock("../../utils/constants", () => ({
   chartColors: ["#e8e5d9", "#781d4e", "#f7b267"],
   predefinedCategories: ["Grocery", "Transport", "Bills"],
-  months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  months: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
 }));
 
 // Mock theme colors
@@ -74,21 +86,21 @@ describe("ProfileStats Component", () => {
     {
       id: "1",
       description: "Coffee",
-      amount: 5.50,
+      amount: 5.5,
       category: "Grocery",
       date: "2025-01-15",
     },
     {
       id: "2",
       description: "Bus ticket",
-      amount: 2.50,
+      amount: 2.5,
       category: "Transport",
       date: "2025-01-20",
     },
     {
       id: "3",
       description: "Lunch",
-      amount: 12.00,
+      amount: 12.0,
       category: "Grocery",
       date: "2025-02-10",
     },
@@ -105,12 +117,12 @@ describe("ProfileStats Component", () => {
 
   it("renders correctly with loading states", async () => {
     const { getByText } = render(<ProfileStats />);
-    
+
     // Wait for initial render to complete
     await waitFor(() => {
       expect(getByText("Yearly Spending (2025)")).toBeTruthy();
     });
-    
+
     expect(getByText("Category Breakdown (Aug 2025)")).toBeTruthy();
     expect(getByText("(Budget: $1000)")).toBeTruthy();
   });
@@ -118,12 +130,12 @@ describe("ProfileStats Component", () => {
   it("renders year picker with correct years", async () => {
     const currentYear = dayjs().year();
     const { getByText } = render(<ProfileStats />);
-    
+
     // Wait for component to fully render
     await waitFor(() => {
       expect(getByText(currentYear.toString())).toBeTruthy();
     });
-    
+
     // Should show current year and 4 previous years
     expect(getByText((currentYear - 1).toString())).toBeTruthy();
     expect(getByText((currentYear - 4).toString())).toBeTruthy();
@@ -131,12 +143,12 @@ describe("ProfileStats Component", () => {
 
   it("renders month picker with all months", async () => {
     const { getByText } = render(<ProfileStats />);
-    
+
     // Wait for component to fully render
     await waitFor(() => {
       expect(getByText("Jan")).toBeTruthy();
     });
-    
+
     expect(getByText("Feb")).toBeTruthy();
     expect(getByText("Dec")).toBeTruthy();
   });
@@ -270,7 +282,12 @@ describe("ProfileStats Component", () => {
     rerender(<ProfileStats />);
 
     await waitFor(() => {
-      expect(collection).toHaveBeenCalledWith({}, "users", "new-user-id", "expenses");
+      expect(collection).toHaveBeenCalledWith(
+        {},
+        "users",
+        "new-user-id",
+        "expenses"
+      );
     });
   });
 
@@ -282,8 +299,8 @@ describe("ProfileStats Component", () => {
     await waitFor(() => {
       expect(getByText("Yearly Spending (2025)")).toBeTruthy();
     });
-    
+
     // Should still render but not fetch data
     expect(getByText("Yearly Spending (2025)")).toBeTruthy();
   });
-}); 
+});
