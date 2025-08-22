@@ -81,13 +81,15 @@ export default function BoughtModal({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Mark as Bought</Text>
+    <Modal visible={visible} animationType="slide" transparent testID="modal">
+      <View style={styles.modalOverlay} testID="modalOverlay">
+        <View style={styles.modalContent} testID="modalContent">
+          <Text style={styles.modalTitle} testID="modalTitle">
+            Mark as Bought
+          </Text>
 
-          {/* Show items being marked */}
-          <Text style={{ marginBottom: 8 }}>
+          {/* Show selected items */}
+          <Text style={{ marginBottom: 8 }} testID="selectedItems">
             {selectedItems.map((item) => item.name).join(", ")}
           </Text>
 
@@ -95,8 +97,9 @@ export default function BoughtModal({
           <TouchableOpacity
             onPress={() => setShowDatePicker(true)}
             style={[styles.button, { marginBottom: 10 }]}
+            testID="openDatePicker"
           >
-            <Text style={styles.buttonText}>
+            <Text style={styles.buttonText} testID="dateText">
               Date: {dayjs(date).format("DD MMM YYYY")}
             </Text>
           </TouchableOpacity>
@@ -109,15 +112,19 @@ export default function BoughtModal({
                 setShowDatePicker(false);
                 if (selectedDate) setDate(selectedDate);
               }}
+              testID="dateTimePicker"
             />
           )}
 
           {/* Category Selector */}
-          <Text style={styles.modalSubtitle}>Select Category</Text>
+          <Text style={styles.modalSubtitle} testID="categoryTitle">
+            Select Category
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.categoryScroll}
+            testID="categoryScroll"
           >
             {categories.map((cat) => {
               const selected = category === cat;
@@ -129,12 +136,14 @@ export default function BoughtModal({
                     styles.categoryButton,
                     selected && styles.categoryButtonSelected,
                   ]}
+                  testID={`categoryButton-${cat}`}
                 >
                   <Text
                     style={[
                       styles.categoryButtonText,
                       selected && styles.categoryButtonTextSelected,
                     ]}
+                    testID={`categoryText-${cat}`}
                   >
                     {cat}
                   </Text>
@@ -152,6 +161,7 @@ export default function BoughtModal({
               style={styles.customCategoryInput}
               onSubmitEditing={addCustomCategory}
               returnKeyType="done"
+              testID="customCategoryInput"
             />
             <TouchableOpacity
               onPress={addCustomCategory}
@@ -160,20 +170,27 @@ export default function BoughtModal({
                 styles.addCategoryButton,
                 !customCategory.trim() && styles.addCategoryButtonDisabled,
               ]}
+              testID="addCustomCategoryButton"
             >
               <Text style={styles.addCategoryButtonText}>Add</Text>
             </TouchableOpacity>
           </View>
           {errors.categories && (
-            <Text style={styles.errorText}>{errors.categories}</Text>
+            <Text style={styles.errorText} testID="categoryError">
+              {errors.categories}
+            </Text>
           )}
 
           {/* Action Buttons */}
-          <View style={styles.modalButtons}>
-            <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
+          <View style={styles.modalButtons} testID="modalButtons">
+            <TouchableOpacity
+              onPress={onClose}
+              style={styles.cancelButton}
+              testID="cancelButton"
+            >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleConfirm}>
+            <TouchableOpacity onPress={handleConfirm} testID="saveButton">
               <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
           </View>
