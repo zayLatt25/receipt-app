@@ -103,40 +103,55 @@ describe("ProfileStats Component", () => {
     collection.mockReturnValue("mock-collection");
   });
 
-  it("renders correctly with loading states", () => {
+  it("renders correctly with loading states", async () => {
     const { getByText } = render(<ProfileStats />);
-
-    expect(getByText("Yearly Spending (2025)")).toBeTruthy();
+    
+    // Wait for initial render to complete
+    await waitFor(() => {
+      expect(getByText("Yearly Spending (2025)")).toBeTruthy();
+    });
+    
     expect(getByText("Category Breakdown (Aug 2025)")).toBeTruthy();
     expect(getByText("(Budget: $1000)")).toBeTruthy();
-    
-    // Should show loading indicators initially
-    expect(getByText("Yearly Spending (2025)")).toBeTruthy();
   });
 
-  it("renders year picker with correct years", () => {
+  it("renders year picker with correct years", async () => {
     const currentYear = dayjs().year();
     const { getByText } = render(<ProfileStats />);
-
+    
+    // Wait for component to fully render
+    await waitFor(() => {
+      expect(getByText(currentYear.toString())).toBeTruthy();
+    });
+    
     // Should show current year and 4 previous years
-    expect(getByText(currentYear.toString())).toBeTruthy();
     expect(getByText((currentYear - 1).toString())).toBeTruthy();
     expect(getByText((currentYear - 4).toString())).toBeTruthy();
   });
 
-  it("renders month picker with all months", () => {
+  it("renders month picker with all months", async () => {
     const { getByText } = render(<ProfileStats />);
-
-    expect(getByText("Jan")).toBeTruthy();
+    
+    // Wait for component to fully render
+    await waitFor(() => {
+      expect(getByText("Jan")).toBeTruthy();
+    });
+    
     expect(getByText("Feb")).toBeTruthy();
     expect(getByText("Dec")).toBeTruthy();
   });
 
   it("allows year selection", async () => {
-    const { getByText } = render(<ProfileStats />);
     const currentYear = dayjs().year();
     const previousYear = currentYear - 1;
+    const { getByText } = render(<ProfileStats />);
 
+    // Wait for initial render
+    await waitFor(() => {
+      expect(getByText(currentYear.toString())).toBeTruthy();
+    });
+
+    // Select previous year
     fireEvent.press(getByText(previousYear.toString()));
 
     await waitFor(() => {
@@ -147,6 +162,12 @@ describe("ProfileStats Component", () => {
   it("allows month selection", async () => {
     const { getByText } = render(<ProfileStats />);
 
+    // Wait for initial render
+    await waitFor(() => {
+      expect(getByText("Jan")).toBeTruthy();
+    });
+
+    // Select February
     fireEvent.press(getByText("Feb"));
 
     await waitFor(() => {
@@ -166,6 +187,11 @@ describe("ProfileStats Component", () => {
 
   it("fetches and displays category stats for selected month", async () => {
     const { getByText } = render(<ProfileStats />);
+
+    // Wait for initial render
+    await waitFor(() => {
+      expect(getByText("Jan")).toBeTruthy();
+    });
 
     // Select February
     fireEvent.press(getByText("Feb"));
@@ -214,6 +240,11 @@ describe("ProfileStats Component", () => {
   it("filters expenses by selected year and month", async () => {
     const { getByText } = render(<ProfileStats />);
 
+    // Wait for initial render
+    await waitFor(() => {
+      expect(getByText("Jan")).toBeTruthy();
+    });
+
     // Select February
     fireEvent.press(getByText("Feb"));
 
@@ -227,7 +258,12 @@ describe("ProfileStats Component", () => {
 
   it("updates when user changes", async () => {
     const newUser = { uid: "new-user-id", email: "new@example.com" };
-    const { rerender } = render(<ProfileStats />);
+    const { rerender, getByText } = render(<ProfileStats />);
+
+    // Wait for initial render
+    await waitFor(() => {
+      expect(getByText("Yearly Spending (2025)")).toBeTruthy();
+    });
 
     // Change user
     useAuth.mockReturnValue({ user: newUser });
@@ -238,10 +274,15 @@ describe("ProfileStats Component", () => {
     });
   });
 
-  it("handles missing user gracefully", () => {
+  it("handles missing user gracefully", async () => {
     useAuth.mockReturnValue({ user: null });
     const { getByText } = render(<ProfileStats />);
 
+    // Wait for component to render
+    await waitFor(() => {
+      expect(getByText("Yearly Spending (2025)")).toBeTruthy();
+    });
+    
     // Should still render but not fetch data
     expect(getByText("Yearly Spending (2025)")).toBeTruthy();
   });
