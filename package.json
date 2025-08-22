@@ -44,8 +44,5 @@
     "react-dom": "^19.1.1",
     "react-test-renderer": "^19.1.1"
   },
-  "jest": {
-    "preset": "jest-expo/universal"
-  },
   "private": true
 }
