@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.1.2",
@@ -42,6 +43,9 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-test-renderer": "^19.1.1"
+  },
+  "jest": {
+    "preset": "jest-expo/universal"
   },
   "private": true
 }
