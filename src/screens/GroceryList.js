@@ -171,11 +171,7 @@ export default function GroceryList() {
               placeholder="Item"
               placeholderTextColor={"grey"}
               value={item.name}
-              returnKeyType="done"
               onChangeText={(text) => handleChange(index, "name", text)}
-              onSubmitEditing={() => {
-                if (item.name.trim() !== "") handleAddItem();
-              }}
             />
             <TextInput
               style={styles.itemPcsInput}
