@@ -13,15 +13,11 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { colors } from "../styles/theme";
-
-// Import the KeyboardAwareScrollView
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function GroceryList() {
   const { user, authLoading } = useAuth();
-  const [items, setItems] = useState([
-    { name: "", pcs: "", price: "", checked: false },
-  ]);
+  const [items, setItems] = useState([{ name: "", pcs: "", price: "" }]);
   const inputRefs = useRef([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -30,6 +26,7 @@ export default function GroceryList() {
 
   const formatCurrency = (num) => "$" + num.toFixed(2);
 
+  // Fetch grocery list from Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -49,6 +46,7 @@ export default function GroceryList() {
     fetchData();
   }, [user]);
 
+  // Auto-save after typing stops
   useEffect(() => {
     if (!user || !isDataLoaded) return;
 
@@ -80,12 +78,6 @@ export default function GroceryList() {
     setItems(updatedItems);
   };
 
-  const toggleCheck = (index) => {
-    const updatedItems = [...items];
-    updatedItems[index].checked = !updatedItems[index].checked;
-    setItems(updatedItems);
-  };
-
   const handleAddItem = () => {
     const lastIndex = items.length - 1;
     if (items[lastIndex].name.trim() === "") {
@@ -94,10 +86,7 @@ export default function GroceryList() {
       }
       return;
     }
-    const newItems = [
-      ...items,
-      { name: "", pcs: "", price: "", checked: false },
-    ];
+    const newItems = [...items, { name: "", pcs: "", price: "" }];
     setItems(newItems);
     setTimeout(() => {
       if (inputRefs.current[newItems.length - 1]) {
@@ -108,7 +97,7 @@ export default function GroceryList() {
 
   const handleDeleteItem = (index) => {
     if (items.length === 1) {
-      setItems([{ name: "", pcs: "", price: "", checked: false }]);
+      setItems([{ name: "", pcs: "", price: "" }]);
     } else {
       const updatedItems = items.filter((_, i) => i !== index);
       setItems(updatedItems);
@@ -140,7 +129,6 @@ export default function GroceryList() {
         </View>
 
         <View style={styles.columnHeaderRow}>
-          <View style={styles.checkboxHeader} />
           <Text style={styles.firstTableColumnText}>Item</Text>
           <Text style={styles.tableColumnText}>Pcs</Text>
           <Text style={styles.tableColumnText}>Price</Text>
@@ -156,20 +144,11 @@ export default function GroceryList() {
       >
         {items.map((item, index) => (
           <View key={index} style={styles.itemRow}>
-            <TouchableOpacity
-              style={[styles.checkbox, item.checked && styles.checkboxChecked]}
-              onPress={() => toggleCheck(index)}
-            >
-              {item.checked && (
-                <MaterialIcons name="check" size={18} color={colors.darkPink} />
-              )}
-            </TouchableOpacity>
-
             <TextInput
               ref={(ref) => (inputRefs.current[index] = ref)}
               style={styles.itemNameInput}
               placeholder="Item"
-              placeholderTextColor={"grey"}
+              placeholderTextColor="grey"
               value={item.name}
               onChangeText={(text) => handleChange(index, "name", text)}
             />

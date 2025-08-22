@@ -1,5 +1,5 @@
 // ProfileStats.js
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import dayjs from "dayjs";
 import { collection, getDocs } from "firebase/firestore";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   VictoryChart,
   VictoryBar,
@@ -37,15 +38,14 @@ export default function ProfileStats({}) {
 
   const years = Array.from({ length: 5 }, (_, i) => dayjs().year() - i);
 
-  useEffect(() => {
-    if (!user) return;
-    fetchYearlyStats();
-  }, [user, selectedYear]);
-
-  useEffect(() => {
-    if (!user) return;
-    fetchCategoryStats();
-  }, [user, selectedMonth, selectedYear]);
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        fetchYearlyStats();
+        fetchCategoryStats();
+      }
+    }, [user, selectedMonth, selectedYear])
+  );
 
   const fetchYearlyStats = async () => {
     setLoadingYearly(true);

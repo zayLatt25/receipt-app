@@ -9,26 +9,32 @@ import {
   Alert,
   Platform,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDoc, collection } from "firebase/firestore";
 import { predefinedCategories } from "../utils/constants";
 import { db } from "../firebase";
 import { styles } from "../styles/ReceiptConfirmationStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Keyboard } from "react-native";
 import LoadingSpinner from "./LoadingSpinner";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
   const insets = useSafeAreaInsets();
 
-  const [purchaseDate, setPurchaseDate] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState(new Date());
   const [category, setCategory] = useState("Others");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (receiptData) {
-      setPurchaseDate(receiptData.purchaseDate || "");
+      setPurchaseDate(
+        receiptData.purchaseDate
+          ? new Date(receiptData.purchaseDate)
+          : new Date()
+      );
       setCategory(receiptData.suggestedCategory || "Others");
       setItems(receiptData.items || []);
     }
@@ -82,7 +88,7 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
           description: i.name || "Unknown",
           amount: qty * price,
           category: categoryToUse,
-          date: purchaseDate,
+          date: purchaseDate.toISOString().split("T")[0], // YYYY-MM-DD
           createdAt: new Date(),
         };
 
@@ -101,49 +107,75 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
 
   const renderItem = ({ item, index }) => (
     <View style={styles.itemRow}>
-      <TextInput
-        style={[styles.itemInput, { flex: 2, marginRight: 5 }]}
-        placeholder="Name"
-        value={item.name}
-        onChangeText={(text) => updateItem(index, "name", text)}
-        onSubmitEditing={() => Keyboard.dismiss()}
-      />
+      <View style={styles.itemInputsContainer}>
+        {/* Name Input */}
+        <TextInput
+          style={[styles.itemInputCommon, styles.itemNameInput]}
+          placeholder="Name"
+          value={item.name}
+          onChangeText={(text) => updateItem(index, "name", text)}
+          onSubmitEditing={() => Keyboard.dismiss()}
+        />
 
-      <TextInput
-        style={[styles.itemInput, { flex: 1, marginRight: 5 }]}
-        placeholder="Qty"
-        keyboardType="numeric"
-        value={item.pieces?.toString() || ""}
-        onChangeText={(text) => updateItem(index, "pieces", text)}
-        returnKeyType="done"
-        onSubmitEditing={() => Keyboard.dismiss()}
-      />
+        {/* Quantity Input */}
+        <TextInput
+          style={[styles.itemInputCommon, styles.itemQtyInput]}
+          placeholder="Qty"
+          keyboardType="numeric"
+          value={item.pieces?.toString() || ""}
+          onChangeText={(text) => updateItem(index, "pieces", text)}
+          returnKeyType="done"
+          onSubmitEditing={() => Keyboard.dismiss()}
+        />
 
-      <TextInput
-        style={[styles.itemInput, { flex: 1 }]}
-        placeholder="Price"
-        keyboardType="numeric"
-        value={item.price?.toString() || ""}
-        onChangeText={(text) => updateItem(index, "price", text)}
-        returnKeyType="done"
-        onSubmitEditing={() => Keyboard.dismiss()}
-      />
+        {/* Price Input */}
+        <View style={styles.priceContainer}>
+          <Text style={styles.priceSign}>$</Text>
+          <TextInput
+            style={styles.itemPriceInput}
+            placeholder="Price"
+            keyboardType="numeric"
+            value={item.price?.toString() || ""}
+            onChangeText={(text) => updateItem(index, "price", text)}
+            returnKeyType="done"
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={styles.deleteBtnCircle}
+        onPress={() => {
+          const updated = items.filter((_, i) => i !== index);
+          setItems(updated);
+        }}
+        accessibilityLabel={
+          item.name && item.name.trim()
+            ? `Delete item ${item.name}`
+            : `Delete item at position ${index + 1}`
+        }
+      >
+        <MaterialIcons name="delete" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={{ ...styles.container, paddingTop: insets.top }}>
-        {/* Sticky Header */}
-        <View style={{ paddingHorizontal: 16, paddingBottom: 10 }}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={styles.headerContainer}>
           <Text style={styles.title}>Confirm Receipt</Text>
 
           <Text style={styles.label}>Purchase Date</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="YYYY-MM-DD"
+          <DateTimePicker
             value={purchaseDate}
-            onChangeText={setPurchaseDate}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              if (selectedDate) {
+                setPurchaseDate(selectedDate);
+              }
+            }}
           />
 
           <Text style={styles.label}>Category</Text>
@@ -175,9 +207,8 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
           </View>
         </View>
 
-        {/* Scrollable Items List */}
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
+          style={styles.scrollableContent}
           behavior={Platform.OS === "ios" ? "padding" : null}
         >
           <FlatList
@@ -185,12 +216,11 @@ const ReceiptConfirmationModal = ({ visible, onClose, receiptData, user }) => {
             keyExtractor={(_, index) => index.toString()}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
-            style={{ flex: 1, paddingHorizontal: 16 }}
+            style={styles.flatListStyle}
             keyboardShouldPersistTaps="handled"
           />
         </KeyboardAvoidingView>
 
-        {/* Sticky Footer */}
         <View style={styles.footerContainer}>
           <Text style={styles.totalText}>Total: ${totalAmount.toFixed(2)}</Text>
 

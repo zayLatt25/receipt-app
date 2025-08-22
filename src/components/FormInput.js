@@ -9,16 +9,19 @@ const FormInput = ({
   keyboardType,
   value,
   onChangeText,
+  returnKeyType,
 }) => {
   return (
     <TextInput
       style={styles.input}
       placeholder={placeholder}
+      placeholderTextColor={"#aaa"}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
       autoCapitalize="none"
       value={value}
       onChangeText={onChangeText}
+      returnKeyType={returnKeyType}
     />
   );
 };

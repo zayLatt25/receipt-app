@@ -113,6 +113,7 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
           <FormInput
             placeholder="Expense name"
             value={description}
+            returnKeyType="done"
             onChangeText={(text) => {
               setDescription(text);
               if (errors.description)
@@ -126,6 +127,7 @@ const AddExpenseModal = ({ visible, onClose, onSave, initialDate }) => {
           <FormInput
             placeholder="Amount"
             keyboardType="numeric"
+            returnKeyType="done"
             value={amount}
             onChangeText={(text) => {
               // Remove all non-digit and non-decimal characters
