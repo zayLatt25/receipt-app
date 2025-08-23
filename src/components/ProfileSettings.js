@@ -5,10 +5,12 @@ import pushNotificationService from "../utils/pushNotifications";
 import { calculateWeeklySpendingSummary, generateWeeklySummaryMessage } from "../utils/weeklySpendingSummary";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 export default function ProfileSettings() {
   const { user } = useAuth();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [changePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
 
   // Check current notification permission status on component mount
   useEffect(() => {
@@ -134,6 +136,22 @@ export default function ProfileSettings() {
         />
       </View>
 
+      {/* Change Password Section */}
+      <View style={styles.settingRow}>
+        <View style={styles.settingInfo}>
+          <Text style={styles.settingTitle}>Change Password</Text>
+          <Text style={styles.settingDescription}>
+            Update your account password for security
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.changePasswordButton}
+          onPress={() => setChangePasswordModalVisible(true)}
+        >
+          <Text style={styles.changePasswordButtonText}>Change</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Weekly Summary Button */}
       {notificationsEnabled && (
         <TouchableOpacity
@@ -146,7 +164,11 @@ export default function ProfileSettings() {
         </TouchableOpacity>
       )}
       
-      {/* TODO: Add more settings content here */}
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        visible={changePasswordModalVisible}
+        onClose={() => setChangePasswordModalVisible(false)}
+      />
     </View>
   );
 }
