@@ -17,8 +17,7 @@ export const calculateWeeklySpendingSummary = async (db, userId, date = new Date
     const referenceDate = dayjs(date);
     
     // Get the start and end of the current week (Monday to Sunday)
-    const startOfWeek = referenceDate.startOf('week').add(1, 'day'); // Monday
-    const endOfWeek = startOfWeek.endOf('week').add(1, 'day'); // Sunday
+    const endOfWeek = startOfWeek.add(6, 'day'); // Sunday
     
     // Get the start and end of last week
     const startOfLastWeek = startOfWeek.subtract(1, 'week');
