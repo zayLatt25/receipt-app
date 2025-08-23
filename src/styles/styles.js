@@ -365,4 +365,26 @@ export const styles = StyleSheet.create({
   statsCategoryHeader: {
     marginTop: verticalScale(24),
   },
+  notificationButton: {
+    backgroundColor: darkPink,
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(8),
+    marginBottom: verticalScale(16),
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  notificationButtonText: {
+    color: lightCream,
+    fontSize: normalizeFont(16),
+    fontFamily: mainFont,
+    fontWeight: "600",
+  },
 });

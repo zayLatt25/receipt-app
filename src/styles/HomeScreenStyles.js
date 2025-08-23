@@ -23,26 +23,4 @@ export const styles = StyleSheet.create({
     color: colors.lightCream,
     marginBottom: verticalScale(16),
   },
-  notificationButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: scale(16),
-    borderRadius: scale(8),
-    marginBottom: verticalScale(16),
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  notificationButtonText: {
-    color: colors.white,
-    fontSize: normalizeFont(16),
-    fontFamily: fonts.main,
-    fontWeight: "600",
-  },
 });
