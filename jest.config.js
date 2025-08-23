@@ -16,6 +16,8 @@ module.exports = {
       "|expo-font" +
       "|expo-image-picker" +
       "|expo-image-manipulator" +
+      "|firebase" +
+      "|@firebase" +
       ")/)",
   ],
 };
