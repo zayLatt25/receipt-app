@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import dayjs from "dayjs";
 
@@ -7,6 +7,7 @@ import CustomCalendar from "../components/Calendar";
 import FloatingActionButton from "../components/FloatingActionButton";
 import AddExpenseModal from "../components/AddExpenseModal";
 import ExpenseList from "../components/ExpenseList";
+import pushNotificationService from "../utils/pushNotifications";
 import {
   collection,
   addDoc,
@@ -173,9 +174,31 @@ const HomeScreen = () => {
     await fetchMonthlyExpenses(monthKey);
   };
 
+  // Handle notification button press
+  const handleNotificationPress = async () => {
+    try {
+      await pushNotificationService.scheduleLocalNotification({
+        title: "Hi there! 👋",
+        body: "This is a test notification from your receipt app!",
+        data: { type: "test" },
+        trigger: null, // Show immediately
+      });
+    } catch (error) {
+      console.error("Error showing notification:", error);
+    }
+  };
+
   return (
     <SafeAreaView edges={["top"]} style={styles.safeAreaView}>
       <View style={styles.container}>
+        {/* Notification Test Button */}
+        <TouchableOpacity
+          style={styles.notificationButton}
+          onPress={handleNotificationPress}
+        >
+          <Text style={styles.notificationButtonText}>🔔 Test Notification</Text>
+        </TouchableOpacity>
+
         <CustomCalendar
           selectedDate={selectedDate}
           onDaySelect={setSelectedDate}

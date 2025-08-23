@@ -54,7 +54,7 @@ class PushNotificationService {
       if (!hasPermissions) return null;
 
       const token = await Notifications.getExpoPushTokenAsync({
-        projectId: '@mac255/receipt', // Replace with your actual Expo project ID
+        projectId: '@mac255/receipt', 
       });
       
       this.expoPushToken = token.data;
