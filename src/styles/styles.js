@@ -399,4 +399,26 @@ export const styles = StyleSheet.create({
   switchTrackDisabled: "#ffffff40",
   switchThumbEnabled: lightCream,
   switchThumbDisabled: "#ffffff80",
+  weeklySummaryButton: {
+    backgroundColor: "#4a90e2",
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(8),
+    marginTop: verticalScale(16),
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  weeklySummaryButtonText: {
+    color: lightCream,
+    fontSize: normalizeFont(16),
+    fontFamily: mainFont,
+    fontWeight: "600",
+  },
 });

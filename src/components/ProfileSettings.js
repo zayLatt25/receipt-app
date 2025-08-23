@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Switch, Alert } from "react-native";
+import { View, Text, Switch, Alert, TouchableOpacity } from "react-native";
 import { styles } from "../styles/styles";
 import pushNotificationService from "../utils/pushNotifications";
+import { calculateWeeklySpendingSummary, generateWeeklySummaryMessage } from "../utils/weeklySpendingSummary";
+import { useAuth } from "../context/AuthContext";
+import { db } from "../firebase";
 
 export default function ProfileSettings() {
+  const { user } = useAuth();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   // Check current notification permission status on component mount
@@ -28,11 +32,28 @@ export default function ProfileSettings() {
       const hasPermissions = await pushNotificationService.requestPermissions();
       if (hasPermissions) {
         setNotificationsEnabled(true);
-        Alert.alert(
-          "Notifications Enabled",
-          "You'll now receive push notifications from the app.",
-          [{ text: "OK" }]
-        );
+        
+        // Automatically schedule weekly spending summaries
+        // Every Monday at 9:00 AM
+        try {
+          await pushNotificationService.scheduleWeeklySpendingSummary(
+            'monday',  
+            '09:00'   
+          );
+          
+          Alert.alert(
+            "Notifications Enabled",
+            "You'll now receive push notifications and weekly spending summaries every Monday at 9:00 AM.",
+            [{ text: "OK" }]
+          );
+        } catch (error) {
+          console.error("Error scheduling weekly summary:", error);
+          Alert.alert(
+            "Notifications Enabled",
+            "You'll now receive push notifications. Weekly summaries will be available manually.",
+            [{ text: "OK" }]
+          );
+        }
       } else {
         Alert.alert(
           "Permission Denied",
@@ -55,11 +76,43 @@ export default function ProfileSettings() {
             style: "destructive",
             onPress: () => {
               setNotificationsEnabled(false);
-              Alert.alert("Notifications Disabled", "You won't receive push notifications anymore.");
+              Alert.alert("Notifications Disabled", "You won't receive push notifications or weekly summaries anymore.");
             }
           }
         ]
       );
+    }
+  };
+
+  // Handle weekly summary notification
+  const handleWeeklySummaryNotification = async () => {
+    if (!user) {
+      Alert.alert("Error", "Please log in to view weekly summaries.");
+      return;
+    }
+
+    if (!notificationsEnabled) {
+      Alert.alert(
+        "Notifications Disabled",
+        "Please enable notifications first to view weekly summaries.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    try {
+      const summary = await calculateWeeklySpendingSummary(db, user.uid);
+      const message = generateWeeklySummaryMessage(summary);
+      
+      await pushNotificationService.scheduleLocalNotification({
+        title: "Weekly Spending Summary",
+        body: message,
+        data: { type: "weekly_summary" },
+        trigger: null, // Show immediately
+      });
+    } catch (error) {
+      console.error("Error showing weekly summary:", error);
+      Alert.alert("Error", "Failed to generate weekly summary. Please try again.");
     }
   };
 
@@ -70,7 +123,7 @@ export default function ProfileSettings() {
         <View style={styles.settingInfo}>
           <Text style={styles.settingTitle}>Push Notifications</Text>
           <Text style={styles.settingDescription}>
-            Receive reminders and updates about your expenses
+            Receive reminders, updates, and weekly spending summaries every Monday at 9:00 AM
           </Text>
         </View>
         <Switch
@@ -80,6 +133,18 @@ export default function ProfileSettings() {
           thumbColor={notificationsEnabled ? styles.switchThumbEnabled : styles.switchThumbDisabled}
         />
       </View>
+
+      {/* Weekly Summary Button */}
+      {notificationsEnabled && (
+        <TouchableOpacity
+          style={styles.weeklySummaryButton}
+          onPress={handleWeeklySummaryNotification}
+        >
+          <Text style={styles.weeklySummaryButtonText}>
+            📊 View Weekly Spending Summary Now
+          </Text>
+        </TouchableOpacity>
+      )}
       
       {/* TODO: Add more settings content here */}
     </View>
