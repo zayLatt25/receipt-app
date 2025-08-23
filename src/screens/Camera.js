@@ -18,10 +18,15 @@ import {
 } from "firebase/storage";
 import styles from "../styles/CameraStyles";
 import ReceiptConfirmationModal from "../components/ReceiptConfirmationModal";
-import { AI_RECEIPT_CONFIG } from "../config/receipt-ai.js";
+import { OPENAI_API_KEY, OPENAI_API_URL } from "@env";
 import { useAuth } from "../context/AuthContext";
 import { predefinedCategories } from "../utils/constants";
 import { colors } from "../styles/theme";
+
+const AI_RECEIPT_CONFIG = {
+  apiKey: OPENAI_API_KEY,
+  apiUrl: OPENAI_API_URL,
+};
 
 const prompt = {
   type: "text",
@@ -161,12 +166,12 @@ export default function CameraScreen() {
         try {
           setLoadingStage("Uploading to Firebase...");
           setLoadingProgress(60);
-          
+
           await uploadBytes(storageRef, blob);
-          
+
           setLoadingStage("Getting download URL...");
           setLoadingProgress(80);
-          
+
           const downloadUrl = await getDownloadURL(storageRef);
 
           setLoadingStage("Processing receipt with AI...");
@@ -252,41 +257,71 @@ export default function CameraScreen() {
             </View>
             <Text style={styles.loadingTitle}>Processing Receipt</Text>
             <Text style={styles.loadingStage}>{loadingStage}</Text>
-            
+
             <View style={styles.progressContainer}>
               <View style={styles.progressBar}>
-                <View 
+                <View
                   style={[
-                    styles.progressFill, 
-                    { width: `${loadingProgress}%` }
-                  ]} 
+                    styles.progressFill,
+                    { width: `${loadingProgress}%` },
+                  ]}
                 />
               </View>
               <Text style={styles.progressText}>{loadingProgress}%</Text>
             </View>
-            
+
             <View style={styles.loadingSteps}>
-              <View style={[styles.stepDot, loadingProgress >= 20 && styles.stepDotActive]}>
+              <View
+                style={[
+                  styles.stepDot,
+                  loadingProgress >= 20 && styles.stepDotActive,
+                ]}
+              >
                 <Text style={styles.stepDotText}>1</Text>
               </View>
               <View style={styles.stepLine} />
-              <View style={[styles.stepDot, loadingProgress >= 60 && styles.stepDotActive]}>
+              <View
+                style={[
+                  styles.stepDot,
+                  loadingProgress >= 60 && styles.stepDotActive,
+                ]}
+              >
                 <Text style={styles.stepDotText}>2</Text>
               </View>
               <View style={styles.stepLine} />
-              <View style={[styles.stepDot, loadingProgress >= 90 && styles.stepDotActive]}>
+              <View
+                style={[
+                  styles.stepDot,
+                  loadingProgress >= 90 && styles.stepDotActive,
+                ]}
+              >
                 <Text style={styles.stepDotText}>3</Text>
               </View>
             </View>
-            
+
             <View style={styles.stepLabels}>
-              <Text style={[styles.stepLabel, loadingProgress >= 20 && styles.stepLabelActive]}>
+              <Text
+                style={[
+                  styles.stepLabel,
+                  loadingProgress >= 20 && styles.stepLabelActive,
+                ]}
+              >
                 Process
               </Text>
-              <Text style={[styles.stepLabel, loadingProgress >= 60 && styles.stepLabelActive]}>
+              <Text
+                style={[
+                  styles.stepLabel,
+                  loadingProgress >= 60 && styles.stepLabelActive,
+                ]}
+              >
                 Upload
               </Text>
-              <Text style={[styles.stepLabel, loadingProgress >= 90 && styles.stepLabelActive]}>
+              <Text
+                style={[
+                  styles.stepLabel,
+                  loadingProgress >= 90 && styles.stepLabelActive,
+                ]}
+              >
                 Analyze
               </Text>
             </View>

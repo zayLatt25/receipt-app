@@ -109,7 +109,7 @@ export const profileStatsStyles = StyleSheet.create({
     marginTop: scale(10),
   },
 
-  // Empty state styles (no button)
+  // Empty state styles
   emptyStateContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -120,10 +120,5 @@ export const profileStatsStyles = StyleSheet.create({
     color: colors.lightCream,
     textAlign: "center",
     marginTop: verticalScale(10),
-  },
-  emptyStateIcon: {
-    width: scale(80),
-    height: scale(80),
-    marginBottom: verticalScale(15),
   },
 });
