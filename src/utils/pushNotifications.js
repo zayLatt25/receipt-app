@@ -262,6 +262,70 @@ class PushNotificationService {
       console.error("Error opening settings:", error);
     }
   }
+
+  /**
+   * Schedule weekly spending summary notification
+   * @param {string} dayOfWeek - Day of week to send notification (e.g., 'monday', 'sunday')
+   * @param {string} time - Time to send notification (e.g., '09:00')
+   * @returns {Promise<string>} The notification identifier
+   */
+  async scheduleWeeklySpendingSummary(dayOfWeek = 'monday', time = '09:00') {
+    try {
+      const [hours, minutes] = time.split(':').map(Number);
+      
+      const trigger = {
+        hour: hours,
+        minute: minutes,
+        weekday: this.getWeekdayNumber(dayOfWeek),
+        repeats: true,
+      };
+
+      const identifier = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Weekly Spending Summary",
+          body: "Check out your spending insights for this week!",
+          data: { type: "weekly_summary" },
+          sound: true,
+        },
+        trigger,
+      });
+
+      return identifier;
+    } catch (error) {
+      console.error("Error scheduling weekly spending summary:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel weekly spending summary notification
+   * @param {string} identifier - The notification identifier
+   */
+  async cancelWeeklySpendingSummary(identifier) {
+    try {
+      await Notifications.cancelScheduledNotificationAsync(identifier);
+    } catch (error) {
+      console.error("Error canceling weekly spending summary:", error);
+    }
+  }
+
+  /**
+   * Get weekday number for notification trigger
+   * @param {string} dayOfWeek - Day name (e.g., 'monday', 'sunday')
+   * @returns {number} Weekday number (1-7, where 1 is Sunday)
+   */
+  getWeekdayNumber(dayOfWeek) {
+    const weekdays = {
+      'sunday': 1,
+      'monday': 2,
+      'tuesday': 3,
+      'wednesday': 4,
+      'thursday': 5,
+      'friday': 6,
+      'saturday': 7,
+    };
+    return weekdays[dayOfWeek.toLowerCase()] || 1;
+  }
 }
 
 // Create and export a singleton instance

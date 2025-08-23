@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Switch, Alert } from "react-native";
+import { View, Text, Switch, Alert } from "react-native";
 import { styles } from "../styles/styles";
 import pushNotificationService from "../utils/pushNotifications";
 
@@ -63,29 +63,6 @@ export default function ProfileSettings() {
     }
   };
 
-  // Handle notification button press
-  const handleNotificationPress = async () => {
-    if (!notificationsEnabled) {
-      Alert.alert(
-        "Notifications Disabled",
-        "Please enable notifications first to test them.",
-        [{ text: "OK" }]
-      );
-      return;
-    }
-
-    try {
-      await pushNotificationService.scheduleLocalNotification({
-        title: "Hi there! 👋",
-        body: "This is a test notification from your receipt app!",
-        data: { type: "test" },
-        trigger: null, // Show immediately
-      });
-    } catch (error) {
-      console.error("Error showing notification:", error);
-    }
-  };
-
   return (
     <View style={styles.settingsContainer}>
       {/* Push Notifications Toggle */}
@@ -103,23 +80,6 @@ export default function ProfileSettings() {
           thumbColor={notificationsEnabled ? styles.switchThumbEnabled : styles.switchThumbDisabled}
         />
       </View>
-
-      {/* Notification Test Button */}
-      <TouchableOpacity
-        style={[
-          styles.notificationButton,
-          !notificationsEnabled && styles.notificationButtonDisabled
-        ]}
-        onPress={handleNotificationPress}
-        disabled={!notificationsEnabled}
-      >
-        <Text style={[
-          styles.notificationButtonText,
-          !notificationsEnabled && styles.notificationButtonTextDisabled
-        ]}>
-          🔔 Test Notification
-        </Text>
-      </TouchableOpacity>
       
       {/* TODO: Add more settings content here */}
     </View>

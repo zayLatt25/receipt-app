@@ -365,28 +365,6 @@ export const styles = StyleSheet.create({
   statsCategoryHeader: {
     marginTop: verticalScale(24),
   },
-  notificationButton: {
-    backgroundColor: darkPink,
-    paddingVertical: verticalScale(8),
-    paddingHorizontal: scale(12),
-    borderRadius: moderateScale(6),
-    marginBottom: verticalScale(10),
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  notificationButtonText: {
-    color: lightCream,
-    fontSize: normalizeFont(14),
-    fontFamily: mainFont,
-    fontWeight: "600",
-  },
   settingsContainer: {
     paddingHorizontal: scale(12),
     paddingTop: verticalScale(12),
@@ -421,11 +399,4 @@ export const styles = StyleSheet.create({
   switchTrackDisabled: "#ffffff40",
   switchThumbEnabled: lightCream,
   switchThumbDisabled: "#ffffff80",
-  notificationButtonDisabled: {
-    backgroundColor: "#ffffff40",
-    opacity: 0.6,
-  },
-  notificationButtonTextDisabled: {
-    color: "#ffffff80",
-  },
 });
