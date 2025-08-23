@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -129,6 +130,8 @@ const processReceipt = async (imageUrl) => {
 export default function CameraScreen() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState("");
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [receiptData, setReceiptData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const storage = getStorage();
@@ -159,6 +162,8 @@ export default function CameraScreen() {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         setLoading(true);
+        setLoadingStage("Processing image...");
+        setLoadingProgress(20);
 
         const manipulated = await ImageManipulator.manipulateAsync(
           result.assets[0].uri,
@@ -168,14 +173,27 @@ export default function CameraScreen() {
 
         if (!manipulated?.uri) throw new Error("Failed to process image");
 
+        setLoadingStage("Preparing upload...");
+        setLoadingProgress(40);
+
         const response = await fetch(manipulated.uri);
         const blob = await response.blob();
         const fileName = `receipts/${user?.uid || "guest"}_${Date.now()}.jpg`;
         const storageRef = ref(storage, fileName);
 
         try {
+          setLoadingStage("Uploading to Firebase...");
+          setLoadingProgress(60);
+          
           await uploadBytes(storageRef, blob);
+          
+          setLoadingStage("Getting download URL...");
+          setLoadingProgress(80);
+          
           const downloadUrl = await getDownloadURL(storageRef);
+
+          setLoadingStage("Processing receipt with AI...");
+          setLoadingProgress(90);
 
           await attemptProcess(downloadUrl, storageRef);
         } catch (uploadError) {
@@ -191,15 +209,20 @@ export default function CameraScreen() {
       Alert.alert("Error", "Failed to process receipt. Please try again.");
     } finally {
       setLoading(false);
+      setLoadingStage("");
+      setLoadingProgress(0);
     }
   };
 
   const attemptProcess = async (downloadUrl, storageRef) => {
-    setLoading(true);
+    setLoadingStage("Analyzing receipt...");
+    setLoadingProgress(95);
 
     const parsedReceipt = await processReceipt(downloadUrl);
 
     setLoading(false);
+    setLoadingStage("");
+    setLoadingProgress(0);
 
     if (parsedReceipt.error || parsedReceipt.errorTitle) {
       Alert.alert(
@@ -245,7 +268,53 @@ export default function CameraScreen() {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#2563eb" />
+        <View style={styles.loadingContainer}>
+          <View style={styles.loadingCard}>
+            <View style={styles.loadingIconContainer}>
+              <ActivityIndicator size="large" color="#e8e5d9" />
+            </View>
+            <Text style={styles.loadingTitle}>Processing Receipt</Text>
+            <Text style={styles.loadingStage}>{loadingStage}</Text>
+            
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[
+                    styles.progressFill, 
+                    { width: `${loadingProgress}%` }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.progressText}>{loadingProgress}%</Text>
+            </View>
+            
+            <View style={styles.loadingSteps}>
+              <View style={[styles.stepDot, loadingProgress >= 20 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>1</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepDot, loadingProgress >= 60 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>2</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepDot, loadingProgress >= 90 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>3</Text>
+              </View>
+            </View>
+            
+            <View style={styles.stepLabels}>
+              <Text style={[styles.stepLabel, loadingProgress >= 20 && styles.stepLabelActive]}>
+                Process
+              </Text>
+              <Text style={[styles.stepLabel, loadingProgress >= 60 && styles.stepLabelActive]}>
+                Upload
+              </Text>
+              <Text style={[styles.stepLabel, loadingProgress >= 90 && styles.stepLabelActive]}>
+                Analyze
+              </Text>
+            </View>
+          </View>
+        </View>
       ) : (
         <>
           <TouchableOpacity
