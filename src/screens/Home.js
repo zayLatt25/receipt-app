@@ -135,10 +135,6 @@ const HomeScreen = () => {
   // Prepare marked dates
   const markedDates = useMemo(() => {
     const monthExpenses = monthlyExpensesCache[currentMonthKey] || [];
-    console.log("Calculating marked dates for month:", currentMonthKey);
-    console.log("Month expenses count:", monthExpenses.length);
-    console.log("Selected date:", selectedDate);
-    console.log("Selected date month:", dayjs(selectedDate).format("YYYY-MM"));
     
     const datesWithExpenses = {};
 
@@ -153,8 +149,6 @@ const HomeScreen = () => {
     // Check if selected date is in the current month being displayed
     const selectedDateMonth = dayjs(selectedDate).format("YYYY-MM");
     const isSelectedDateInCurrentMonth = selectedDateMonth === currentMonthKey;
-    
-    console.log("Is selected date in current month?", isSelectedDateInCurrentMonth);
     
     if (datesWithExpenses[selectedDate]) {
       // Selected day with expenses
@@ -174,16 +168,11 @@ const HomeScreen = () => {
         selectedTextColor: "#fff",
       };
     }
-
-    console.log("Final marked dates:", Object.keys(datesWithExpenses));
     return datesWithExpenses;
   }, [monthlyExpensesCache, selectedDate, currentMonthKey]);
 
   // Handle month change in calendar
   const handleMonthChange = async (monthDateString) => {
-    console.log("Month change triggered:", monthDateString);
-    console.log("Type of monthDateString:", typeof monthDateString);
-    console.log("monthDateString value:", monthDateString);
     
     // Ensure monthDateString is properly formatted
     let monthKey;
@@ -208,8 +197,6 @@ const HomeScreen = () => {
       monthKey = dayjs().format("YYYY-MM");
     }
     
-    console.log("New month key:", monthKey);
-    
     // First fetch the monthly expenses for the new month
     await fetchMonthlyExpenses(monthKey);
     
@@ -224,11 +211,8 @@ const HomeScreen = () => {
       // Use the same day number, but cap it at the last day of the new month
       const newDay = Math.min(currentDay, lastDayOfNewMonth);
       const newSelectedDate = newMonth.date(newDay).format("YYYY-MM-DD");
-      
-      console.log("Updating selected date from", selectedDate, "to", newSelectedDate);
+    
       setSelectedDate(newSelectedDate);
-    } else {
-      console.log("Selected date is already in the new month, no update needed");
     }
   };
 

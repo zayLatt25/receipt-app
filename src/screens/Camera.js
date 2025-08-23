@@ -216,7 +216,6 @@ export default function CameraScreen() {
             onPress: async () => {
               try {
                 await deleteObject(storageRef);
-                console.log("Deleted receipt image after cancel");
               } catch (err) {
                 console.error("Failed to delete after cancel:", err);
               }
@@ -232,7 +231,6 @@ export default function CameraScreen() {
       // delete after success
       try {
         await deleteObject(storageRef);
-        console.log("Deleted receipt image after success");
       } catch (err) {
         console.error("Failed to delete after success:", err);
       }
