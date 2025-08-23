@@ -76,10 +76,6 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **React Native Testing Library** - Component testing
 - **Babel** - JavaScript compiler
 
-## 📱 Screenshots
-
-*[Screenshots would be added here showing the main app interface, receipt scanning, analytics, and grocery list features]*
-
 ## 🚀 Getting Started
 
 ### Prerequisites
