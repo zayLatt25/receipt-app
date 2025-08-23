@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -20,6 +21,7 @@ import ReceiptConfirmationModal from "../components/ReceiptConfirmationModal";
 import { AI_RECEIPT_CONFIG } from "../config/receipt-ai.js";
 import { useAuth } from "../context/AuthContext";
 import { predefinedCategories } from "../utils/constants";
+import { colors } from "../styles/theme";
 
 const prompt = {
   type: "text",
@@ -102,33 +104,11 @@ const processReceipt = async (imageUrl) => {
   }
 };
 
-// const processReceipt = async () => {
-//   return {
-//     items: [
-//       { name: "KINGS CARNIVAL 1.2L", pieces: 2, price: 4.59 },
-//       { name: "KING CHOC M/CHIP I/C 1.2L", pieces: 2, price: 4.59 },
-//       { name: "KNORR CUBES TYAM 60G", pieces: 2, price: 2.11 },
-//       { name: "KNORR CUBES BEEF 60G", pieces: 2, price: 2.11 },
-//       { name: "VEPO PURE D/WATER 1.5L", pieces: 2, price: 0.7 },
-//       { name: "MYS FY XIAO BAI CHYE 200G", pieces: 2, price: 0.75 },
-//       { name: "ENOKI MUSHROOM 200G", pieces: 2, price: 1.4 },
-//       { name: "C82 COLOUR RICE 100G", pieces: 2, price: 1.4 },
-//       { name: "CHKN BONELESS LEG(P) 200G", pieces: 2, price: 2.35 },
-//       { name: "CHN H/POTATOES 1.2KG", pieces: 1, price: 4.7 },
-//       { name: "CHN PD C/CABBAGE(KG)", pieces: 1, price: 2.09 },
-//       { name: "SANREMO 3MIN QK MCRN 500G", pieces: 1, price: 2.25 },
-//       { name: "THA PD GREEN MANGO", pieces: 3, price: 1.25 },
-//       { name: "PREGI CARBONARA MR 295G", pieces: 1, price: 2.7 },
-//       { name: "PREGI TRAD.300G", pieces: 1, price: 2.7 },
-//     ],
-//     purchaseDate: "2025-08-15",
-//     suggestedCategory: "Grocery",
-//   };
-// };
-
 export default function CameraScreen() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState("");
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [receiptData, setReceiptData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const storage = getStorage();
@@ -159,6 +139,8 @@ export default function CameraScreen() {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         setLoading(true);
+        setLoadingStage("Processing image...");
+        setLoadingProgress(20);
 
         const manipulated = await ImageManipulator.manipulateAsync(
           result.assets[0].uri,
@@ -168,14 +150,27 @@ export default function CameraScreen() {
 
         if (!manipulated?.uri) throw new Error("Failed to process image");
 
+        setLoadingStage("Preparing upload...");
+        setLoadingProgress(40);
+
         const response = await fetch(manipulated.uri);
         const blob = await response.blob();
         const fileName = `receipts/${user?.uid || "guest"}_${Date.now()}.jpg`;
         const storageRef = ref(storage, fileName);
 
         try {
+          setLoadingStage("Uploading to Firebase...");
+          setLoadingProgress(60);
+          
           await uploadBytes(storageRef, blob);
+          
+          setLoadingStage("Getting download URL...");
+          setLoadingProgress(80);
+          
           const downloadUrl = await getDownloadURL(storageRef);
+
+          setLoadingStage("Processing receipt with AI...");
+          setLoadingProgress(90);
 
           await attemptProcess(downloadUrl, storageRef);
         } catch (uploadError) {
@@ -191,15 +186,20 @@ export default function CameraScreen() {
       Alert.alert("Error", "Failed to process receipt. Please try again.");
     } finally {
       setLoading(false);
+      setLoadingStage("");
+      setLoadingProgress(0);
     }
   };
 
   const attemptProcess = async (downloadUrl, storageRef) => {
-    setLoading(true);
+    setLoadingStage("Analyzing receipt...");
+    setLoadingProgress(95);
 
     const parsedReceipt = await processReceipt(downloadUrl);
 
     setLoading(false);
+    setLoadingStage("");
+    setLoadingProgress(0);
 
     if (parsedReceipt.error || parsedReceipt.errorTitle) {
       Alert.alert(
@@ -216,7 +216,6 @@ export default function CameraScreen() {
             onPress: async () => {
               try {
                 await deleteObject(storageRef);
-                console.log("Deleted receipt image after cancel");
               } catch (err) {
                 console.error("Failed to delete after cancel:", err);
               }
@@ -232,7 +231,6 @@ export default function CameraScreen() {
       // delete after success
       try {
         await deleteObject(storageRef);
-        console.log("Deleted receipt image after success");
       } catch (err) {
         console.error("Failed to delete after success:", err);
       }
@@ -247,7 +245,53 @@ export default function CameraScreen() {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#2563eb" />
+        <View style={styles.loadingContainer}>
+          <View style={styles.loadingCard}>
+            <View style={styles.loadingIconContainer}>
+              <ActivityIndicator size="large" color={colors.navyBlue} />
+            </View>
+            <Text style={styles.loadingTitle}>Processing Receipt</Text>
+            <Text style={styles.loadingStage}>{loadingStage}</Text>
+            
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[
+                    styles.progressFill, 
+                    { width: `${loadingProgress}%` }
+                  ]} 
+                />
+              </View>
+              <Text style={styles.progressText}>{loadingProgress}%</Text>
+            </View>
+            
+            <View style={styles.loadingSteps}>
+              <View style={[styles.stepDot, loadingProgress >= 20 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>1</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepDot, loadingProgress >= 60 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>2</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepDot, loadingProgress >= 90 && styles.stepDotActive]}>
+                <Text style={styles.stepDotText}>3</Text>
+              </View>
+            </View>
+            
+            <View style={styles.stepLabels}>
+              <Text style={[styles.stepLabel, loadingProgress >= 20 && styles.stepLabelActive]}>
+                Process
+              </Text>
+              <Text style={[styles.stepLabel, loadingProgress >= 60 && styles.stepLabelActive]}>
+                Upload
+              </Text>
+              <Text style={[styles.stepLabel, loadingProgress >= 90 && styles.stepLabelActive]}>
+                Analyze
+              </Text>
+            </View>
+          </View>
+        </View>
       ) : (
         <>
           <TouchableOpacity

@@ -9,14 +9,19 @@ export default function CustomCalendar({
   markedDates,
   onMonthChange,
 }) {
+  // Create a key that changes when the month changes to force re-render
+  const monthKey = selectedDate.substring(0, 7); // YYYY-MM
+  
   return (
     <View style={styles.calendarWrapper}>
       <Calendar
+        key={monthKey}
         onDayPress={(day) => onDaySelect(day.dateString)}
         current={selectedDate}
         markedDates={markedDates}
         hideExtraDays={true}
         enableSwipeMonths={true}
+        disableMonthChange={false}
         theme={{
           ...styles.calendarTheme,
           // Responsive sizes
