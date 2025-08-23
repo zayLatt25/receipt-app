@@ -104,30 +104,6 @@ const processReceipt = async (imageUrl) => {
   }
 };
 
-// const processReceipt = async () => {
-//   return {
-//     items: [
-//       { name: "KINGS CARNIVAL 1.2L", pieces: 2, price: 4.59 },
-//       { name: "KING CHOC M/CHIP I/C 1.2L", pieces: 2, price: 4.59 },
-//       { name: "KNORR CUBES TYAM 60G", pieces: 2, price: 2.11 },
-//       { name: "KNORR CUBES BEEF 60G", pieces: 2, price: 2.11 },
-//       { name: "VEPO PURE D/WATER 1.5L", pieces: 2, price: 0.7 },
-//       { name: "MYS FY XIAO BAI CHYE 200G", pieces: 2, price: 0.75 },
-//       { name: "ENOKI MUSHROOM 200G", pieces: 2, price: 1.4 },
-//       { name: "C82 COLOUR RICE 100G", pieces: 2, price: 1.4 },
-//       { name: "CHKN BONELESS LEG(P) 200G", pieces: 2, price: 2.35 },
-//       { name: "CHN H/POTATOES 1.2KG", pieces: 1, price: 4.7 },
-//       { name: "CHN PD C/CABBAGE(KG)", pieces: 1, price: 2.09 },
-//       { name: "SANREMO 3MIN QK MCRN 500G", pieces: 1, price: 2.25 },
-//       { name: "THA PD GREEN MANGO", pieces: 3, price: 1.25 },
-//       { name: "PREGI CARBONARA MR 295G", pieces: 1, price: 2.7 },
-//       { name: "PREGI TRAD.300G", pieces: 1, price: 2.7 },
-//     ],
-//     purchaseDate: "2025-08-15",
-//     suggestedCategory: "Grocery",
-//   };
-// };
-
 export default function CameraScreen() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);

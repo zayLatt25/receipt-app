@@ -101,7 +101,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginBottom: verticalScale(20),
-    paddingLeft: moderateScale(20),
+    paddingLeft: moderateScale(5),
   },
   stepDot: {
     width: moderateScale(32),
