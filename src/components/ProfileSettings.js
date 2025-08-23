@@ -129,8 +129,8 @@ export default function ProfileSettings() {
         <Switch
           value={notificationsEnabled}
           onValueChange={handleNotificationToggle}
-          trackColor={{ false: SWITCH_TRACK_DISABLED, true: SWITCH_TRACK_ENABLED }}
-          thumbColor={notificationsEnabled ? SWITCH_THUMB_ENABLED : SWITCH_THUMB_DISABLED}
+          trackColor={{ false: styles.switchTrackDisabled, true: styles.switchTrackEnabled }}
+          thumbColor={notificationsEnabled ? styles.switchThumbEnabled : styles.switchThumbDisabled}
         />
       </View>
 
