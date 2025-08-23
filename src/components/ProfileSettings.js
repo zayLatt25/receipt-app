@@ -136,18 +136,6 @@ export default function ProfileSettings() {
         />
       </View>
 
-      {/* Weekly Summary Button */}
-      {notificationsEnabled && (
-        <TouchableOpacity
-          style={styles.weeklySummaryButton}
-          onPress={handleWeeklySummaryNotification}
-        >
-          <Text style={styles.weeklySummaryButtonText}>
-            📊 View Weekly Spending Summary Now
-          </Text>
-        </TouchableOpacity>
-      )}
-
       {/* Change Password Section */}
       <View style={styles.settingRow}>
         <View style={styles.settingInfo}>
@@ -163,6 +151,18 @@ export default function ProfileSettings() {
           <Text style={styles.changePasswordButtonText}>Change</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Weekly Summary Button */}
+      {notificationsEnabled && (
+        <TouchableOpacity
+          style={styles.weeklySummaryButton}
+          onPress={handleWeeklySummaryNotification}
+        >
+          <Text style={styles.weeklySummaryButtonText}>
+            📊 View Weekly Spending Summary Now
+          </Text>
+        </TouchableOpacity>
+      )}
       
       {/* Change Password Modal */}
       <ChangePasswordModal
