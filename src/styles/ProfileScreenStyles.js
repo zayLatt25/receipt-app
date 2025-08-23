@@ -22,6 +22,9 @@ export default StyleSheet.create({
     marginBottom: verticalScale(10),
     marginTop: verticalScale(10),
   },
+  profileInfo: {
+    marginBottom: verticalScale(10),
+  },
   title: {
     fontSize: fonts.titleSize,
     fontFamily: fonts.main,
@@ -96,5 +99,78 @@ export default StyleSheet.create({
   tabContent: {
     flexGrow: 1,
     minHeight: verticalScale(400),
+  },
+
+  // Settings styles
+  settingsContainer: {
+    paddingHorizontal: scale(12),
+    paddingTop: verticalScale(12),
+  },
+  settingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: verticalScale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: "#ffffff20",
+    marginBottom: verticalScale(10),
+  },
+  settingInfo: {
+    flex: 1,
+    marginRight: scale(12),
+  },
+  settingTitle: {
+    fontSize: normalizeFont(16),
+    fontFamily: fonts.main,
+    fontWeight: "600",
+    color: colors.lightCream,
+    marginBottom: verticalScale(2),
+  },
+  settingDescription: {
+    fontSize: normalizeFont(12),
+    fontFamily: fonts.main,
+    color: "#ffffff80",
+    lineHeight: verticalScale(16),
+  },
+  switchTrackEnabled: "#781d4e",
+  switchTrackDisabled: "#ffffff40",
+  switchThumbEnabled: colors.lightCream,
+  switchThumbDisabled: "#ffffff80",
+  weeklySummaryButton: {
+    backgroundColor: "#4a90e2",
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(8),
+    marginTop: verticalScale(16),
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  weeklySummaryButtonText: {
+    color: colors.lightCream,
+    fontSize: normalizeFont(14),
+    fontFamily: fonts.main,
+    fontWeight: "600",
+  },
+  changePasswordButton: {
+    backgroundColor: colors.darkPink,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(16),
+    borderRadius: moderateScale(8),
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: scale(80),
+  },
+  changePasswordButtonText: {
+    color: colors.lightCream,
+    fontSize: normalizeFont(14),
+    fontFamily: fonts.main,
+    fontWeight: "600",
   },
 });

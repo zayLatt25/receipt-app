@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
 import dayjs from "dayjs";
 
 import CustomCalendar from "../components/Calendar";
@@ -131,6 +132,15 @@ const HomeScreen = () => {
     }
     refreshExpenses(selectedDate);
   }, [selectedDate, authLoading, user]);
+
+  // Refresh data when screen comes into focus (e.g., after adding expenses from camera)
+  useFocusEffect(
+    useCallback(() => {
+      if (user && !authLoading) {
+        refreshExpenses(selectedDate, true);
+      }
+    }, [user, authLoading, selectedDate])
+  );
 
   // Prepare marked dates
   const markedDates = useMemo(() => {

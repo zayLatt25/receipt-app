@@ -8,9 +8,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import FormInput from "./FormInput";
-import FormButton from "./FormButton";
 import { useAuth } from "../context/AuthContext";
-import { styles } from "../styles/styles";
+import styles from "../styles/ChangePasswordModalStyles";
 
 export default function ChangePasswordModal({ visible, onClose }) {
   const { changePassword } = useAuth();

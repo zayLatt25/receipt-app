@@ -33,7 +33,6 @@ export default function ProfileStats({}) {
   const [categoryTotals, setCategoryTotals] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month());
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
-  const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const pieSize = screenWidth * 0.8;
 
   const years = Array.from({ length: 5 }, (_, i) => dayjs().year() - i);
@@ -160,7 +159,7 @@ export default function ProfileStats({}) {
     </View>
   );
 
-  const maxMonthly = Math.max(...monthlyTotals, monthlyBudget);
+  const maxMonthly = Math.max(...monthlyTotals);
 
   // Check if current month has any expenses
   const monthHasData = categoryTotals.some((cat) => cat.amount > 0);

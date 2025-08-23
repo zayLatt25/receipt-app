@@ -20,6 +20,7 @@ export default StyleSheet.create({
     padding: scale(20),
     borderRadius: moderateScale(12),
     width: "85%",
+    marginTop: -verticalScale(200),
   },
   modalTitle: {
     fontSize: normalizeFont(18),

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Switch, Alert, TouchableOpacity } from "react-native";
-import { styles } from "../styles/styles";
+import styles from "../styles/ProfileScreenStyles";
 import pushNotificationService from "../utils/pushNotifications";
 import { calculateWeeklySpendingSummary, generateWeeklySummaryMessage } from "../utils/weeklySpendingSummary";
 import { useAuth } from "../context/AuthContext";

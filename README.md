@@ -118,8 +118,9 @@ A comprehensive mobile application built with React Native and Expo for tracking
 
 3. **Environment Setup**
 
-   - Create a Firebase project and add your configuration to `src/firebase.js`
-   - Set up OpenAI API credentials in `src/config/receipt-ai.js`
+   - Copy `.env.example` to `.env` and configure your environment variables
+   - Create a Firebase project and add your configuration
+   - Set up OpenAI API credentials
    - Configure your development environment
 
 4. **Start the development server**
@@ -137,16 +138,47 @@ A comprehensive mobile application built with React Native and Expo for tracking
 
 ## 🔧 Configuration
 
+### Environment Variables
+
+The app uses environment variables for sensitive configuration. A `.env.example` file is provided as a template:
+
+1. **Copy the example file**:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure your environment variables**:
+   ```bash
+   # Firebase Configuration
+   FIREBASE_API_KEY=your_firebase_api_key_here
+   FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   FIREBASE_APP_ID=your_app_id
+
+   # OpenAI API Configuration
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_API_ENDPOINT=https://api.openai.com/v1/chat/completions
+
+   # App Configuration
+   APP_ENV=development
+   ```
+
+3. **Never commit your `.env` file** to version control (it's already in `.gitignore`)
+
 ### Firebase Setup
 
 1. Create a new Firebase project
 2. Enable Authentication, Firestore, and Storage
-3. Update `src/firebase.js` with your project credentials
+3. Copy your Firebase configuration from the Firebase console
+4. Update your `.env` file with the Firebase credentials
 
 ### OpenAI API Setup
 
-1. Get your OpenAI API key
-2. Update `src/config/receipt-ai.js` with your API key and endpoint
+1. Get your OpenAI API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Update your `.env` file with the API key
+3. Ensure you have sufficient API credits for receipt processing
 
 ## 📱 Key Features Usage
 
@@ -207,6 +239,7 @@ Test coverage includes:
 
 ```
 receipt-app/
+├── .env.example           # Environment variables template
 ├── src/
 │   ├── components/          # Reusable UI components
 │   ├── screens/            # Main app screens
@@ -222,6 +255,7 @@ receipt-app/
 
 ## 🔒 Security Features
 
+- **Environment Variable Management**: Secure configuration using `.env` files with `.env.example` template
 - **Firebase Authentication**: Secure user sessions with automatic token refresh
 - **Password Security**: 
   - Re-authentication required for password changes
