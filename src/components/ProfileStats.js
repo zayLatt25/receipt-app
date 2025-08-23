@@ -19,7 +19,7 @@ import {
   VictoryAxis,
   VictoryPie,
 } from "victory-native";
-import { profileStatsStyles as styles } from "../styles/ProfileStatsStyles";
+import { profileStatsStyles as styles } from "../styles/profileStatsStyles";
 import { colors } from "../styles/theme";
 import { chartColors, predefinedCategories, months } from "../utils/constants";
 
