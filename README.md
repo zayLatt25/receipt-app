@@ -5,14 +5,16 @@ A comprehensive mobile application built with React Native and Expo for tracking
 ## ✨ Features
 
 ### 🔐 Authentication & User Management
+
 - Secure user registration and login
 - Firebase Authentication integration
 - Persistent user sessions
 - User profile management
 
 ### 📸 Smart Receipt Scanning
+
 - **AI-Powered Receipt Processing**: Uses OpenAI's GPT-4 Vision to automatically extract receipt information
-- **Automatic Data Extraction**: 
+- **Automatic Data Extraction**:
   - Purchase date
   - Suggested category classification
   - Item details (name, quantity, price per piece)
@@ -20,6 +22,7 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **Error Handling**: Smart validation for receipt quality and readability
 
 ### 💰 Expense Management
+
 - **Daily & Monthly Tracking**: View expenses by date with calendar integration
 - **Category Classification**: Pre-defined categories including:
   - Grocery, Transport, Bills, Entertainment
@@ -28,18 +31,21 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **Real-time Updates**: Instant synchronization with Firebase
 
 ### 📊 Analytics & Insights
+
 - **Monthly Expense Charts**: Visual representation of spending patterns
 - **Category Breakdown**: Pie charts showing spending distribution
 - **Yearly Overview**: Track expenses across different years
 - **Budget Tracking**: Set and monitor monthly spending limits
 
 ### 🛒 Grocery List Management
+
 - **Dynamic Lists**: Create and manage shopping lists
 - **Auto-save**: Automatic synchronization with cloud storage
 - **Item Details**: Track item names, quantities, and prices
 - **Real-time Updates**: Instant sync across devices
 
 ### 📅 Calendar Integration
+
 - **Date Selection**: Easy navigation between different dates
 - **Expense Overview**: Quick view of daily expenses
 - **Monthly Summaries**: Track spending patterns over time
@@ -47,6 +53,7 @@ A comprehensive mobile application built with React Native and Expo for tracking
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React Native** (0.79.5) - Cross-platform mobile development
 - **Expo** (53.0.22) - Development platform and tools
 - **React Navigation** - Navigation between screens
@@ -54,6 +61,7 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **React Native Reanimated** - Smooth animations
 
 ### Backend & Services
+
 - **Firebase** (12.0.0) - Backend-as-a-Service
   - **Firestore** - NoSQL database for expenses and user data
   - **Firebase Auth** - User authentication
@@ -61,11 +69,13 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **OpenAI API** - AI-powered receipt text extraction
 
 ### State Management & Data
+
 - **React Context** - Global state management
 - **AsyncStorage** - Local data persistence
 - **Day.js** - Date manipulation and formatting
 
 ### Development Tools
+
 - **Jest** - Testing framework
 - **React Native Testing Library** - Component testing
 - **Babel** - JavaScript compiler
@@ -73,6 +83,7 @@ A comprehensive mobile application built with React Native and Expo for tracking
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - npm or yarn
 - Expo CLI
@@ -81,12 +92,14 @@ A comprehensive mobile application built with React Native and Expo for tracking
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd receipt-app
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -94,11 +107,13 @@ A comprehensive mobile application built with React Native and Expo for tracking
    ```
 
 3. **Environment Setup**
+
    - Create a Firebase project and add your configuration to `src/firebase.js`
    - Set up OpenAI API credentials in `src/config/receipt-ai.js`
    - Configure your development environment
 
 4. **Start the development server**
+
    ```bash
    npm start
    # or
@@ -113,11 +128,13 @@ A comprehensive mobile application built with React Native and Expo for tracking
 ## 🔧 Configuration
 
 ### Firebase Setup
+
 1. Create a new Firebase project
 2. Enable Authentication, Firestore, and Storage
 3. Update `src/firebase.js` with your project credentials
 
 ### OpenAI API Setup
+
 1. Get your OpenAI API key
 2. Update `src/config/receipt-ai.js` with your API key and endpoint
 
@@ -137,6 +154,7 @@ npm test
 ```
 
 Test coverage includes:
+
 - Component rendering and interactions
 - Modal functionality
 - List operations
