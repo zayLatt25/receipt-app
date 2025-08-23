@@ -134,9 +134,9 @@ export default StyleSheet.create({
   },
   stepLabels: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "100%",
-    paddingHorizontal: moderateScale(10),
+    gap: moderateScale(35),
   },
   stepLabel: {
     fontSize: normalizeFont(12),
