@@ -251,6 +251,17 @@ class PushNotificationService {
   async clearBadgeCount() {
     await this.setBadgeCount(0);
   }
+
+  /**
+   * Open device settings (iOS) or app settings (Android)
+   */
+  async openSettings() {
+    try {
+      await Notifications.openSettingsAsync();
+    } catch (error) {
+      console.error("Error opening settings:", error);
+    }
+  }
 }
 
 // Create and export a singleton instance
