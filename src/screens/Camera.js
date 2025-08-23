@@ -21,6 +21,7 @@ import ReceiptConfirmationModal from "../components/ReceiptConfirmationModal";
 import { AI_RECEIPT_CONFIG } from "../config/receipt-ai.js";
 import { useAuth } from "../context/AuthContext";
 import { predefinedCategories } from "../utils/constants";
+import { colors } from "../styles/theme";
 
 const prompt = {
   type: "text",
@@ -271,7 +272,7 @@ export default function CameraScreen() {
         <View style={styles.loadingContainer}>
           <View style={styles.loadingCard}>
             <View style={styles.loadingIconContainer}>
-              <ActivityIndicator size="large" color="#e8e5d9" />
+              <ActivityIndicator size="large" color={colors.navyBlue} />
             </View>
             <Text style={styles.loadingTitle}>Processing Receipt</Text>
             <Text style={styles.loadingStage}>{loadingStage}</Text>

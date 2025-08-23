@@ -99,8 +99,9 @@ export default StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     marginBottom: verticalScale(20),
+    paddingLeft: moderateScale(20),
   },
   stepDot: {
     width: moderateScale(32),
