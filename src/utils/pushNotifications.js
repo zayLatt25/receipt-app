@@ -5,7 +5,8 @@ import { Platform } from 'react-native';
 // Configure notification behavior
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
@@ -33,13 +34,11 @@ class PushNotificationService {
       }
       
       if (finalStatus !== 'granted') {
-        console.log('Failed to get push token for push notification!');
         return false;
       }
       
       return true;
     } else {
-      console.log('Must use physical device for Push Notifications');
       return false;
     }
   }

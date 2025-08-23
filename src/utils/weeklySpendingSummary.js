@@ -24,12 +24,6 @@ export const calculateWeeklySpendingSummary = async (db, userId, date = new Date
     const startOfLastWeek = startOfWeek.subtract(1, 'week');
     const endOfLastWeek = endOfWeek.subtract(1, 'week');
 
-    console.log('Debug - Week boundaries:');
-    console.log('Current week start:', startOfWeek.format('YYYY-MM-DD'));
-    console.log('Current week end:', endOfWeek.format('YYYY-MM-DD'));
-    console.log('Last week start:', startOfLastWeek.format('YYYY-MM-DD'));
-    console.log('Last week end:', endOfLastWeek.format('YYYY-MM-DD'));
-
     // Try the date range query first
     let currentWeekExpenses = [];
     let lastWeekExpenses = [];
@@ -57,19 +51,13 @@ export const calculateWeeklySpendingSummary = async (db, userId, date = new Date
       currentWeekExpenses = currentWeekSnapshot.docs;
       lastWeekExpenses = lastWeekSnapshot.docs;
       
-      console.log('Debug - Query results:');
-      console.log('Current week expenses found:', currentWeekExpenses.length);
-      console.log('Last week expenses found:', lastWeekExpenses.length);
-      
     } catch (queryError) {
-      console.log('Date range query failed, trying fallback method:', queryError);
+      console.error('Date range query failed, trying fallback method:', queryError);
       
       // Fallback: Get all expenses and filter locally
       const allExpensesQuery = query(collection(db, "users", userId, "expenses"));
       const allExpensesSnapshot = await getDocs(allExpensesQuery);
       const allExpenses = allExpensesSnapshot.docs;
-      
-      console.log('Debug - Fallback: Total expenses found:', allExpenses.length);
       
       // Filter expenses by week locally
       currentWeekExpenses = allExpenses.filter(doc => {
@@ -89,22 +77,12 @@ export const calculateWeeklySpendingSummary = async (db, userId, date = new Date
         return expenseDayjs.isAfter(startOfLastWeek.subtract(1, 'day')) && 
                expenseDayjs.isBefore(endOfLastWeek.add(1, 'day'));
       });
-      
-      console.log('Debug - Fallback filtering results:');
-      console.log('Current week expenses (filtered):', currentWeekExpenses.length);
-      console.log('Last week expenses (filtered):', lastWeekExpenses.length);
-    }
-
-    // Log some sample expense data for debugging
-    if (currentWeekExpenses.length > 0) {
-      console.log('Sample current week expense:', currentWeekExpenses[0].data());
     }
 
     // Calculate current week total
     const currentWeekTotal = currentWeekExpenses.reduce((total, doc) => {
       const data = doc.data();
       const amount = Number(data.amount) || 0;
-      console.log(`Expense amount: ${data.amount}, parsed: ${amount}`);
       return total + amount;
     }, 0);
 
@@ -113,10 +91,6 @@ export const calculateWeeklySpendingSummary = async (db, userId, date = new Date
       const data = doc.data();
       return total + (Number(data.amount) || 0);
     }, 0);
-
-    console.log('Debug - Totals calculated:');
-    console.log('Current week total:', currentWeekTotal);
-    console.log('Last week total:', lastWeekTotal);
 
     // Calculate percentage change
     let percentageChange = 0;
