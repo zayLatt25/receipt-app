@@ -6,10 +6,11 @@ A comprehensive mobile application built with React Native and Expo for tracking
 
 ### 🔐 Authentication & User Management
 
-- Secure user registration and login
-- Firebase Authentication integration
-- Persistent user sessions
-- User profile management
+- **Secure Authentication**: User registration and login with Firebase
+- **Password Management**: Change password functionality with validation
+- **Profile Settings**: Comprehensive user profile management
+- **Persistent Sessions**: Automatic session management with AsyncStorage
+- **Security Features**: Password strength validation and re-authentication
 
 ### 📸 Smart Receipt Scanning
 
@@ -50,6 +51,14 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **Expense Overview**: Quick view of daily expenses
 - **Monthly Summaries**: Track spending patterns over time
 
+### 🔔 Push Notifications & Alerts
+
+- **Weekly Spending Summaries**: Automated weekly spending reports every Monday at 9:00 AM
+- **Smart Scheduling**: Configurable notification timing and preferences
+- **Permission Management**: Easy enable/disable notification controls
+- **Rich Notifications**: Detailed spending breakdowns with category insights
+- **Local Notifications**: Instant summary generation and display
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -59,6 +68,7 @@ A comprehensive mobile application built with React Native and Expo for tracking
 - **React Navigation** - Navigation between screens
 - **Victory Native** - Data visualization and charts
 - **React Native Reanimated** - Smooth animations
+- **Expo Notifications** - Push notification management and scheduling
 
 ### Backend & Services
 
@@ -138,6 +148,37 @@ A comprehensive mobile application built with React Native and Expo for tracking
 1. Get your OpenAI API key
 2. Update `src/config/receipt-ai.js` with your API key and endpoint
 
+## 📱 Key Features Usage
+
+### 🔑 Change Password
+
+The app provides a secure way to change your password:
+
+1. **Access Settings**: Navigate to Profile → Settings
+2. **Change Password**: Tap the "Change" button in the Change Password section
+3. **Secure Validation**: 
+   - Enter your current password for verification
+   - Set a new password (minimum 6 characters)
+   - Confirm your new password
+4. **Security Features**:
+   - Re-authentication required before password change
+   - Password strength validation
+   - Real-time form validation
+   - Secure input fields
+
+### 🔔 Push Notifications Setup
+
+Configure weekly spending summaries and notifications:
+
+1. **Enable Notifications**: Toggle the push notifications switch in Profile Settings
+2. **Permission Setup**: Grant notification permissions when prompted
+3. **Automatic Summaries**: Receive weekly spending reports every Monday at 9:00 AM
+4. **Instant Summaries**: Tap "View Weekly Spending Summary Now" for immediate insights
+5. **Rich Content**: Get detailed breakdowns including:
+   - Total weekly spending
+   - Category-wise distribution
+   - Spending trends and comparisons
+
 ## 📱 Available Scripts
 
 - `npm start` - Start Expo development server
@@ -156,9 +197,11 @@ npm test
 Test coverage includes:
 
 - Component rendering and interactions
-- Modal functionality
-- List operations
-- Profile statistics
+- Modal functionality (including ChangePasswordModal)
+- List operations and expense management
+- Profile statistics and analytics
+- Authentication flows and password changes
+- Form validation and error handling
 
 ## 📁 Project Structure
 
@@ -179,10 +222,16 @@ receipt-app/
 
 ## 🔒 Security Features
 
-- Firebase Authentication with secure user sessions
-- Data isolation between users
-- Secure API key management
-- Input validation and sanitization
+- **Firebase Authentication**: Secure user sessions with automatic token refresh
+- **Password Security**: 
+  - Re-authentication required for password changes
+  - Password strength validation (minimum 6 characters)
+  - Secure password input fields
+  - Protection against common password vulnerabilities
+- **Data Isolation**: Complete separation of user data with Firebase security rules
+- **API Security**: Secure API key management and environment configuration
+- **Input Validation**: Comprehensive validation and sanitization across all forms
+- **Session Management**: Automatic session handling with secure token storage
 
 ## 📊 Performance Features
 
